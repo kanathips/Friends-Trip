@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "687140764728",
+    "firebase_url": "https://friends-trip.firebaseio.com",
+    "project_id": "friends-trip",
+    "storage_bucket": "friends-trip.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:687140764728:android:3c28e940fba25fcb",
+        "android_client_info": {
+          "package_name": "com.tinyandfriend.project.friendstrip"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "687140764728-515k8bqieo4csig7mnr6bii5tq0dtamm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tinyandfriend.project.friendstrip",
+            "certificate_hash": "4E01400F8D2DD50CC91CFC2DCCA119CBF17C67AC"
+          }
+        },
+        {
+          "client_id": "687140764728-fmvume9hkq1ep4ue031fg06ldcquelva.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAw7cLwxNFZp4s30GI04bJWJ__bjQPRBcs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "687140764728-fmvume9hkq1ep4ue031fg06ldcquelva.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
