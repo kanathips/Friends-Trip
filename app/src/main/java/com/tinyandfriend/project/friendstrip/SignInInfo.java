@@ -1,14 +1,13 @@
 package com.tinyandfriend.project.friendstrip;
 
-import android.text.TextUtils;
-
 /**
  * Created by NewWy on 3/10/2559.
  */
-public class SignInInfo {
+class SignInInfo {
 
-    String email;
-    String password;
+
+    private String email;
+    private String password;
 
     public SignInInfo(String email, String password) throws IllegalArgumentException {
         setEmail(email);
@@ -19,8 +18,8 @@ public class SignInInfo {
         return password;
     }
 
-    public void setPassword(String password) {
-        if(!(password.isEmpty() || password == null)) {
+    private void setPassword(String password) {
+        if(!(password.isEmpty())) {
             this.password = password;
         }else{
             throw new IllegalArgumentException("Password is Empty or Null");
@@ -32,9 +31,9 @@ public class SignInInfo {
         return email;
     }
 
-    public void setEmail(String email) throws IllegalArgumentException{
+    private void setEmail(String email) throws IllegalArgumentException{
 
-        boolean valid = !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        boolean valid = Validator.validateEmail(email);
         if(valid)
             this.email = email;
         else

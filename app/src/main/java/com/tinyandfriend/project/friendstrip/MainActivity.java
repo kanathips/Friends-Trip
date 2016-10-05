@@ -1,26 +1,82 @@
 package com.tinyandfriend.project.friendstrip;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    private SharedPreferences sharedPreferences;
+    private FirebaseUser firebaseUser;
+    private FirebaseAuth firebaseAuth;
+    private String username;
+    private AuthenManager authenManager;
+    private FirebaseAuth.AuthStateListener authStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button signInButton = (Button)findViewById(R.id.sign_in_button);
-        signInButton.setOnClickListener(new View.OnClickListener() {
+
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-                startActivity(intent);
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                firebaseUser = firebaseAuth.getCurrentUser();
+                String toastText;
+                if (firebaseUser == null) {
+                    startActivity(new Intent(MainActivity.this, SignInActivity.class));
+                    finish();
+                } else {
+                    if(!firebaseAuth.getCurrentUser().isEmailVerified()) {
+                        toastText = "Please verify your email";
+                    }else {
+                        if ((username = firebaseUser.getDisplayName()) == null)
+                            username = firebaseUser.getEmail();
+                        toastText = "Welcome : " + username;
+                    }
+                    Toast.makeText(MainActivity.this, toastText, Toast.LENGTH_SHORT).show();
+                }
             }
-        });
+        };
+        authenManager = AuthenManager.getInstance();
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        firebaseAuth.addAuthStateListener(authStateListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (authStateListener != null) {
+            firebaseAuth.removeAuthStateListener(authStateListener);
+        }
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
+        if (authStateListener != null) {
+            firebaseAuth.removeAuthStateListener(authStateListener);
+        }
+    }
+
+    public void onSignOutClick(View view) {
+        authenManager.signOut();
+        //TODO Change the line below to notify user about sign out
+        Toast.makeText(this, "Signed out", Toast.LENGTH_SHORT).show();
+    }
+
 }
