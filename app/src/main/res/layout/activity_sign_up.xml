@@ -55,5 +55,5 @@
         android:text="Sign Up"
         android:id="@+id/button"
         android:layout_gravity="center_horizontal"
-        android:onClick="onClickSignUp"/>
+        android:onClick="onSignUpClick"/>
 </LinearLayout>

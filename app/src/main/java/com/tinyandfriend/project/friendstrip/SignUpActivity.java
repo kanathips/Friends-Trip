@@ -58,7 +58,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    public void onClickSignUp(View view){
+    public void onSignUpClick(View view){
     //TODO Implement Validate From Function here
 //        if(!validateFrom()){
 //            return;

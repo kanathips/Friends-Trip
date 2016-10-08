@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Friends Trip</string>
+    <string name="username">อีเมล หรือ ชื่อผู้ใช้</string>
+    <string name="password">รหัสผ่าน</string>
+    <string name="forget">ลืมรหัสผ่าน?</string>
+    <string name="sing_in">เข้าสู่ระบบ</string>
+    <string name="sign_up">สมัครสมาชิก</string>
 </resources>
