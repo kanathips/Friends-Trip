@@ -1,15 +1,17 @@
 package com.tinyandfriend.project.friendstrip;
 
 
+import com.google.firebase.database.Exclude;
+
 /**
  * Created by NewWy on 3/10/2559.
  */
-class SignUpInfo {
+class SignUpInfo extends Object{
 
-    private String email;
+    @Exclude
     private String password;
+    private String email;
     private String citizenId;
-    private String username;
     private String displayName;
     private String fName;
     private String lName;
@@ -18,6 +20,18 @@ class SignUpInfo {
 
     public SignUpInfo() {
 
+    }
+
+    @Exclude
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password, String rePassword) throws IllegalArgumentException{
+        if(password.equals(rePassword))
+            this.password = password;
+        else
+            throw new IllegalArgumentException("Password confirm not match");
     }
 
     public String getPhoneNumber() {
@@ -44,22 +58,11 @@ class SignUpInfo {
         this.displayName = displayName;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password, String rePassword) throws IllegalArgumentException{
-        if(rePassword.equals(password))
-            this.setPassword(password);
-        else
-            throw new IllegalArgumentException("Password And Confirm Password are Miss Match");
-    }
-
     public String getCitizenId() {
         return citizenId;
     }
 
-    public void setCitizenId(String citizenId) {
+    public void setCitizenId(String citizenId) throws IllegalArgumentException {
         boolean checkResult = Validator.validateCitizenId(citizenId);
         if(checkResult){
             this.citizenId = citizenId;
@@ -79,18 +82,6 @@ class SignUpInfo {
             this.email = email;
         else
             throw new IllegalArgumentException("Invalid Email Format");
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    private void setPassword(String password) {
-        this.password = password;
     }
 
     public String getfName() {

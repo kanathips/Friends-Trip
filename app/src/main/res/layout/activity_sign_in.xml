@@ -41,11 +41,16 @@
         android:layout_height="wrap_content"
         android:text="Sign Up"
         android:id="@+id/sign_up_button"
-        android:onClick="onSignUpClick"
+        android:onClick="onClickSignUp"
         android:layout_gravity="center_horizontal"
         />
 
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Forget Password"
+        android:onClick="onClickForgetPassword"
+        android:elevation="0dp" />
 
 
 </LinearLayout>

@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private FirebaseAuth firebaseAuth;
     private String username;
-    private AuthenManager authenManager;
     private FirebaseAuth.AuthStateListener authStateListener;
 
     @Override
@@ -43,13 +44,12 @@ public class MainActivity extends AppCompatActivity {
                     }else {
                         if ((username = firebaseUser.getDisplayName()) == null)
                             username = firebaseUser.getEmail();
-                        toastText = "Welcome : " + username;
+                        toastText = FirebaseDatabase.getInstance().getReference().child("users").child(firebaseUser.getUid()).toString();
                     }
                     Toast.makeText(MainActivity.this, toastText, Toast.LENGTH_SHORT).show();
                 }
             }
         };
-        authenManager = AuthenManager.getInstance();
     }
 
     @Override
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onSignOutClick(View view) {
-        authenManager.signOut();
+        firebaseAuth.signOut();
         //TODO Change the line below to notify user about sign out
         Toast.makeText(this, "Signed out", Toast.LENGTH_SHORT).show();
     }

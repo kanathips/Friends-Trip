@@ -11,6 +11,19 @@
     style="?android:attr/buttonBarButtonStyle"
     >
 
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View Trip"
+        android:onClick="onClickViewTrip"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Trip"
+        android:onClick="onClickCreateTrip"/>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
