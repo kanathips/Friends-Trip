@@ -5,4 +5,7 @@
     <string name="forget">ลืมรหัสผ่าน?</string>
     <string name="sing_in">เข้าสู่ระบบ</string>
     <string name="sign_up">สมัครสมาชิก</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
