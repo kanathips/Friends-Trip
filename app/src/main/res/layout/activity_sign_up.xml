@@ -128,7 +128,7 @@
                 android:layout_weight=".5"
                 android:hint="DD / MM / YYYY"
                 android:textSize="15dp"
-                android:editable="false"
+                android:enabled="false"
                 android:gravity="center"/>
 
             <ImageButton

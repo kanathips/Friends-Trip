@@ -123,7 +123,6 @@
                 android:id="@+id/sign_up_button"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/sign_up"
-                android:textColor="#ffffff"
                 android:background="@drawable/border_bt"
                 android:onClick="onSignUpClick"
                 android:layout_weight="1" />
@@ -135,7 +134,6 @@
                 android:id="@+id/sign_in_button"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/sing_in"
-                android:textColor="#ffffff"
                 android:background="@drawable/border_bt"
                 android:onClick="onClickLogin"
                 android:layout_weight="1" />
