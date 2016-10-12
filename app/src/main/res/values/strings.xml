@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">Friends Trip</string>
+
+    <string-array name="tag_trip">
+        <item>ปั่นจักรยาน</item>
+        <item>แคมป์ปิ้ง</item>
+        <item>ปีนเขา</item>
+        <item>เดินทางไกล</item>
+        <item>ค้างคืน</item>
+    </string-array>
+    <string-array name="tag_place">
+        <item>ภูเขา</item>
+        <item>น้ำตก</item>
+        <item>วัด</item>
+        <item>ทะเล</item>
+        <item>สวนดอกไม้</item>
+    </string-array>
+    <string-array name="tag_region">
+        <item>กลาง</item>
+        <item>ตะวันออก</item>
+        <item>ตะวันตก</item>
+        <item>ใต้</item>
+        <item>เหนือ</item>
+        <item>ตะวันออกเฉียงเหนือ</item>
+    </string-array>
 </resources>

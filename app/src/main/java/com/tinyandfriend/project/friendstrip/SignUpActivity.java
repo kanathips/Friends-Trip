@@ -4,8 +4,12 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -19,10 +23,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.tinyandfriend.project.friendstrip.adapter.AuthAdapter;
+import com.tinyandfriend.project.friendstrip.info.SignUpInfo;
 
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by NewWy on 3/10/2559.
@@ -40,6 +44,22 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText fNameEditText;
     private EditText lNameEditText;
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.commit_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case(R.id.commit):
+                onClickSignUp();
+                return  true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,9 +128,15 @@ public class SignUpActivity extends AppCompatActivity {
 
         });
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
     }
 
-    public void onClickSignUp(View view) {
+    private void onClickSignUp() {
         //TODO Implement Validate From Function here
         if (!validateFrom()) {
             return;

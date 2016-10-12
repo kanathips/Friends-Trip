@@ -15,6 +15,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.tinyandfriend.project.friendstrip.adapter.AuthAdapter;
+import com.tinyandfriend.project.friendstrip.info.SignInInfo;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -43,7 +45,7 @@ public class SignInActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     Log.i("SignInActivity", "SignIn:OnComplete: " + task.isSuccessful());
-                    String toastText;
+                    String toastText = "";
                     if (!task.isSuccessful() && task.getException() != null) {
                         //TODO Change The Toast to show user about sign in error
                         toastText = task.getException().getMessage();
@@ -53,9 +55,10 @@ public class SignInActivity extends AppCompatActivity {
                     } else {
                         FirebaseUser user = task.getResult().getUser();
                         //TODO Add This line to show about Sign In Success
-                        if (!user.isEmailVerified()) {
-                            toastText = "Please verify your email";
-                        } else {
+//                        if (!user.isEmailVerified()) {
+//                            toastText = "Please verify your email";
+//                        } else {
+                        if (user.isEmailVerified()) {
                             toastText = "Sign In Success";
                             startActivity(new Intent(SignInActivity.this, MainActivity.class));
                             finish();
@@ -74,8 +77,8 @@ public class SignInActivity extends AppCompatActivity {
         boolean valid = true;
 
         String email = emailEditText.getText().toString();
-        if (email.isEmpty()) {
-            emailEditText.setError("Required.");
+        if (email.isEmpty() || !Validator.validateEmail(email)) {
+            emailEditText.setError("จำเป็นต้องใส่.");
             valid = false;
         } else {
             emailEditText.setError(null);
@@ -83,7 +86,7 @@ public class SignInActivity extends AppCompatActivity {
 
         String password = passwordEditText.getText().toString();
         if (TextUtils.isEmpty(password)) {
-            passwordEditText.setError("Required.");
+            passwordEditText.setError("จำเป็นต้องใส่");
             valid = false;
         } else {
             passwordEditText.setError(null);
