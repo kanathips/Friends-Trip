@@ -105,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(MainActivity.this,
                         "Selected page position: " + position, Toast.LENGTH_SHORT).show();
             }
-
             // This method will be invoked when the current page is scrolled
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -119,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Code goes here
             }
         });
+
 
 
 

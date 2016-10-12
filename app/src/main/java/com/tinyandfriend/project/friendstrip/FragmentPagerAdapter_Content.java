@@ -12,7 +12,7 @@ import com.astuetz.PagerSlidingTabStrip;
 
 public class FragmentPagerAdapter_Content extends FragmentPagerAdapter  implements PagerSlidingTabStrip.IconTabProvider {
     final int PAGE_COUNT = 3;
-    private String tabTitles[] = new String[] { "Tab1", "Tab2", "Tab3" };
+    private String tabTitles[] = new String[] { "JOIN", "CREATE", "FRIENDS" };
     private int tabIcons[] = {R.drawable.ic_directions_walk_white_36dp, R.drawable.ic_location_city_white_36dp, R.drawable.ic_group_white_36dp};
 
     public FragmentPagerAdapter_Content(FragmentManager fm) {
@@ -26,7 +26,12 @@ public class FragmentPagerAdapter_Content extends FragmentPagerAdapter  implemen
 
     @Override
     public Fragment getItem(int position) {
-        return PageFragment.newInstance(position + 1);
+        switch(position){
+            case 0: return new Fragment_Join();
+            case 1: return new Fragment_Create();
+            case 2: return new Fragment_Friends();
+        }
+        return null;
     }
 
     @Override
