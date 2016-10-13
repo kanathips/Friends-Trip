@@ -17,13 +17,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.tinyandfriend.project.friendstrip.adapter.FragmentPagerAdapter_Content;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -31,7 +30,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseUser firebaseUser;
     private FirebaseAuth firebaseAuth;
     private String username;
-    private AuthenManager authenManager;
     private FirebaseAuth.AuthStateListener authStateListener;
 
     @Override
@@ -46,37 +44,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 firebaseUser = firebaseAuth.getCurrentUser();
-                String toastText;
+                String toastText = "";
                 if (firebaseUser == null) {
+                    toastText = "Please Sign In";
                     startActivity(new Intent(MainActivity.this, SignInActivity.class));
                     finish();
+                } else if (!firebaseUser.isEmailVerified()) {
+                    toastText = "Please verify your email";
+                    startActivity(new Intent(MainActivity.this, ReVerifyEmailActivity.class));
+                    finish();
                 } else {
-                    if(!firebaseAuth.getCurrentUser().isEmailVerified()) {
-                        toastText = "Please verify your email";
-                    }else {
-                        if ((username = firebaseUser.getDisplayName()) == null)
-                            username = firebaseUser.getEmail();
-                        toastText = "Welcome : " + username;
-                    }
-                    Toast.makeText(MainActivity.this, toastText, Toast.LENGTH_SHORT).show();
+                    if((username = firebaseUser.getDisplayName()) == null)
+                        username = firebaseUser.getEmail();
+                    toastText = "Welcome : " + username;
                 }
+                Toast.makeText(MainActivity.this, toastText, Toast.LENGTH_SHORT).show();
             }
         };
-        authenManager = AuthenManager.getInstance();
 
-////////////////////////////////////////////////////////// Main///////////////////////////////////////////////////////////
+        firebaseAuth.addAuthStateListener(authStateListener);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab.setOnClickListener(new View.OnClickListener()
+
+                               {
+                                   @Override
+                                   public void onClick(View view) {
+                                       Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                                               .setAction("Action", null).show();
+                                   }
+                               }
+
+        );
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -87,40 +91,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-////////////////////////////////////////////////////////// Fragement///////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////// Fragement///////////////////////////////////////////////////////////
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new FragmentPagerAdapter_Content(getSupportFragmentManager()));
+        viewPager.setAdapter(new
+
+                FragmentPagerAdapter_Content(getSupportFragmentManager()
+
+        ));
 
         // Give the PagerSlidingTabStrip the ViewPager
         PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         // Attach the view pager to the tab strip
         tabsStrip.setViewPager(viewPager);
 
-        tabsStrip.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        tabsStrip.setOnPageChangeListener(
+                new ViewPager.OnPageChangeListener()
 
-            // This method will be invoked when a new page becomes selected.
-            @Override
-            public void onPageSelected(int position) {
-                Toast.makeText(MainActivity.this,
-                        "Selected page position: " + position, Toast.LENGTH_SHORT).show();
-            }
-            // This method will be invoked when the current page is scrolled
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                // Code goes here
-            }
+                {
 
-            // Called when the scroll state changes:
-            // SCROLL_STATE_IDLE, SCROLL_STATE_DRAGGING, SCROLL_STATE_SETTLING
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                // Code goes here
-            }
-        });
+                    // This method will be invoked when a new page becomes selected.
+                    @Override
+                    public void onPageSelected(int position) {
+                        Toast.makeText(MainActivity.this,
+                                "Selected page position: " + position, Toast.LENGTH_SHORT).show();
+                    }
 
+                    // This method will be invoked when the current page is scrolled
+                    @Override
+                    public void onPageScrolled(int position, float positionOffset,
+                                               int positionOffsetPixels) {
+                        // Code goes here
+                    }
 
+                    // Called when the scroll state changes:
+                    // SCROLL_STATE_IDLE, SCROLL_STATE_DRAGGING, SCROLL_STATE_SETTLING
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
+                        // Code goes here
+                    }
+                }
 
+        );
 
 
     }
@@ -175,8 +187,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_send) {
 
-        } else if(id == R.id.nav_log_out){
-            authenManager.signOut();
+        } else if (id == R.id.nav_log_out) {
+            firebaseAuth.signOut();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -187,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onStart() {
         super.onStart();
-        firebaseAuth.addAuthStateListener(authStateListener);
+//        firebaseAuth.addAuthStateListener(authStateListener);
     }
 
     @Override
@@ -204,5 +216,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             firebaseAuth.removeAuthStateListener(authStateListener);
         }
     }
-
 }

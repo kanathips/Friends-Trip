@@ -1,10 +1,14 @@
-package com.tinyandfriend.project.friendstrip;
+package com.tinyandfriend.project.friendstrip.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.tinyandfriend.project.friendstrip.Fragment_Create;
+import com.tinyandfriend.project.friendstrip.Fragment_Friends;
+import com.tinyandfriend.project.friendstrip.Fragment_Join;
+import com.tinyandfriend.project.friendstrip.R;
 
 /**
  * Created by StandAlone on 10/10/2559.

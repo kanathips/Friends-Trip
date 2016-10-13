@@ -1,9 +1,11 @@
-package com.tinyandfriend.project.friendstrip;
+package com.tinyandfriend.project.friendstrip.info;
+
+import com.tinyandfriend.project.friendstrip.Validator;
 
 /**
  * Created by NewWy on 3/10/2559.
  */
-class SignInInfo {
+public class SignInInfo {
 
 
     private String email;

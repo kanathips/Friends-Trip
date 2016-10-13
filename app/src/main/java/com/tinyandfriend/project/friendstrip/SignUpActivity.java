@@ -1,13 +1,10 @@
 package com.tinyandfriend.project.friendstrip;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -23,8 +20,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.Calendar;
+import com.tinyandfriend.project.friendstrip.adapter.AuthAdapter;
+import com.tinyandfriend.project.friendstrip.info.SignUpInfo;
 
 import java.util.Calendar;
 
@@ -186,7 +183,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                                 //TODO Change this line to show user abount a Sign up Successful
                                 Toast.makeText(SignUpActivity.this, "Sign Up Success", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
+//                                startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
                                 finish();
                             }
                         }

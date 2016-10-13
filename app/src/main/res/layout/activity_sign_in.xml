@@ -105,6 +105,7 @@
                 android:id="@+id/textView"
                 android:gravity="right"
                 android:textSize="18dp"
+                android:onClick="onClickResetPassword"
                 android:layout_weight="1" />
 
         </LinearLayout>
@@ -117,17 +118,6 @@
             android:layout_height="46dp">
 
             <Button
-                android:layout_marginRight="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="45dp"
-                android:id="@+id/sign_up_button"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/sign_up"
-                android:background="@drawable/border_bt"
-                android:onClick="onSignUpClick"
-                android:layout_weight="1" />
-
-            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="45dp"
                 android:layout_marginTop="100px"
@@ -136,6 +126,18 @@
                 android:text="@string/sing_in"
                 android:background="@drawable/border_bt"
                 android:onClick="onClickLogin"
+                android:layout_weight="1" />
+
+
+            <Button
+                android:layout_marginRight="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:id="@+id/sign_up_button"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/sign_up"
+                android:background="@drawable/border_bt"
+                android:onClick="onSignUpClick"
                 android:layout_weight="1" />
 
         </LinearLayout>

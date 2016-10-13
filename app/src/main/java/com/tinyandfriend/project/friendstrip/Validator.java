@@ -5,7 +5,7 @@ import android.text.TextUtils;
 /**
  * Created by NewWy on 4/10/2559.
  */
-class Validator {
+public class Validator {
     public static boolean validateEmail(String email){
         return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
