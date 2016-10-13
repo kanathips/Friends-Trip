@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "687140764728",
-    "firebase_url": "https://friends-trip.firebaseio.com",
-    "project_id": "friends-trip",
-    "storage_bucket": "friends-trip.appspot.com"
+    "project_number": "277603483884",
+    "firebase_url": "https://friends-trip-fd3c2.firebaseio.com",
+    "project_id": "friends-trip-fd3c2",
+    "storage_bucket": "friends-trip-fd3c2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:687140764728:android:3c28e940fba25fcb",
+        "mobilesdk_app_id": "1:277603483884:android:3c28e940fba25fcb",
         "android_client_info": {
           "package_name": "com.tinyandfriend.project.friendstrip"
         }
       },
       "oauth_client": [
         {
-          "client_id": "687140764728-515k8bqieo4csig7mnr6bii5tq0dtamm.apps.googleusercontent.com",
+          "client_id": "277603483884-p8niaved1race76cbsb007uv7cooavua.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.tinyandfriend.project.friendstrip",
@@ -23,13 +23,13 @@
           }
         },
         {
-          "client_id": "687140764728-fmvume9hkq1ep4ue031fg06ldcquelva.apps.googleusercontent.com",
+          "client_id": "277603483884-chlj4ltcjtmrncoe1fc33i9vber80o2g.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAw7cLwxNFZp4s30GI04bJWJ__bjQPRBcs"
+          "current_key": "AIzaSyAOEzXTi6ecTlCWWss9E20TCR-UrgekkRI"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "687140764728-fmvume9hkq1ep4ue031fg06ldcquelva.apps.googleusercontent.com",
+              "client_id": "277603483884-chlj4ltcjtmrncoe1fc33i9vber80o2g.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
