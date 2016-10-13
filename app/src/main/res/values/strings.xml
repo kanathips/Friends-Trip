@@ -1,7 +1,22 @@
 <resources>
     <string name="app_name">Friends Trip</string>
+    <string name="username">อีเมล หรือ ชื่อผู้ใช้</string>
+    <string name="password">รหัสผ่าน</string>
+    <string name="forget">ลืมรหัสผ่าน?</string>
+    <string name="sing_in">เข้าสู่ระบบ</string>
+    <string name="sign_up">สมัครสมาชิก</string>
 
-    <string-array name="tag_trip">
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_main">Main</string>
+
+<string-array name="tag_trip">
         <item>ปั่นจักรยาน</item>
         <item>แคมป์ปิ้ง</item>
         <item>ปีนเขา</item>

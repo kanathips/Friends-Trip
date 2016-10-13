@@ -1,9 +1,14 @@
 package com.tinyandfriend.project.friendstrip;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ReVerifyEmailActivity extends AppCompatActivity {
@@ -17,7 +22,12 @@ public class ReVerifyEmailActivity extends AppCompatActivity {
     }
 
     public void onClickReVerify(View view){
-        firebaseAuth.getCurrentUser().sendEmailVerification();
+        firebaseAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Toast.makeText(ReVerifyEmailActivity.this, "Send " + task.isSuccessful(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void onClickSignOut(View view){

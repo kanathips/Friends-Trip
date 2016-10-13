@@ -2,14 +2,11 @@ package com.tinyandfriend.project.friendstrip;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -44,43 +41,27 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText fNameEditText;
     private EditText lNameEditText;
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.commit_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case(R.id.commit):
-                onClickSignUp();
-                return  true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+    private static EditText dateView;
+    private int mYear, mMonth, mDay;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
         setEmailEditText((EditText) findViewById(R.id.email));
-
         setRePasswordEditText((EditText) findViewById(R.id.repassword));
-
         setPasswordEditText((EditText) findViewById(R.id.password));
-
         setDisplayNameEditText((EditText) findViewById(R.id.displayname));
-
         setCitizenIdEditText((EditText) findViewById(R.id.citizen_id));
-
         setbDateEditText((EditText)findViewById(R.id.birth_date));
-
         setfNameEditText((EditText)findViewById(R.id.first_name));
-
         setlNameEditText((EditText)findViewById(R.id.last_name));
 
         setPhoneNumberEditText((EditText)findViewById(R.id.phonenumber));
@@ -128,15 +109,37 @@ public class SignUpActivity extends AppCompatActivity {
 
         });
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        dateView = (EditText) findViewById(R.id.birth_date);
 
     }
 
-    private void onClickSignUp() {
+
+
+
+    public void onClickDate(View view) {
+//
+        final Calendar c = Calendar.getInstance();
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,R.style.MyDatePickerDialogTheme,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view,int year, int monthOfYear, int dayOfMonth) {
+
+                        dateView.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                    }
+                }, mYear, mMonth, mDay);
+
+        datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        datePickerDialog.show();
+
+    }
+
+
+    public void onClickSignUp(View view) {
         //TODO Implement Validate From Function here
         if (!validateFrom()) {
             return;
@@ -180,7 +183,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                                 //TODO Change this line to show user abount a Sign up Successful
                                 Toast.makeText(SignUpActivity.this, "Sign Up Success", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
+//                                startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
                                 finish();
                             }
                         }
@@ -192,7 +195,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private boolean validateFrom() {
-
 
         boolean valid = true;
         String errorMessage;
@@ -235,7 +237,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
         getPhoneNumberEditText().setError(errorMessage);
 
-            String email = getEmailText();
+        String email = getEmailText();
 
         if (email.isEmpty()) {
             valid = false;
@@ -399,5 +401,4 @@ public class SignUpActivity extends AppCompatActivity {
     private String getCitizenIdText() {
         return getCitizenIdEditText().getText().toString().trim();
     }
-
 }
