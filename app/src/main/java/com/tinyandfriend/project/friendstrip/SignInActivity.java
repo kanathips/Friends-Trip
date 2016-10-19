@@ -47,23 +47,22 @@ public class SignInActivity extends AppCompatActivity {
             AuthAdapter authAdapter = new AuthAdapter(firebaseAuth);
             authAdapter.signIn(signInInfo).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
-                public void onComplete(@NonNull Task task) {
+                public void onComplete(@NonNull Task<AuthResult> task) {
                     Log.i(TAG, "SignIn:OnComplete: " + task.isSuccessful());
-                    String toastText;
                     if (!task.isSuccessful() && task.getException() != null) {
                         //TODO Change The Toast to show user about sign in error
-                        toastText = task.getException().getMessage();
+                        Toast.makeText(SignInActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     } else if (!task.isSuccessful()) {
-                        //TODO Add This line to show about Sign In Error
-                        toastText = "Sign In Fail";
-                    } else if (!firebaseAuth.getCurrentUser().isEmailVerified()) {
-                        toastText = "Please verify your email";
-                    } else {
-                        toastText = "Sign In Success";
+                        //TODO Change The Toast to show user about sign in error
+                        Toast.makeText(SignInActivity.this, "Sign In Fail", Toast.LENGTH_SHORT).show();
+                    }else if(!task.getResult().getUser().isEmailVerified()){
+                        Log.v(TAG, "SignIn:OnComplete: Account was not verify");
+                        startActivity(new Intent(SignInActivity.this, ReVerifyEmailActivity.class));
+                    } else if(task.isSuccessful()) {
+                        Log.v(TAG, "SignIn:OnComplete: Sign In Pass");
                         startActivity(new Intent(SignInActivity.this, MainActivity.class));
                         finish();
                     }
-                    Toast.makeText(SignInActivity.this, toastText, Toast.LENGTH_SHORT).show();
                 }
             });
         } catch (IllegalArgumentException e) {

@@ -1,5 +1,6 @@
 package com.tinyandfriend.project.friendstrip;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -26,12 +27,11 @@ import com.tinyandfriend.project.friendstrip.adapter.FragmentPagerAdapter_Conten
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private SharedPreferences sharedPreferences;
     private FirebaseUser firebaseUser;
     private FirebaseAuth firebaseAuth;
     private String username;
     private FirebaseAuth.AuthStateListener authStateListener;
-
+    private boolean stateFlag = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,10 +39,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if(stateFlag == false){
+                    stateFlag = true;
+                    return;
+                }
                 firebaseUser = firebaseAuth.getCurrentUser();
                 String toastText = "";
                 if (firebaseUser == null) {
@@ -54,32 +57,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     startActivity(new Intent(MainActivity.this, ReVerifyEmailActivity.class));
                     finish();
                 } else {
-                    if((username = firebaseUser.getDisplayName()) == null)
+                    if ((username = firebaseUser.getDisplayName()) == null)
                         username = firebaseUser.getEmail();
                     toastText = "Welcome : " + username;
                 }
                 Toast.makeText(MainActivity.this, toastText, Toast.LENGTH_SHORT).show();
+                stateFlag = false;
             }
         };
-
-        firebaseAuth.addAuthStateListener(authStateListener);
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener()
-
-                               {
-                                   @Override
-                                   public void onClick(View view) {
-                                       Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                                               .setAction("Action", null).show();
-                                   }
-                               }
-
+        fab.setOnClickListener(
+                new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
+                }
         );
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -94,11 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ////////////////////////////////////////////////////////// Fragement///////////////////////////////////////////////////////////
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new
-
-                FragmentPagerAdapter_Content(getSupportFragmentManager()
-
-        ));
+        viewPager.setAdapter(new FragmentPagerAdapter_Content(getSupportFragmentManager()));
 
         // Give the PagerSlidingTabStrip the ViewPager
         PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
@@ -106,15 +101,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabsStrip.setViewPager(viewPager);
 
         tabsStrip.setOnPageChangeListener(
-                new ViewPager.OnPageChangeListener()
-
-                {
+                new ViewPager.OnPageChangeListener(){
 
                     // This method will be invoked when a new page becomes selected.
                     @Override
                     public void onPageSelected(int position) {
-                        Toast.makeText(MainActivity.this,
-                                "Selected page position: " + position, Toast.LENGTH_SHORT).show();
+                        switch (position){
+                            case(0):
+                                onSelectJoinPage();
+                                break;
+                            case(1):
+                                onSelectFriendPage();
+                                break;
+                            case(2):
+                                onSelectSomeThing();
+                        }
+                        Toast.makeText(MainActivity.this, "Selected page position: " + position, Toast.LENGTH_SHORT).show();
                     }
 
                     // This method will be invoked when the current page is scrolled
@@ -131,10 +133,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         // Code goes here
                     }
                 }
-
         );
+    }
 
+    private void onSelectSomeThing() {
+        FloatingActionButton actionButton = (FloatingActionButton) findViewById(R.id.fab);
+        actionButton.setBackgroundResource(R.drawable.ic_location_city_white_36dp);
+    }
 
+    private void onSelectJoinPage() {
+        FloatingActionButton actionButton = (FloatingActionButton) findViewById(R.id.fab);
+        actionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, CreateTripActivity.class));
+            }
+        });
+        actionButton.setBackgroundResource(R.drawable.ic_directions_walk_white_36dp);
+    }
+
+    private void onSelectFriendPage(){
+        FloatingActionButton actionButton = (FloatingActionButton) findViewById(R.id.fab);
+        actionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, AddFriendsActivity.class));
+            }
+        });
+        actionButton.setBackgroundResource(R.drawable.ic_group_white_36dp);
     }
 
     @Override
@@ -171,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -199,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onStart() {
         super.onStart();
-//        firebaseAuth.addAuthStateListener(authStateListener);
+        firebaseAuth.addAuthStateListener(authStateListener);
     }
 
     @Override
@@ -210,10 +236,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public void onDestroy() {
-        super.onDestroy();
-        if (authStateListener != null) {
-            firebaseAuth.removeAuthStateListener(authStateListener);
-        }
-    }
+//    public void onDestroy() {
+//        super.onDestroy();
+//        if (authStateListener != null) {
+//            firebaseAuth.removeAuthStateListener(authStateListener);
+//        }
+//    }
 }

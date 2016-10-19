@@ -35,6 +35,7 @@
                 android:id="@+id/first_name"
                 android:layout_gravity="center_horizontal"
                 android:hint="ชื่อจริง"
+                android:singleLine="true"
                 android:layout_weight="1" />
 
             <EditText
@@ -43,6 +44,7 @@
                 android:id="@+id/last_name"
                 android:layout_gravity="center_horizontal"
                 android:hint="นามสกุล"
+                android:singleLine="true"
                 android:layout_weight="1" />
 
         </LinearLayout>

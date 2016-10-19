@@ -11,8 +11,12 @@ public class SignUpInfo extends Object{
 
     @Exclude
     private String password;
+
     private String email;
+
+    @Exclude
     private String citizenId;
+
     private String displayName;
     private String fName;
     private String lName;
@@ -59,6 +63,7 @@ public class SignUpInfo extends Object{
         this.displayName = displayName;
     }
 
+    @Exclude
     public String getCitizenId() {
         return citizenId;
     }

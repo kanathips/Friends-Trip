@@ -1,4 +1,4 @@
-package com.tinyandfriend.project.friendstrip;
+package com.tinyandfriend.project.friendstrip.listener;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,6 +8,8 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.tinyandfriend.project.friendstrip.ReVerifyEmailActivity;
+import com.tinyandfriend.project.friendstrip.SignInActivity;
 
 /**
  * Created by NewWy on 12/10/2559.
