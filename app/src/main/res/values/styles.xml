@@ -6,7 +6,7 @@
         <item name="colorPrimary">#008cf7</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColor">#ffffff</item>
+        <!--<item name="android:textColor">#ffffff</item>-->
     </style>
 
     <style name="MyDatePickerDialogTheme" parent="@android:style/Theme.Holo.Light.Dialog">

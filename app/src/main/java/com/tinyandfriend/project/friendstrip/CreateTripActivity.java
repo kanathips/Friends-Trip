@@ -1,6 +1,7 @@
 package com.tinyandfriend.project.friendstrip;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -22,7 +22,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.tinyandfriend.project.friendstrip.adapter.TagListViewAdapter;
 import com.tinyandfriend.project.friendstrip.info.PlaceInfo;
-import com.tinyandfriend.project.friendstrip.view.MapDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,7 +33,7 @@ import java.util.Calendar;
 public class CreateTripActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private ArrayList<PlaceInfo> placeInfos;
-
+    private static final int ADD_PLACE_REQUEST = 1;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -144,12 +143,13 @@ public class CreateTripActivity extends AppCompatActivity implements OnMapReadyC
         editMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MapDialog mapDialog = new MapDialog(CreateTripActivity.this);
-                mapDialog.show();
+                Intent intent = new Intent(CreateTripActivity.this, AddPlaceActivity.class);
+                intent.putExtra("placeInfos", placeInfos);
+                startActivityForResult(intent, ADD_PLACE_REQUEST);
             }
         });
     }
-    
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         googleMap.getUiSettings().setMapToolbarEnabled(false);
@@ -159,6 +159,15 @@ public class CreateTripActivity extends AppCompatActivity implements OnMapReadyC
         markerOptions.position(latLng);
         markerOptions.title("I'm Here");
         googleMap.addMarker(markerOptions);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ADD_PLACE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                placeInfos = data.getParcelableArrayListExtra("placeInfos");
+            }
+        }
     }
 
 

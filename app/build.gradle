@@ -35,6 +35,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-places:9.6.1'
         compile 'com.google.android.gms:play-services-maps:9.6.1'
 
+    compile 'org.jetbrains:annotations-java5:15.0'
 }
 
 
