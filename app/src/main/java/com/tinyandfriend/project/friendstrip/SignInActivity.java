@@ -1,5 +1,6 @@
 package com.tinyandfriend.project.friendstrip;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -35,6 +36,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     public void onClickLogin(View view) {
+        final ProgressDialog progressDialog = new ProgressDialog(this);
         if (!validateForm())
             return;
 
@@ -57,9 +59,12 @@ public class SignInActivity extends AppCompatActivity {
                         Toast.makeText(SignInActivity.this, "Sign In Fail", Toast.LENGTH_SHORT).show();
                     }else if(!task.getResult().getUser().isEmailVerified()){
                         Log.v(TAG, "SignIn:OnComplete: Account was not verify");
+                        progressDialog.show(SignInActivity.this, "เข้าสู่ระบบ", "กำลังทำการเข้าสู่ระบบ...");
                         startActivity(new Intent(SignInActivity.this, ReVerifyEmailActivity.class));
+                        finish();
                     } else if(task.isSuccessful()) {
                         Log.v(TAG, "SignIn:OnComplete: Sign In Pass");
+                        progressDialog.show(SignInActivity.this, "เข้าสู่ระบบ", "กำลังทำการเข้าสู่ระบบ...");
                         startActivity(new Intent(SignInActivity.this, MainActivity.class));
                         finish();
                     }
@@ -95,6 +100,7 @@ public class SignInActivity extends AppCompatActivity {
 
     public void onSignUpClick(View view) {
         startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
+//        finish();
     }
 
     public void onClickResetPassword(View view) {

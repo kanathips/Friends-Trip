@@ -49,20 +49,20 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
         pixelWidth = getResources().getDisplayMetrics().widthPixels;
         pixelHeight = getResources().getDisplayMetrics().heightPixels;
 
-//        if (getIntent().hasExtra("placeInfos")) {
-//            placeInfos = getIntent().getParcelableArrayListExtra("placeInfos");
-//        } else {
-//            placeInfos = new ArrayList<>();
-//        }
-
-        if(placeInfos.size() > 2){
-            createLatLngBounds(placeInfos);
-        }else if (placeInfos.size() == 1){
-            PlaceInfo info = placeInfos.get(0);
-            CameraPosition test = CameraPosition.fromLatLngZoom(info.getLocation(), 17);
-            CameraUpdate cu = CameraUpdateFactory.newCameraPosition(test);
-            googleMap.animateCamera(cu);
+        if (getIntent().hasExtra("placeInfos")) {
+            placeInfos = getIntent().getParcelableArrayListExtra("placeInfos");
+        } else {
+            placeInfos = new ArrayList<>();
         }
+
+//        if(placeInfos.size() > 2){
+//            createLatLngBounds(placeInfos);
+//        }else if (placeInfos.size() == 1){
+//            PlaceInfo info = placeInfos.get(0);
+//            CameraPosition test = CameraPosition.fromLatLngZoom(info.getLocation(), 17);
+//            CameraUpdate cu = CameraUpdateFactory.newCameraPosition(test);
+//            googleMap.animateCamera(cu);
+//        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

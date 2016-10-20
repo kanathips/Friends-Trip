@@ -1,5 +1,6 @@
 package com.tinyandfriend.project.friendstrip;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -48,5 +49,10 @@ public class ForgetPasswordActivity extends AppCompatActivity{
             //TODO Change the line below to show the user about email format error
             Toast.makeText(ForgetPasswordActivity.this, "Error", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void onClickCancel_ForgetPassword(View view) {
+        finish();
+        startActivity(new Intent(this, SignInActivity.class));
     }
 }

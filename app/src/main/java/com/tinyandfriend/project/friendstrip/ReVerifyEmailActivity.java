@@ -1,5 +1,6 @@
 package com.tinyandfriend.project.friendstrip;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -29,10 +30,14 @@ public class ReVerifyEmailActivity extends AppCompatActivity {
                 Toast.makeText(ReVerifyEmailActivity.this, "Send " + task.isSuccessful(), Toast.LENGTH_SHORT).show();
             }
         });
+        ProgressDialog.show(this, "เข้าสู่ระบบ", "กำลังทำการเข้าสู่ระบบ...");
+        startActivity(new Intent(this, SignInActivity.class));
+        finish();
     }
 
     public void onClickSignOut(View view){
         firebaseAuth.signOut();
         startActivity(new Intent(this, SignInActivity.class));
+        finish();
     }
 }

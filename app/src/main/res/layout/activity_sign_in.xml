@@ -1,70 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fbutton="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="30dp"
-    android:background="@drawable/bg"
+    android:background="@drawable/bg1"
     android:weightSum="1">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:src="@drawable/logo"
+        />
+
 
     <TextView
         android:text="เข้าสู่ระบบเฟรนทริป"
-        android:layout_marginTop="90dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textView2"
-        android:textSize="25dp"
-        android:textColor="#ffffff"
-        android:layout_weight="0.18" />
+        android:textSize="20dp"
+        android:textColor="#ffffff" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="239dp"
+        android:layout_height="wrap_content"
         android:padding="10dp"
-        android:weightSum="1"
         android:orientation="vertical"
-        android:layout_weight="0.18">
-        <!--<TextView-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:text="@string/username"-->
-            <!--android:textColor="#C1C1C1"-->
-            <!--android:textSize="18dp"-->
-            <!--/>-->
+        android:background="@color/darkTransparent">
 
         <LinearLayout
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.28">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:layout_width="37dp"
                 android:layout_height="match_parent"
-                fbutton:srcCompat="@drawable/user"
+                fbutton:srcCompat="@drawable/ic_account_circle_white_24dp"
                 android:id="@+id/imageView" />
 
-            <EditText
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/email"
-                android:layout_gravity="center_horizontal"
-                android:inputType="textEmailAddress"
-                android:hint="@string/username"
-                android:textColorHint="#C1C1C1"
-                android:textColor="#ffffff"
-                android:backgroundTint="@android:color/holo_blue_light" />
+                android:textColorHint="@color/whiteLow"
+                >
+
+                <EditText
+                    android:id="@+id/email"
+                    android:inputType="textEmailAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/username"
+                    android:textColor="@color/white"
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+
         </LinearLayout>
 
-        <!--<TextView-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:text="@string/password"-->
-            <!--android:textColor="#C1C1C1"-->
-            <!--android:textSize="18dp"-->
-            <!--/>-->
         <LinearLayout
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
@@ -74,32 +73,37 @@
             <ImageView
                 android:layout_width="39dp"
                 android:layout_height="match_parent"
-                fbutton:srcCompat="@drawable/lock"
+                fbutton:srcCompat="@drawable/ic_lock_white_24dp"
                 android:id="@+id/imageView2" />
 
-            <EditText
+
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/password"
-                android:textColor="#ffffff"
-                android:hint="@string/password"
-                android:textColorHint="#C1C1C1"
-                android:layout_gravity="center_horizontal"
-                android:inputType="textPassword"
-                android:backgroundTint="@android:color/holo_blue_light" />
+                android:textColorHint="@color/whiteLow"
+                >
+
+                <EditText
+                    android:id="@+id/password"
+                    android:inputType="textPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password"
+                    android:textColor="@color/white"
+                    />
+            </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="1">
+            android:layout_height="50dp">
 
             <TextView
                 android:layout_marginTop="30px"
                 android:text="@string/forget"
-                android:textColor="#C1C1C1"
+                android:textColor="@color/whiteLow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView"
@@ -111,34 +115,36 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginBottom="10dp"
-            android:layout_gravity="right"
+            android:layout_marginTop="70dp"
+            android:layout_gravity="center"
+            android:gravity="right"
             android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="46dp">
+            android:layout_width="match_parent"
+            android:layout_height="65dp">
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="45dp"
-                android:layout_marginTop="100px"
+                android:layout_width="130dp"
+                android:layout_height="55dp"
+                android:id="@+id/sign_up_button"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginRight="10dp"
+                android:text="@string/sign_up"
+                android:textSize="16dp"
+                android:textColor="@color/white"
+                android:background="@drawable/border_bt"
+                android:onClick="onSignUpClick"/>
+
+            <Button
+                android:layout_width="130dp"
+                android:layout_height="55dp"
                 android:id="@+id/sign_in_button"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/sing_in"
-                android:background="@drawable/border_bt"
-                android:onClick="onClickLogin"
-                android:layout_weight="1" />
+                android:textSize="16dp"
+                android:textColor="@color/white"
+                android:background="@color/colorRed"
+                android:onClick="onClickLogin"/>
 
-
-            <Button
-                android:layout_marginRight="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="45dp"
-                android:id="@+id/sign_up_button"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/sign_up"
-                android:background="@drawable/border_bt"
-                android:onClick="onSignUpClick"
-                android:layout_weight="1" />
 
         </LinearLayout>
 
@@ -146,3 +152,16 @@
 
 
 </LinearLayout>
+
+
+<!--<com.rengwuxian.materialedittext.MaterialEditText-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:inputType="textEmailAddress"-->
+<!--android:hint="@string/username"-->
+<!--android:id="@+id/email"-->
+<!--android:layout_gravity="center_horizontal"-->
+<!--app:met_baseColor="@android:color/white"-->
+<!--app:met_primaryColor="?colorAccent"-->
+<!--android:textCursorDrawable="@color/background_tab_pressed"-->
+<!--app:met_floatingLabel="highlight"/>-->

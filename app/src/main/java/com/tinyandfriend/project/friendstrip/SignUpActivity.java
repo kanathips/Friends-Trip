@@ -1,6 +1,7 @@
 package com.tinyandfriend.project.friendstrip;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -141,6 +142,11 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             Log.e("SignUpInfo", e.getMessage());
         }
+    }
+
+    public void onClickSignUp_Cancel(View view) {
+//        startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
+        finish();
     }
 
     public void signUp(final SignUpInfo signUpInfo) {
@@ -505,4 +511,6 @@ public class SignUpActivity extends AppCompatActivity {
     private String getCitizenIdText() {
         return getCitizenIdEditText().getText().toString().trim();
     }
+
+
 }
