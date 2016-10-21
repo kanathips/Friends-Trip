@@ -30,7 +30,6 @@ public class ReVerifyEmailActivity extends AppCompatActivity {
                 Toast.makeText(ReVerifyEmailActivity.this, "Send " + task.isSuccessful(), Toast.LENGTH_SHORT).show();
             }
         });
-        ProgressDialog.show(this, "เข้าสู่ระบบ", "กำลังทำการเข้าสู่ระบบ...");
         startActivity(new Intent(this, SignInActivity.class));
         finish();
     }

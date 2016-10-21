@@ -3,6 +3,8 @@ package com.tinyandfriend.project.friendstrip;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -15,7 +17,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +30,12 @@ import android.widget.Toast;
 import com.astuetz.PagerSlidingTabStrip;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.tinyandfriend.project.friendstrip.adapter.CardView_Adapter;
 import com.tinyandfriend.project.friendstrip.adapter.FragmentPagerAdapter_Content;
+import com.tinyandfriend.project.friendstrip.info.CardView_Info;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -33,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String username;
     private FirebaseAuth.AuthStateListener authStateListener;
     private boolean stateFlag = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,7 +148,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 }
         );
+
+
     }
+
+
 
     private void onSelectSomeThing() {
         FloatingActionButton actionButton = (FloatingActionButton) findViewById(R.id.fab);
@@ -217,6 +233,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_log_out) {
             firebaseAuth.signOut();
+            startActivity(new Intent(this,SignInActivity.class));
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
