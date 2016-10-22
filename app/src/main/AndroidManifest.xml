@@ -31,7 +31,6 @@
         <activity android:name=".SignInActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".AddFriendsActivity" />
-        <activity android:name=".ReVerifyEmailActivity" />
         <activity android:name=".ForgetPasswordActivity" />
         <activity android:name=".CreateTripActivity" />
         <!--
