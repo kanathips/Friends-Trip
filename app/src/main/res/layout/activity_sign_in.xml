@@ -138,7 +138,9 @@
                 android:text="@string/sign_up"
                 android:background="@drawable/border_bt"
                 android:onClick="onSignUpClick"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp" />
 
         </LinearLayout>
 

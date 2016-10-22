@@ -37,9 +37,7 @@ public class AuthStateChangeListener implements FirebaseAuth.AuthStateListener {
                 context.startActivity(new Intent(context, ReVerifyEmailActivity.class));
 //                ((Activity)context).finish();
             }
-//            }else {
-//                Toast.makeText(context, "Sign In Ok", Toast.LENGTH_SHORT).show();
-//            }
+
         }
     }
 }

@@ -23,6 +23,30 @@ public class PlaceInfo implements Parcelable {
         id = in.readString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PlaceInfo info = (PlaceInfo) o;
+
+        if (day != info.day) return false;
+        if (!name.equals(info.name)) return false;
+        if (!location.equals(info.location)) return false;
+        if (address != null ? !address.equals(info.address) : info.address != null) return false;
+        return id.equals(info.id);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + location.hashCode();
+        result = 31 * result + day;
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + id.hashCode();
+        return result;
+    }
+
     public static final Creator<PlaceInfo> CREATOR = new Creator<PlaceInfo>() {
         @Override
         public PlaceInfo createFromParcel(Parcel in) {

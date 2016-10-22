@@ -11,7 +11,6 @@
         android:text="สมัครสมาชิก"
         android:textSize="25dp"
         android:textColor="#ffffff"
-
         />
 
 
@@ -84,36 +83,13 @@
             android:id="@+id/displayname"
             android:layout_gravity="center_horizontal"
             android:hint="ชื่อที่ใช้ในระบบ"
+            android:singleLine="true"
             />
-
-        <!--<EditText-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:inputType="date"-->
-            <!--android:ems="10"-->
-            <!--android:hint="วันเกิด"-->
-            <!--android:id="@+id/birth"/>-->
-        <!--<Button-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="วันเกิด"-->
-            <!--android:onClick="showDatePickerDialog" />-->
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <!--<Button android:id="@+id/myDatePickerButton"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="วันเกิด" />-->
-
-            <!--<TextView android:id="@+id/showMyDate"-->
-                <!--android:layout_width="fill_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:textSize="18dp"-->
-                <!--android:layout_weight="1" />-->
 
             <TextView
                 android:layout_height="wrap_content"
@@ -152,7 +128,7 @@
             android:id="@+id/phonenumber"
             android:layout_gravity="center_horizontal"
             android:hint="เบอร์โทรศัพท์"
-            android:inputType="numberDecimal"/>
+            android:inputType="phone"/>
 
         <EditText
             android:layout_width="match_parent"
@@ -160,7 +136,7 @@
             android:id="@+id/citizen_id"
             android:layout_gravity="center_horizontal"
             android:hint="รหัสประจำตัวประชาชน"
-            android:inputType="numberDecimal"/>
+            android:inputType="number"/>
     </LinearLayout>
 
     <LinearLayout

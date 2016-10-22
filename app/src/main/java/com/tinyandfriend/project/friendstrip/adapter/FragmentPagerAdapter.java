@@ -22,6 +22,7 @@ public class FragmentPagerAdapter extends FragmentStatePagerAdapter {
     }
 
 
+
     public ArrayList<FragmentPager> getFragments() {
         return fragments;
     }

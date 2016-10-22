@@ -3,15 +3,25 @@ package com.tinyandfriend.project.friendstrip;
 //import android.support.v4.app.FragmentManager;
 
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
@@ -25,11 +35,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.gordonwong.materialsheetfab.MaterialSheetFab;
+import com.tinyandfriend.project.friendstrip.adapter.PlaceInfoAdapter;
 import com.tinyandfriend.project.friendstrip.info.PlaceInfo;
+import com.tinyandfriend.project.friendstrip.view.SingleSheetFAB;
 
 import java.util.ArrayList;
-
-import static android.R.attr.padding;
 
 public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectionListener, OnMapReadyCallback {
 
@@ -40,29 +51,25 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
 
 
     private static final String TAG = "Add_Place_Activity";
+    private MaterialSheetFab<SingleSheetFAB> materialSheetFab;
+    private int tripDuration;
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_place);
-
+        placeInfos = new ArrayList<>();
         pixelWidth = getResources().getDisplayMetrics().widthPixels;
         pixelHeight = getResources().getDisplayMetrics().heightPixels;
 
-//        if (getIntent().hasExtra("placeInfos")) {
-//            placeInfos = getIntent().getParcelableArrayListExtra("placeInfos");
-//        } else {
-//            placeInfos = new ArrayList<>();
-//        }
-
-        if(placeInfos.size() > 2){
-            createLatLngBounds(placeInfos);
-        }else if (placeInfos.size() == 1){
-            PlaceInfo info = placeInfos.get(0);
-            CameraPosition test = CameraPosition.fromLatLngZoom(info.getLocation(), 17);
-            CameraUpdate cu = CameraUpdateFactory.newCameraPosition(test);
-            googleMap.animateCamera(cu);
+        if (getIntent().hasExtra("placeInfos")) {
+            originalPlaceInfos = getIntent().getParcelableArrayListExtra("placeInfos");
+        } else {
+            originalPlaceInfos = new ArrayList<>();
         }
+
+        tripDuration = (int) getIntent().getLongExtra("tripDuration", 0);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -75,15 +82,10 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
 
         MapFragment mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        setupAddPlaceFab(tripDuration);
     }
 
-    private LatLngBounds createLatLngBounds(ArrayList<PlaceInfo> placeInfos){
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for (PlaceInfo info: placeInfos){
-            builder.include(info.getLocation());
-        }
-        return builder.build();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -96,8 +98,9 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case (R.id.commit):
+                originalPlaceInfos.addAll(placeInfos);
                 Intent intent = new Intent(this, CreateTripActivity.class);
-                intent.putParcelableArrayListExtra("placeInfos", placeInfos);
+                intent.putParcelableArrayListExtra("placeInfos", originalPlaceInfos);
                 setResult(RESULT_OK, intent);
                 finish();
                 return true;
@@ -106,19 +109,65 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
         }
     }
 
+    private void setupAddPlaceFab(int tripDuration) {
+        if (tripDuration == 0 || tripDuration == 1) {
 
-    public void onclickAddPlace(View view) {
-        if(placeInfo == null)
-            return;
+        } else {
+
+            ArrayList<String> fabSheetTexts = new ArrayList<>();
+
+            for (int i = 1; i <= tripDuration && i < 6; i++) {
+                String text = "วันที่ " + i;
+                fabSheetTexts.add(text);
+            }
+
+            if (tripDuration > 5) {
+                fabSheetTexts.add("เพิ่มเติม");
+            }
+
+
+            SingleSheetFAB fab = (SingleSheetFAB) findViewById(R.id.add_place_button);
+            ListView sheetView = (ListView) findViewById(R.id.fab_sheet);
+            View overlay = findViewById(R.id.overlay);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, fabSheetTexts);
+            int sheetColor = getResources().getColor(R.color.colorAccent);
+            int fabColor = getResources().getColor(R.color.colorPrimary);
+
+            sheetView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (placeInfo == null)
+                        return;
+                    if (originalPlaceInfos.contains(placeInfo) || placeInfos.contains(placeInfo)) {
+                        Toast.makeText(AddPlaceActivity.this, "คุณเลือกสถานที่นี้ไปแล้ว", Toast.LENGTH_SHORT).show();
+                        return;                    }
+                    if(position < 5){
+                        placeInfo.setDay(position + 1);
+                        addPlace(placeInfos, placeInfo, googleMap);
+                    }else{
+                        setupDialog(placeInfos, placeInfo, googleMap);
+                    }
+                }
+            });
+
+            sheetView.setAdapter(adapter);
+            materialSheetFab = new MaterialSheetFab<>(fab, sheetView, overlay,
+                    sheetColor, fabColor);
+        }
+    }
+
+    private void addPlace(ArrayList<PlaceInfo> placeInfos, PlaceInfo placeInfo, GoogleMap googleMap){
         placeInfos.add(placeInfo);
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.title(placeInfo.getName());
         markerOptions.position(placeInfo.getLocation());
-        googleMap.addMarker(markerOptions);
+        markerOptions.snippet(placeInfo.getAddress());
+        googleMap.addMarker(markerOptions).setTag(placeInfo.getDay());
     }
 
-    private ArrayList<PlaceInfo> placeInfos;
+    private ArrayList<PlaceInfo> originalPlaceInfos;
     private PlaceInfo placeInfo;
+    private ArrayList<PlaceInfo> placeInfos;
 
 
     @Override
@@ -127,6 +176,7 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
         placeInfo.setLocation(place.getLatLng());
         placeInfo.setName(place.getName().toString());
         placeInfo.setId(place.getId());
+        placeInfo.setAddress(place.getAddress().toString());
 
         CameraPosition test = CameraPosition.fromLatLngZoom(place.getLatLng(), 17);
         CameraUpdate cu = CameraUpdateFactory.newCameraPosition(test);
@@ -141,26 +191,86 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
-        for (int i = 0; i < placeInfos.size(); i++) {
-            PlaceInfo info = placeInfos.get(i);
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        googleMap.getUiSettings().setMapToolbarEnabled(false);
+        for (int i = 0; i < originalPlaceInfos.size(); i++) {
+            PlaceInfo info = originalPlaceInfos.get(i);
             MarkerOptions options = new MarkerOptions();
             options.position(info.getLocation());
             options.title(info.getName());
-
+            builder.include(info.getLocation());
             googleMap.addMarker(options);
         }
 
-        if(mapFlag)
+        if (originalPlaceInfos.size() > 1) {
+            LatLngBounds latLngBounds = builder.build();
+            int padding = (int) (pixelWidth * 0.15);
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(latLngBounds, pixelWidth, pixelHeight, padding);
+            googleMap.animateCamera(cu);
+        } else if (originalPlaceInfos.size() == 1) {
+            PlaceInfo info = originalPlaceInfos.get(0);
+            CameraPosition test = CameraPosition.fromLatLngZoom(info.getLocation(), 17);
+            CameraUpdate cu = CameraUpdateFactory.newCameraPosition(test);
+            googleMap.animateCamera(cu);
+        }
+
+        if (mapFlag)
             googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         else
             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        googleMap.setInfoWindowAdapter(new PlaceInfoAdapter(this));
     }
 
-    public void onClickChangeMapType(View view){
-        if(mapFlag)
+    public void onClickChangeMapType(View view) {
+        if (mapFlag)
             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         else
             googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         mapFlag = !mapFlag;
+    }
+
+    private void setupDialog(final ArrayList<PlaceInfo> placeInfos, final PlaceInfo placeInfo, final GoogleMap googleMap) {
+        // get prompts.xml view
+        LayoutInflater li = LayoutInflater.from(this);
+        View promptsView = li.inflate(R.layout.trip_day_dialog, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+        alertDialogBuilder.setView(promptsView);
+
+        final EditText userInput = (EditText) promptsView
+                .findViewById(R.id.dialog_editText);
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                int tripDay = Integer.parseInt(userInput.getText().toString());
+
+                                if(tripDay > tripDuration || tripDay == 0){
+                                    userInput.setError("ข้อมูลไม่ถูกต้อง");
+                                    return;
+                                }
+                                placeInfo.setDay(tripDay);
+                                addPlace(placeInfos, placeInfo, googleMap);
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
     }
 }
