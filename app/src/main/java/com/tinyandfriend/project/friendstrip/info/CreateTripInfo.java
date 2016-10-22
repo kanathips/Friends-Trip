@@ -3,6 +3,7 @@ package com.tinyandfriend.project.friendstrip.info;
 import com.tinyandfriend.project.friendstrip.info.PlaceInfo;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 /**
  * Created by NewWy on 9/10/2559.
@@ -18,6 +19,15 @@ public class CreateTripInfo {
     String expense;
     ArrayList<String> tag;
     ArrayList<PlaceInfo> placeInfos;
+    TreeMap<String, String> files;
+
+    public TreeMap<String, String> getFiles() {
+        return files;
+    }
+
+    public void setFiles(TreeMap<String, String> files) {
+        this.files = files;
+    }
 
     public String getNumberMember() {
         return numberMember;

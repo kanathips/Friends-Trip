@@ -124,6 +124,7 @@ public class AddFriendsActivity extends AppCompatActivity {
         Map<String, Object> receiveMap = new HashMap<>();
         receiveMap.put(senderUID, Approving);
         databaseReference.child("friendTerm").child(targetUID).updateChildren(receiveMap);
+
         tempProgressDialog.dismiss();
     }
 }

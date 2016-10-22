@@ -14,10 +14,10 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <android.support.v4.view.ViewPager
+    <com.tinyandfriend.project.friendstrip.view.NoSwipeViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/viewpager">
-    </android.support.v4.view.ViewPager>
+    </com.tinyandfriend.project.friendstrip.view.NoSwipeViewPager>
 
 </LinearLayout>

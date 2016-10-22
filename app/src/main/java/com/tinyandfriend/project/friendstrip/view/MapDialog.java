@@ -41,7 +41,7 @@ package com.tinyandfriend.project.friendstrip.view;//package com.tinyandfriend.p
 //    @Nullable
 //    @Override
 //    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        View view = inflater.inflate(R.layout.map_dialog, container, false);
+//        View view = inflater.inflate(R.layout.trip_day_dialog, container, false);
 //
 //        FragmentManager fragmentManager = getActivity().getFragmentManager();
 //
@@ -97,15 +97,12 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.widget.FrameLayout;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.tinyandfriend.project.friendstrip.R;
 
 public class MapDialog extends Dialog implements
@@ -122,7 +119,7 @@ public class MapDialog extends Dialog implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.map_dialog);
+        setContentView(R.layout.trip_day_dialog);
 
 //        FragmentManager fragmentManager = activity.getFragmentManager();
 //
