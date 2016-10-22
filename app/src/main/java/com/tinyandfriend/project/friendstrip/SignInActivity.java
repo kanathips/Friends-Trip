@@ -35,6 +35,8 @@ public class SignInActivity extends AppCompatActivity {
         passwordEditText = (EditText) findViewById(R.id.password);
 
         firebaseAuth = FirebaseAuth.getInstance();
+
+
     }
 
     public void onClickLogin(View view) {

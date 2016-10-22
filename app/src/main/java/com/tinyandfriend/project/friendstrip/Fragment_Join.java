@@ -44,7 +44,7 @@ public class Fragment_Join extends Fragment {
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(),1);
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(10), false));
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(0), false));
 //        recyclerView.setItemAnimator(new DefaultItemAnimator());
 //        recyclerView.setAdapter(adapter);
 
