@@ -2,9 +2,9 @@ package com.tinyandfriend.project.friendstrip;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.content.Intent;
+import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 //import android.support.annotation.NonNull;
 import android.support.annotation.NonNull;
@@ -32,12 +32,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.tinyandfriend.project.friendstrip.adapter.AuthAdapter;
 import com.tinyandfriend.project.friendstrip.info.SignUpInfo;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Created by NewWy on 3/10/2559.
@@ -55,15 +53,15 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText fNameEditText;
     private EditText lNameEditText;
 
-    private TextInputLayout  emailTextLayout;
-    private TextInputLayout  citizenIdTextLayout;
-    private TextInputLayout  rePasswordTextLayout;
-    private TextInputLayout  passwordTextLayout;
-    private TextInputLayout  displayNameTextLayout;
-    private TextInputLayout  phoneNumberTextLayout;
-    private TextInputLayout  bDateTextLayout;
-    private TextInputLayout  fNameTextLayout;
-    private TextInputLayout  lNameTextLayout;
+    private TextInputLayout emailTextLayout;
+    private TextInputLayout citizenIdTextLayout;
+    private TextInputLayout rePasswordTextLayout;
+    private TextInputLayout passwordTextLayout;
+    private TextInputLayout displayNameTextLayout;
+    private TextInputLayout phoneNumberTextLayout;
+    private TextInputLayout bDateTextLayout;
+    private TextInputLayout fNameTextLayout;
+    private TextInputLayout lNameTextLayout;
 
     private DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference();
 
@@ -102,13 +100,11 @@ public class SignUpActivity extends AppCompatActivity {
         setRePasswordTextLayout((TextInputLayout) findViewById(R.id.rePasswordTextLayout));
         setPhoneNumberTextLayout((TextInputLayout) findViewById(R.id.phoneNumberTextLayout));
 
-
         setPhoneNumberEditText((EditText) findViewById(R.id.phonenumber));
 
         firebaseAuth = FirebaseAuth.getInstance();
 
         dateView = (EditText) findViewById(R.id.birth_date);
-
 
 
     }
@@ -140,12 +136,10 @@ public class SignUpActivity extends AppCompatActivity {
     public void onClickSignUp(View view) {
         //TODO Implement Validate From Function here
 
-        if(!loginAttempt()){
+        if (!loginAttempt()) {
             return;
         }
-
-        final ProgressDialog progressDialog = ProgressDialog.show(SignUpActivity.this, "สมัครสมาชิก", "กำลังทำรายการโปรดรอ...");
-
+//        final ProgressDialog progressDialog = ProgressDialog.show(SignUpActivity.this, "สมัครสมาชิก", "กำลังทำรายการโปรดรอ...");
         final SignUpInfo signUpInfo = new SignUpInfo();
         try {
             signUpInfo.setEmail(getEmailText());
@@ -158,16 +152,14 @@ public class SignUpActivity extends AppCompatActivity {
             signUpInfo.setPhoneNumber(getPhoneNumberText());
 
             signUp(signUpInfo);
-            progressDialog.dismiss();
+//            progressDialog.dismiss();
 
         } catch (IllegalArgumentException e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignUpActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             Log.e("SignUpInfo", e.getMessage());
         }
 
-
     }
-
     public void onClickSignUp_Cancel(View view) {
 //        startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
         finish();
@@ -239,7 +231,7 @@ public class SignUpActivity extends AppCompatActivity {
                                                                     String errorText;
                                                                     if (exception instanceof FirebaseAuthWeakPasswordException == true) {
                                                                         errorText = "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร";
-                                                                    }else{
+                                                                    } else {
                                                                         errorText = exception.getMessage();
                                                                     }
                                                                     Toast.makeText(SignUpActivity.this, errorText, Toast.LENGTH_SHORT).show();
@@ -253,9 +245,9 @@ public class SignUpActivity extends AppCompatActivity {
                                                                     databaseReference.child("users").child(user.getUid()).setValue(signUpInfo).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                         @Override
                                                                         public void onComplete(@NonNull Task<Void> task) {
-                                                                            if(task.isSuccessful()){
+                                                                            if (task.isSuccessful()) {
                                                                                 Log.i(TAG, "Firebase : Insert Sign up Info Complete");
-                                                                            }else{
+                                                                            } else {
                                                                                 Log.e(TAG, "Firebase : Insert Sign up Info Not Complete");
                                                                             }
                                                                         }
@@ -266,9 +258,9 @@ public class SignUpActivity extends AppCompatActivity {
                                                                     databaseReference.child("citizenIdIndex").child(user.getUid()).setValue(citizenIdMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                         @Override
                                                                         public void onComplete(@NonNull Task<Void> task) {
-                                                                            if(task.isSuccessful()){
+                                                                            if (task.isSuccessful()) {
                                                                                 Log.i(TAG, "Firebase : Insert CitizenId Index Complete");
-                                                                            }else{
+                                                                            } else {
                                                                                 Log.e(TAG, "Firebase : Insert CitizenId Index Not Complete");
                                                                             }
                                                                         }
@@ -279,9 +271,9 @@ public class SignUpActivity extends AppCompatActivity {
                                                                     databaseReference.child("displayNameIndex").child(user.getUid()).setValue(displayNameMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                         @Override
                                                                         public void onComplete(@NonNull Task<Void> task) {
-                                                                            if(task.isSuccessful()){
+                                                                            if (task.isSuccessful()) {
                                                                                 Log.i(TAG, "Firebase : Insert Display name Index Complete");
-                                                                            }else{
+                                                                            } else {
                                                                                 Log.e(TAG, "Firebase : Insert Display name Index Not Complete");
                                                                             }
                                                                         }
@@ -355,6 +347,89 @@ public class SignUpActivity extends AppCompatActivity {
         valid = true;
         return true;
     }
+
+//    private boolean validateFrom() {
+//
+//        boolean valid = true;
+//        String errorMessage;
+//
+//        String fName = getFNameText();
+//
+//        if (fName.isEmpty()) {
+//            valid = false;
+//            errorMessage = "จำเป็นต้องใส่";
+//        } else {
+//            errorMessage = null;
+//        }
+//
+//        getfNameEditText().setError(errorMessage);
+//
+//        String phoneNumber = getPhoneNumberText();
+//        if (phoneNumber.isEmpty()) {
+//            valid = false;
+//            errorMessage = "จำเป็นต้องใส่เบอร์โทรศัพท์";
+//        } else {
+//            errorMessage = null;
+//        }
+//        getPhoneNumberEditText().setError(errorMessage);
+//
+//        String email = getEmailText();
+//
+//        if (email.isEmpty()) {
+//            valid = false;
+//            errorMessage = "จำเป็นต้องใส่อีเมลล์";
+//        } else if (!Validator.validateEmail(email)) {
+//            valid = false;
+//            errorMessage = "รูปแบบอีเมลล์ไม่ถูกต้อง";
+//        } else {
+//            errorMessage = null;
+//        }
+//        getEmailEditText().setError(errorMessage);
+//
+//        String password = getPasswordText();
+//        if (password.isEmpty()) {
+//            valid = false;
+//            errorMessage = "จำเป็นต้องใส่รหัสผ่าน";
+//        } else {
+//            errorMessage = null;
+//        }
+//        getPasswordEditText().setError(errorMessage);
+//
+//        String rePassword = getRePasswordText();
+//        if (rePassword.isEmpty()) {
+//            valid = false;
+//            errorMessage = "จำเป็นต้องยืนยันรหัสผ่าน";
+//        } else if (!rePassword.equals(password)) {
+//            valid = false;
+//            errorMessage = "รหัสผ่านไม่ตรงกัน";
+//        } else {
+//            errorMessage = null;
+//        }
+//        getRePasswordEditText().setError(errorMessage);
+//
+//        String displayName = getDisplayNameText();
+//        if (displayName.isEmpty()) {
+//            valid = false;
+//            errorMessage = "จำเป็นต่องใส่ผู้ใช้งาน";
+//        } else {
+//            errorMessage = null;
+//        }
+//        getDisplayNameEditText().setError(errorMessage);
+//
+//        String citizenId = getCitizenIdText();
+//        if (citizenId.isEmpty()) {
+//            valid = false;
+//            errorMessage = "จำเป็นต่องใสรหัสประจำตัวประชาชน";
+//        } else if (!Validator.validateCitizenId(citizenId)) {
+//            valid = false;
+//            errorMessage = "รหัสประจำตัวประชาชนไม่ถูกต้อง";
+//        } else {
+//            errorMessage = null;
+//        }
+//        getCitizenIdEditText().setError(errorMessage);
+//        return valid;
+//    }
+
 
     private void requestFocus(View view) {
         if (view.requestFocus()) {
