@@ -1,6 +1,7 @@
 package com.tinyandfriend.project.friendstrip;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
@@ -136,12 +137,12 @@ public class SignUpActivity extends AppCompatActivity {
     public void onClickSignUp(View view) {
         //TODO Implement Validate From Function here
 
-        if (!loginAttempt()) {
+        if (!validateForm())
             return;
-        }
-//        final ProgressDialog progressDialog = ProgressDialog.show(SignUpActivity.this, "สมัครสมาชิก", "กำลังทำรายการโปรดรอ...");
-        final SignUpInfo signUpInfo = new SignUpInfo();
+
+        SignUpInfo signUpInfo = new SignUpInfo();
         try {
+
             signUpInfo.setEmail(getEmailText());
             signUpInfo.setPassword(getPasswordText(), getRePasswordText());
             signUpInfo.setDisplayName(getDisplayNameText());
@@ -152,7 +153,7 @@ public class SignUpActivity extends AppCompatActivity {
             signUpInfo.setPhoneNumber(getPhoneNumberText());
 
             signUp(signUpInfo);
-//            progressDialog.dismiss();
+
 
         } catch (IllegalArgumentException e) {
             Toast.makeText(SignUpActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -160,13 +161,56 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
     }
+
+    private boolean validateForm() {
+        if (!validateCheck(getfNameTextLayout(),getfNameEditText(),false,false,false)) {  return false;   }
+        if (!validateCheck(getlNameTextLayout(),getlNameEditText(),false,false,false)) {  return false;   }
+        if (!validateCheck(getEmailTextLayout(),getEmailEditText(),false,true,false)) {  return false;   }
+        if (!validateCheck(getRePasswordTextLayout(),getRePasswordEditText(),true,false,false)) {  return false;   }
+        if (!validateCheck(getPasswordTextLayout(),getPasswordEditText(),true,false,false)) {  return false;   }
+        if (!validateCheck(getDisplayNameTextLayout(),getDisplayNameEditText(),false,false,false)) {  return false;   }
+        if (!validateCheck(getPhoneNumberTextLayout(),getPhoneNumberEditText(),false,false,false)) {  return false;   }
+        if (!validateCheck(getCitizenIdTextLayout(),getCitizenIdEditText(),false,false,true)) {  return false;   }
+
+        return valid;
+
+    }
+
+    private boolean validateCheck(TextInputLayout textInputLayout,EditText editText,boolean isPassword,boolean isEmail,boolean isCitizenId) {
+        if (editText.getText().toString().trim().isEmpty()) {
+            textInputLayout.setError("จำเป็นต้องใส่");
+            requestFocus(editText);
+            valid = false;
+            return false;
+        } else if(!getPasswordText().equals(getRePasswordText())&&isPassword){
+            textInputLayout.setError("รหัสผ่านไม่ตรงกัน");
+            requestFocus(editText);
+            valid = false;
+            return false;
+        }else if(!Validator.validateEmail(getEmailText())&&isEmail){
+            textInputLayout.setError("รูปแบบอีเมลไม่ถูกต้อง");
+            requestFocus(editText);
+            valid = false;
+            return false;
+        }else if(!Validator.validateCitizenId(getCitizenIdText())&&isCitizenId){
+            textInputLayout.setError("รหัสบัตรประจำตัวประชาชนไม่ถูกต้อง");
+            requestFocus(editText);
+            valid = false;
+            return false;
+        }else {
+            textInputLayout.setErrorEnabled(false);
+        }
+        valid = true;
+        return true;
+    }
+
     public void onClickSignUp_Cancel(View view) {
 //        startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
         finish();
     }
 
     public void signUp(final SignUpInfo signUpInfo) {
-
+        final ProgressDialog progressDialog = ProgressDialog.show(SignUpActivity.this, "สมัครสมาชิก", "กำลังทำรายการโปรดรอ...");
         final boolean[] valid = {true};
         dbReference.child("citizenIdIndex").orderByChild("citizenId").equalTo(signUpInfo.getCitizenId())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -286,7 +330,7 @@ public class SignUpActivity extends AppCompatActivity {
                                                             }
                                                         });
                                             }
-
+                                            progressDialog.dismiss();
                                         }
 
                                         //
@@ -306,47 +350,7 @@ public class SignUpActivity extends AppCompatActivity {
                 });
     }
 
-    private boolean loginAttempt() {
-        if (!validateCheck(getfNameTextLayout(),getfNameEditText(),false,false,false)) {  return false;   }
-        if (!validateCheck(getlNameTextLayout(),getlNameEditText(),false,false,false)) {  return false;   }
-        if (!validateCheck(getEmailTextLayout(),getEmailEditText(),false,true,false)) {  return false;   }
-        if (!validateCheck(getRePasswordTextLayout(),getRePasswordEditText(),true,false,false)) {  return false;   }
-        if (!validateCheck(getPasswordTextLayout(),getPasswordEditText(),true,false,false)) {  return false;   }
-        if (!validateCheck(getDisplayNameTextLayout(),getDisplayNameEditText(),false,false,false)) {  return false;   }
-        if (!validateCheck(getPhoneNumberTextLayout(),getPhoneNumberEditText(),false,false,false)) {  return false;   }
-        if (!validateCheck(getCitizenIdTextLayout(),getCitizenIdEditText(),false,false,true)) {  return false;   }
 
-        return valid;
-
-    }
-
-    private boolean validateCheck(TextInputLayout textInputLayout,EditText editText,boolean isPassword,boolean isEmail,boolean isCitizenId) {
-        if (editText.getText().toString().trim().isEmpty()) {
-            textInputLayout.setError("จำเป็นต้องใส่");
-            requestFocus(editText);
-            valid = false;
-            return false;
-        } else if(!getPasswordText().equals(getRePasswordText())&&isPassword){
-            textInputLayout.setError("รหัสผ่านไม่ตรงกัน");
-            requestFocus(editText);
-            valid = false;
-            return false;
-        }else if(!Validator.validateEmail(getEmailText())&&isEmail){
-            textInputLayout.setError("รูปแบบอีเมลไม่ถูกต้อง");
-            requestFocus(editText);
-            valid = false;
-            return false;
-        }else if(!Validator.validateCitizenId(getCitizenIdText())&&isCitizenId){
-            textInputLayout.setError("รหัสบัตรประจำตัวประชาชนไม่ถูกต้อง");
-            requestFocus(editText);
-            valid = false;
-            return false;
-        }else {
-            textInputLayout.setErrorEnabled(false);
-        }
-        valid = true;
-        return true;
-    }
 
 //    private boolean validateFrom() {
 //
@@ -437,9 +441,6 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    private void validateDB(SignUpInfo signUpInfo) {
-
-    }
 
     // Setter And Getter
 
