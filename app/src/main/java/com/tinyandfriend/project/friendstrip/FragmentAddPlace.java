@@ -10,7 +10,6 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,20 +27,18 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+<<<<<<< HEAD:app/src/main/java/com/tinyandfriend/project/friendstrip/FragmentAddPlace.java
+=======
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.tinyandfriend.project.friendstrip.info.TripInfo;
+>>>>>>> refs/remotes/origin/Mark_branch:app/src/main/java/com/tinyandfriend/project/friendstrip/AddPlaceFragment.java
 import com.tinyandfriend.project.friendstrip.info.PlaceInfo;
+import com.tinyandfriend.project.friendstrip.info.TripInfo;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-
-/**
- * Created by NewWy on 22/10/2559.
- */
-
-public class AddPlaceFragment extends FragmentPager implements OnMapReadyCallback {
+public class FragmentAddPlace extends FragmentPager implements OnMapReadyCallback {
 
     private static final String TAG = "ADD_PLACE_FRAGMENT";
     private static final int ADD_PLACE_REQUEST = 0;
@@ -49,22 +46,20 @@ public class AddPlaceFragment extends FragmentPager implements OnMapReadyCallbac
     private int pixelHeight;
     private ArrayList<PlaceInfo> placeInfos;
     private Context context;
-    private AppCompatActivity activity;
     private View rootView;
     private GoogleMap googleMap;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.add_place_fragment, container, false);
+        rootView = inflater.inflate(R.layout.fragment_add_place, container, false);
 
         context = getContext();
-        activity = (AppCompatActivity) getActivity();
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
         pixelWidth = getResources().getDisplayMetrics().widthPixels;
         pixelHeight = getResources().getDisplayMetrics().heightPixels;
 
         placeInfos = new ArrayList<>();
-        ;
 
         //Add Toolbar
 
