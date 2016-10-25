@@ -11,50 +11,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba5927d2-a110-4a09-9753-03fd2302bb9a" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/.name" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dictionaries/NewWy.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/info/LatLng.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/info/TripInfo.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/file_row.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/appcompat_v7_24_2_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/appcompat_v7_24_2_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/design_24_2_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/design_24_2_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/firebase_auth_9_6_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/firebase_auth_9_6_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/firebase_auth_common_9_6_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/firebase_auth_common_9_6_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/firebase_auth_module_9_6_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/firebase_auth_module_9_6_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/firebase_storage_9_6_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/firebase_storage_9_6_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/library_2_1_4.xml" afterPath="$PROJECT_DIR$/.idea/libraries/library_2_1_4.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/pagerslidingtabstrip_1_0_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/pagerslidingtabstrip_1_0_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/play_services_basement_9_6_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/play_services_basement_9_6_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/play_services_maps_9_6_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/play_services_maps_9_6_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/play_services_places_9_6_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/play_services_places_9_6_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/recyclerview_animators_2_2_4.xml" afterPath="$PROJECT_DIR$/.idea/libraries/recyclerview_animators_2_2_4.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/recyclerview_v7_24_2_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/recyclerview_v7_24_2_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/support_compat_24_2_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/support_compat_24_2_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/support_core_ui_24_2_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/support_core_ui_24_2_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/support_fragment_24_2_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/support_fragment_24_2_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/support_media_compat_24_2_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/support_media_compat_24_2_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/support_vector_drawable_24_2_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/support_vector_drawable_24_2_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/AddPlaceActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/AddPlaceActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/AddPlaceFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/AddPlaceFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/AddTagFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/AddTagFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/CreateTripActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/CreateTripActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/DateSelect.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/DateSelect.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/Fragment_Join.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/Fragment_Join.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/MainActivity.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/Fragment_Notification.java~refs_remotes_origin_Newwy's_branch" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/SignUpActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/SignUpActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/adapter/TagListViewAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/adapter/TagListViewAdapter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/info/PlaceInfo.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/info/PlaceInfo.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/add_place_fragment.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/add_place_fragment.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/create_trip_page.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/create_trip_page.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_add_tag.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_add_tag.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/tag_listview_row.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/tag_listview_row.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gradlew" afterPath="$PROJECT_DIR$/gradlew" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gradlew.bat" afterPath="$PROJECT_DIR$/gradlew.bat" />
     </list>
     <ignored path="Friends-Trip.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -110,9 +68,10 @@
       <file leaf-file-name="SignUpActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/SignUpActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="19" column="24" selection-start-line="19" selection-start-column="24" selection-end-line="19" selection-end-column="24" />
+            <state relative-caret-position="7480">
+              <caret line="554" column="0" selection-start-line="554" selection-start-column="0" selection-end-line="554" selection-end-column="0" />
               <folding>
+                <element signature="imports" expanded="true" />
                 <element signature="method#onClickDate#0;class#SignUpActivity#0" expanded="false" />
                 <element signature="e#9377#9463#0" expanded="false" />
                 <element signature="e#13340#19775#0" expanded="true" />
@@ -2123,15 +2082,47 @@
               <option name="myItemId" value="Friends-Trip" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
             </PATH_ELEMENT>
+          </PATH>
+          <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Gradle Scripts" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidBuildScriptsGroupNode" />
+              <option name="myItemId" value="Friends-Trip" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
               <option name="myItemId" value="Friends-Trip" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Friends-Trip" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="friendstrip" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -2605,6 +2596,7 @@
         <state relative-caret-position="3434">
           <caret line="339" column="12" selection-start-line="339" selection-start-column="12" selection-end-line="339" selection-end-column="12" />
           <folding>
+            <element signature="imports" expanded="true" />
             <element signature="method#onClickDate#0;class#SignUpActivity#0" expanded="false" />
             <element signature="e#9377#9463#0" expanded="false" />
             <element signature="e#13340#19775#0" expanded="true" />
@@ -2914,9 +2906,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/tinyandfriend/project/friendstrip/SignUpActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="24" selection-start-line="19" selection-start-column="24" selection-end-line="19" selection-end-column="24" />
+        <state relative-caret-position="7480">
+          <caret line="554" column="0" selection-start-line="554" selection-start-column="0" selection-end-line="554" selection-end-column="0" />
           <folding>
+            <element signature="imports" expanded="true" />
             <element signature="method#onClickDate#0;class#SignUpActivity#0" expanded="false" />
             <element signature="e#9377#9463#0" expanded="false" />
             <element signature="e#13340#19775#0" expanded="true" />

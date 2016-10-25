@@ -347,6 +347,7 @@ public class SignUpActivity extends AppCompatActivity {
                                         @Override
                                         public void onCancelled(DatabaseError databaseError) {
                                             Toast.makeText(SignUpActivity.this, "ชื่อที่ใช้ในระบบ " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                                            progressDialog.dismiss();
                                         }
                                     });
                         }
@@ -354,93 +355,10 @@ public class SignUpActivity extends AppCompatActivity {
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         Toast.makeText(SignUpActivity.this, "บัตรปชช " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
                     }
                 });
     }
-
-
-//    private boolean validateFrom() {
-//
-//        boolean valid = true;
-//        String errorMessage;
-//
-//        String fName = getFNameText();
-//
-//        if (fName.isEmpty()) {
-//            valid = false;
-//            errorMessage = "จำเป็นต้องใส่";
-//        } else {
-//            errorMessage = null;
-//        }
-//
-//        getfNameEditText().setError(errorMessage);
-//
-//        String phoneNumber = getPhoneNumberText();
-//        if (phoneNumber.isEmpty()) {
-//            valid = false;
-//            errorMessage = "จำเป็นต้องใส่เบอร์โทรศัพท์";
-//        } else {
-//            errorMessage = null;
-//        }
-//        getPhoneNumberEditText().setError(errorMessage);
-//
-//        String email = getEmailText();
-//
-//        if (email.isEmpty()) {
-//            valid = false;
-//            errorMessage = "จำเป็นต้องใส่อีเมลล์";
-//        } else if (!Validator.validateEmail(email)) {
-//            valid = false;
-//            errorMessage = "รูปแบบอีเมลล์ไม่ถูกต้อง";
-//        } else {
-//            errorMessage = null;
-//        }
-//        getEmailEditText().setError(errorMessage);
-//
-//        String password = getPasswordText();
-//        if (password.isEmpty()) {
-//            valid = false;
-//            errorMessage = "จำเป็นต้องใส่รหัสผ่าน";
-//        } else {
-//            errorMessage = null;
-//        }
-//        getPasswordEditText().setError(errorMessage);
-//
-//        String rePassword = getRePasswordText();
-//        if (rePassword.isEmpty()) {
-//            valid = false;
-//            errorMessage = "จำเป็นต้องยืนยันรหัสผ่าน";
-//        } else if (!rePassword.equals(password)) {
-//            valid = false;
-//            errorMessage = "รหัสผ่านไม่ตรงกัน";
-//        } else {
-//            errorMessage = null;
-//        }
-//        getRePasswordEditText().setError(errorMessage);
-//
-//        String displayName = getDisplayNameText();
-//        if (displayName.isEmpty()) {
-//            valid = false;
-//            errorMessage = "จำเป็นต่องใส่ผู้ใช้งาน";
-//        } else {
-//            errorMessage = null;
-//        }
-//        getDisplayNameEditText().setError(errorMessage);
-//
-//        String citizenId = getCitizenIdText();
-//        if (citizenId.isEmpty()) {
-//            valid = false;
-//            errorMessage = "จำเป็นต่องใสรหัสประจำตัวประชาชน";
-//        } else if (!Validator.validateCitizenId(citizenId)) {
-//            valid = false;
-//            errorMessage = "รหัสประจำตัวประชาชนไม่ถูกต้อง";
-//        } else {
-//            errorMessage = null;
-//        }
-//        getCitizenIdEditText().setError(errorMessage);
-//        return valid;
-//    }
-
 
     private void requestFocus(View view) {
         if (view.requestFocus()) {
