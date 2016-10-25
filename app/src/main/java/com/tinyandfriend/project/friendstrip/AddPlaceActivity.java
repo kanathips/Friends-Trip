@@ -3,6 +3,7 @@ package com.tinyandfriend.project.friendstrip;
 //import android.support.v4.app.FragmentManager;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -17,9 +18,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,11 +39,16 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.gordonwong.materialsheetfab.MaterialSheetFab;
 import com.tinyandfriend.project.friendstrip.adapter.PlaceInfoAdapter;
 import com.tinyandfriend.project.friendstrip.info.PlaceInfo;
+import com.tinyandfriend.project.friendstrip.listener.OnInfoWindowElemTouchListener;
+import com.tinyandfriend.project.friendstrip.view.MapWrapperLayout;
 import com.tinyandfriend.project.friendstrip.view.SingleSheetFAB;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -54,6 +63,7 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
     private static final String TAG = "Add_Place_Activity";
     private MaterialSheetFab<SingleSheetFAB> materialSheetFab;
     private int tripDuration;
+    private ViewGroup infoWindow;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -85,6 +95,55 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
         mapFragment.getMapAsync(this);
 
         setupAddPlaceFab(tripDuration);
+    }
+
+    private void setUpInfoWindow(GoogleMap googleMap) {
+        final MapWrapperLayout mapWrapperLayout = (MapWrapperLayout) findViewById(R.id.map_relative_layout);
+        mapWrapperLayout.init(googleMap, getPixelsFromDp(this, 39 + 20));
+        this.infoWindow = (ViewGroup) getLayoutInflater().inflate(R.layout.place_info, null);
+        final TextView infoTitle = (TextView) infoWindow.findViewById(R.id.title);
+        final TextView infoSnippet = (TextView) infoWindow.findViewById(R.id.snippet);
+        final TextView tripDay = (TextView) infoWindow.findViewById(R.id.trip_day);
+        Button infoButton = (Button) infoWindow.findViewById(R.id.button);
+
+        // Setting custom OnTouchListener which deals with the pressed state
+        // so it shows up
+        final OnInfoWindowElemTouchListener infoButtonListener = new OnInfoWindowElemTouchListener(infoButton) {
+            @Override
+            protected void onClickConfirmed(View v, Marker marker) {
+                for (PlaceInfo info : placeInfos) {
+                    if (info.getName().equals(marker.getTitle())) {
+                        placeInfos.remove(info);
+                        marker.remove();
+                    }
+                }
+            }
+        };
+        infoButton.setOnTouchListener(infoButtonListener);
+
+
+        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                infoTitle.setText(marker.getTitle());
+                infoSnippet.setText(marker.getSnippet());
+                infoButtonListener.setMarker(marker);
+                tripDay.setText(marker.getTag().toString());
+                mapWrapperLayout.setMarkerWithInfoWindow(marker, infoWindow);
+                return infoWindow;
+            }
+        });
+    }
+
+
+    public static int getPixelsFromDp(Context context, float dp) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
     }
 
 
@@ -169,10 +228,9 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
     public void onBackPressed() {
         if (materialSheetFab == null) {
             super.onBackPressed();
-        }else if(materialSheetFab.isSheetVisible()){
+        } else if (materialSheetFab.isSheetVisible()) {
             materialSheetFab.hideSheet();
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }
@@ -215,16 +273,27 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
 
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        setUpInfoWindow(googleMap);
 
+        markStartPlace(googleMap);
         googleMap.getUiSettings().setMapToolbarEnabled(false);
+
+        if (mapFlag)
+            googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        else
+            googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+    }
+
+    private void markStartPlace(GoogleMap googleMap) {
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for (int i = 0; i < originalPlaceInfos.size(); i++) {
             PlaceInfo info = originalPlaceInfos.get(i);
             MarkerOptions options = new MarkerOptions();
             options.position(info.getLocation().toGmsLatLng());
             options.title(info.getName());
             builder.include(info.getLocation().toGmsLatLng());
-            googleMap.addMarker(options);
+            googleMap.addMarker(options).setTag(info.getDay());
         }
 
         if (originalPlaceInfos.size() > 1) {
@@ -238,13 +307,6 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
             CameraUpdate cu = CameraUpdateFactory.newCameraPosition(test);
             googleMap.animateCamera(cu);
         }
-
-        if (mapFlag)
-            googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        else
-            googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
-        googleMap.setInfoWindowAdapter(new PlaceInfoAdapter(this));
     }
 
     public void onClickChangeMapType(View view) {
@@ -297,3 +359,4 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
         alertDialog.show();
     }
 }
+

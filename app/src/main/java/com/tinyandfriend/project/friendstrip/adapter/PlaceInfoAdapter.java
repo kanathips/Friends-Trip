@@ -9,12 +9,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 import com.tinyandfriend.project.friendstrip.R;
 
-import org.w3c.dom.Text;
-
-/**
- * Created by NewWy on 21/10/2559.
- */
-
 public class PlaceInfoAdapter implements GoogleMap.InfoWindowAdapter {
 
     private final Context context;
@@ -40,8 +34,8 @@ public class PlaceInfoAdapter implements GoogleMap.InfoWindowAdapter {
         TextView snippet = (TextView)view.findViewById(R.id.snippet);
         snippet.setText(marker.getSnippet());
 
-        TextView tripDay = (TextView)view.findViewById(R.id.trip_day);
-        tripDay.setText(marker.getTag().toString());
+//        TextView tripDay = (TextView)view.findViewById(R.id.trip_day);
+//        tripDay.setText(marker.getTag().toString());
 
         return view;
     }

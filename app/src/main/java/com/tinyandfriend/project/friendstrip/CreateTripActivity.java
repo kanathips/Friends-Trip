@@ -26,10 +26,10 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.UploadTask;
 import com.tinyandfriend.project.friendstrip.adapter.FragmentPagerAdapter;
+import com.tinyandfriend.project.friendstrip.info.FileInfo;
 import com.tinyandfriend.project.friendstrip.info.TripInfo;
 import com.tinyandfriend.project.friendstrip.view.NoSwipeViewPager;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,11 +57,11 @@ public class CreateTripActivity extends AppCompatActivity {
 
 
         fragmentPagers = new ArrayList<>();
-        AddPlaceFragment addPlaceFragment = new AddPlaceFragment();
+        FragmentAddPlace fragmentAddPlace = new FragmentAddPlace();
 
-        AddTagFragment addTagFragment = new AddTagFragment();
+        FragmentAddTag addTagFragment = new FragmentAddTag();
 
-        fragmentPagers.add(addPlaceFragment);
+        fragmentPagers.add(fragmentAddPlace);
         fragmentPagers.add(addTagFragment);
         FragmentPagerAdapter pagerAdapter = new FragmentPagerAdapter(fragmentManager, fragmentPagers);
 
@@ -97,20 +97,20 @@ public class CreateTripActivity extends AppCompatActivity {
                                 final ProgressDialog processDialog = ProgressDialog.show(CreateTripActivity.this, null, "กำลังสร้างทริป โปรดรอสักครู่");
                                 currentFragment.setInfo(tripInfo);
 
-                                AddTagFragment addTagFragment = (AddTagFragment) currentFragment;
-                                final ArrayList<Uri> uries = addTagFragment.getFileList();
+                                FragmentAddTag addTagFragment = (FragmentAddTag) currentFragment;
+                                final ArrayList<FileInfo> fileInfos = addTagFragment.getFileList();
                                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                                 tripInfo.setOwnerUID(user.getUid());
                                 final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("tripRoom").push();
                                 reference.setValue(tripInfo).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        if (uries.size() == 0) {
+                                        if (fileInfos.size() == 0) {
                                             CreateTripActivity.this.finish();
-                                        } else if (uries.size() > 0) {
+                                        } else if (fileInfos.size() > 0) {
                                             processDialog.setMessage("กำลังอัพโหลดไฟล์");
-                                            for (int i = 0; i < uries.size(); i++) {
-                                                uploadFile(uries, i, reference, processDialog);
+                                            for (int i = 0; i < fileInfos.size(); i++) {
+                                                uploadFile(fileInfos, i, reference, processDialog);
                                             }
                                         }
                                     }
@@ -142,16 +142,16 @@ public class CreateTripActivity extends AppCompatActivity {
 
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
-    private void uploadFile(final ArrayList<Uri> uries, final int position, final DatabaseReference reference, final ProgressDialog processDialog) {
-        Uri uri = uries.get(position);
-        final File file = new File(uri.getPath());
-        UploadTask uploadTask = storage.getReference().child("trip_document/" + reference.getKey() + "/" + file.getName()).putFile(uri, metadata);
+    private void uploadFile(final ArrayList<FileInfo> fileInfos, final int position, final DatabaseReference reference, final ProgressDialog processDialog) {
+        Uri uri = fileInfos.get(position).getUri();
+        final String fileName = fileInfos.get(position).getFileName();
+        UploadTask uploadTask = storage.getReference().child("trip_document/" + reference.getKey() + "/" + fileName).putFile(uri, metadata);
         uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                processDialog.setMessage(file.getName() + " : " + progress + "%");
-                Log.i(TAG, file.getName() + " upload is " + progress + "% done");
+                int progress = (int) ((100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount());
+                processDialog.setMessage(fileName + " : " + progress + "%");
+                Log.i(TAG, fileName+ " upload is " + progress + "% done");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -168,7 +168,7 @@ public class CreateTripActivity extends AppCompatActivity {
                 map.put(Integer.toString(position), taskSnapshot.getDownloadUrl().toString());
                 reference.child("files").updateChildren(map);
 
-                if (position + 1 == uries.size()) {
+                if (position + 1 == fileInfos.size()) {
                     processDialog.setMessage("อัพโหลดเสร็จสิ้น");
                     processDialog.dismiss();
                     CreateTripActivity.this.finish();

@@ -1,27 +1,16 @@
 package com.tinyandfriend.project.friendstrip;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.graphics.Rect;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,12 +19,7 @@ import android.widget.Toast;
 import com.astuetz.PagerSlidingTabStrip;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.tinyandfriend.project.friendstrip.adapter.CardView_Adapter;
-import com.tinyandfriend.project.friendstrip.adapter.FragmentPagerAdapter_Content;
-import com.tinyandfriend.project.friendstrip.info.CardView_Info;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.tinyandfriend.project.friendstrip.adapter.ContentFragmentPagerAdapter;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -105,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ////////////////////////////////////////////////////////// Fragement///////////////////////////////////////////////////////////
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new FragmentPagerAdapter_Content(getSupportFragmentManager()));
+        viewPager.setAdapter(new ContentFragmentPagerAdapter(getSupportFragmentManager()));
 
         // Give the PagerSlidingTabStrip the ViewPager
         PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);

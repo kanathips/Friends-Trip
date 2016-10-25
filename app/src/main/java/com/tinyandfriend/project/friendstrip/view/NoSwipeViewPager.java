@@ -16,11 +16,23 @@ public class NoSwipeViewPager extends ViewPager {
         super(context, attrs);
     }
 
+    private boolean isPagingEnabled = false;
+
+    public NoSwipeViewPager(Context context) {
+        super(context);
+    }
+
     @Override
-    public boolean onTouchEvent(android.view.MotionEvent ev) {
-        if (super.onTouchEvent(ev)) {
-            return false;
-        }
-        return false;
+    public boolean onTouchEvent(MotionEvent event) {
+        return this.isPagingEnabled && super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        return this.isPagingEnabled && super.onInterceptTouchEvent(event);
+    }
+
+    public void setPagingEnabled(boolean b) {
+        this.isPagingEnabled = b;
     }
 }
