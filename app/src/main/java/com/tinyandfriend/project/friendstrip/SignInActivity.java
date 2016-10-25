@@ -1,8 +1,11 @@
 package com.tinyandfriend.project.friendstrip;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -32,9 +35,12 @@ public class SignInActivity extends AppCompatActivity {
         passwordEditText = (EditText) findViewById(R.id.password);
 
         firebaseAuth = FirebaseAuth.getInstance();
+
+
     }
 
     public void onClickLogin(View view) {
+        final ProgressDialog progressDialog = new ProgressDialog(this);
         if (!validateForm())
             return;
 
@@ -57,9 +63,30 @@ public class SignInActivity extends AppCompatActivity {
                         Toast.makeText(SignInActivity.this, "Sign In Fail", Toast.LENGTH_SHORT).show();
                     }else if(!task.getResult().getUser().isEmailVerified()){
                         Log.v(TAG, "SignIn:OnComplete: Account was not verify");
-                        startActivity(new Intent(SignInActivity.this, ReVerifyEmailActivity.class));
+                        new AlertDialog.Builder(SignInActivity.this)
+                                .setTitle("เข้าสู่ระบบไม่สำเร็จ")
+                                .setMessage("ท่านยังไม่ได้ทำการยืนยันตัวตนผ่านทางอีเมล...")
+                                .setPositiveButton("ส่งอีกครัง", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // continue with delete
+                                        firebaseAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                Toast.makeText(SignInActivity.this, "Send " + task.isSuccessful(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                })
+                                .setNegativeButton("ยกเลิก", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
                     } else if(task.isSuccessful()) {
                         Log.v(TAG, "SignIn:OnComplete: Sign In Pass");
+                        progressDialog.show(SignInActivity.this, "เข้าสู่ระบบ", "กำลังทำการเข้าสู่ระบบ...");
                         startActivity(new Intent(SignInActivity.this, MainActivity.class));
                         finish();
                     }
@@ -95,6 +122,7 @@ public class SignInActivity extends AppCompatActivity {
 
     public void onSignUpClick(View view) {
         startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
+//        finish();
     }
 
     public void onClickResetPassword(View view) {

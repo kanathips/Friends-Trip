@@ -35,7 +35,7 @@ public class DateSelect implements DatePickerDialog.OnDateSetListener{
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        String date = String.valueOf(dayOfMonth) + "-" + String.valueOf(month)
+        String date = String.valueOf(dayOfMonth) + "-" + String.valueOf(month+1)
                 + "-" + String.valueOf(year);
         editText.setText(date);
         editText.setError(null);

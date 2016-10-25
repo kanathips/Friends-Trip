@@ -1,6 +1,7 @@
 package com.tinyandfriend.project.friendstrip;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -28,7 +29,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.tinyandfriend.project.friendstrip.adapter.AuthAdapter;
 import com.tinyandfriend.project.friendstrip.info.SignUpInfo;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -109,7 +112,7 @@ public class SignUpActivity extends AppCompatActivity {
                         dateView.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
                     }
                 }, mYear, mMonth, mDay);
-
+        datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
         datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         datePickerDialog.show();
@@ -141,6 +144,11 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             Log.e("SignUpInfo", e.getMessage());
         }
+    }
+
+    public void onClickSignUp_Cancel(View view) {
+//        startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
+        finish();
     }
 
     public void signUp(final SignUpInfo signUpInfo) {
@@ -505,4 +513,6 @@ public class SignUpActivity extends AppCompatActivity {
     private String getCitizenIdText() {
         return getCitizenIdEditText().getText().toString().trim();
     }
+
+
 }

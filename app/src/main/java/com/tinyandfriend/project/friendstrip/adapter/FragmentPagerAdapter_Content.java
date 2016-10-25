@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.tinyandfriend.project.friendstrip.Fragment_Create;
+import com.tinyandfriend.project.friendstrip.Fragment_Notification;
 import com.tinyandfriend.project.friendstrip.Fragment_Friends;
 import com.tinyandfriend.project.friendstrip.Fragment_Join;
 import com.tinyandfriend.project.friendstrip.R;
@@ -17,7 +17,7 @@ import com.tinyandfriend.project.friendstrip.R;
 public class FragmentPagerAdapter_Content extends FragmentPagerAdapter  implements PagerSlidingTabStrip.IconTabProvider {
     final int PAGE_COUNT = 3;
     private String tabTitles[] = new String[] { "JOIN", "CREATE", "FRIENDS" };
-    private int tabIcons[] = {R.drawable.ic_directions_walk_white_36dp, R.drawable.ic_location_city_white_36dp, R.drawable.ic_group_white_36dp};
+    private int tabIcons[] = {R.drawable.ic_directions_walk_white_36dp, R.drawable.ic_announcement_white_36dp, R.drawable.ic_group_white_36dp};
 
     public FragmentPagerAdapter_Content(FragmentManager fm) {
         super(fm);
@@ -32,7 +32,7 @@ public class FragmentPagerAdapter_Content extends FragmentPagerAdapter  implemen
     public Fragment getItem(int position) {
         switch(position){
             case 0: return new Fragment_Join();
-            case 1: return new Fragment_Create();
+            case 1: return new Fragment_Notification();
             case 2: return new Fragment_Friends();
         }
         return null;

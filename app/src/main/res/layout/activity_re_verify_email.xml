@@ -8,20 +8,54 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.tinyandfriend.project.friendstrip.ReVerifyEmailActivity">
+    android:background="@drawable/bg1"
+    tools:context="com.tinyandfriend.project.friendstrip.ReVerifyEmailActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:padding="15dp"
+        android:layout_marginTop="210dp"
+        android:background="@color/darkTransparent"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="โปรดยืนยันอีเมลก่อนเข้าสู่ระบบ"
+            android:textSize="20dp"
+            android:textColor="@color/white"
+            android:gravity="center_vertical|center_horizontal|bottom"
+            />
+
+        <LinearLayout
+            android:layout_marginTop="50dp"
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_marginRight="10dp"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="ออกจากระบบ"
+                android:textColor="@color/white"
+                android:background="@color/darkLow"
+                android:onClick="onClickSignOut" />
+
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="ยืนยันอีกครั้ง"
+                android:background="@color/colorRed"
+                android:textColor="@color/white"
+                android:onClick="onClickReVerify"/>
 
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Re-Verify"
-        android:onClick="onClickReVerify"/>
+        </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sign Out"
-        android:onClick="onClickSignOut"/>
+    </LinearLayout>
 
 
 </LinearLayout>

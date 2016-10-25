@@ -2,12 +2,9 @@ package com.tinyandfriend.project.friendstrip;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,20 +15,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.CancellableTask;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageMetadata;
-import com.google.firebase.storage.UploadTask;
 import com.tinyandfriend.project.friendstrip.adapter.TagListViewAdapter;
-import com.tinyandfriend.project.friendstrip.info.CreateTripInfo;
+import com.tinyandfriend.project.friendstrip.info.TripInfo;
 
-import java.io.File;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.TreeMap;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -41,9 +29,12 @@ public class AddTagFragment extends FragmentPager {
     private Context context;
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private String TAG = "ADD_TAG_FRAGMENT";
-    private StorageMetadata metadata;
     private boolean isUploading = false;
     private View rootView;
+    private TagListViewAdapter regionTagAdapter;
+    private TagListViewAdapter tripTagAdapter;
+    private TagListViewAdapter placeTagAdapter;
+    private ArrayList<Uri> fileList;
 
     @Nullable
     @Override
@@ -51,15 +42,15 @@ public class AddTagFragment extends FragmentPager {
         rootView = inflater.inflate(R.layout.fragment_add_tag, container, false);
         context = getContext();
         ListView regionListView = (ListView) rootView.findViewById(R.id.tag_region);
-        TagListViewAdapter regionTagAdapter = new TagListViewAdapter(context, R.array.tag_region, R.layout.tag_listview_row);
+        regionTagAdapter = new TagListViewAdapter(context, R.array.tag_region, R.layout.tag_listview_row);
         regionListView.setAdapter(regionTagAdapter);
 
         ListView tripListView = (ListView) rootView.findViewById(R.id.tag_trip);
-        TagListViewAdapter tripTagAdapter = new TagListViewAdapter(context, R.array.tag_trip, R.layout.tag_listview_row);
+        tripTagAdapter = new TagListViewAdapter(context, R.array.tag_trip, R.layout.tag_listview_row);
         tripListView.setAdapter(tripTagAdapter);
 
         ListView placeListView = (ListView) rootView.findViewById(R.id.tag_place);
-        TagListViewAdapter placeTagAdapter = new TagListViewAdapter(context, R.array.tag_place, R.layout.tag_listview_row);
+        placeTagAdapter = new TagListViewAdapter(context, R.array.tag_place, R.layout.tag_listview_row);
         placeListView.setAdapter(placeTagAdapter);
 
         Button uploadButton = (Button) rootView.findViewById(R.id.upload_button);
@@ -69,10 +60,8 @@ public class AddTagFragment extends FragmentPager {
                 showFileChooser();
             }
         });
-        metadata = new StorageMetadata.Builder()
-                .setContentType("application/pdf")
-                .build();
-        uploadFiles = new TreeMap<>();
+        fileList = new ArrayList<>();
+        uploadFiles = new ArrayList<>();
 
         return rootView;
     }
@@ -84,13 +73,14 @@ public class AddTagFragment extends FragmentPager {
 
     @Override
     void setInfo(Object info) {
-        CreateTripInfo tripInfo = (CreateTripInfo)info;
+        TripInfo tripInfo = (TripInfo)info;
 
-        EditText editText;
+        ArrayList<String> tagArray = new ArrayList<>();
+        tagArray.addAll(placeTagAdapter.getSelectedTag());
+        tagArray.addAll(regionTagAdapter.getSelectedTag());
+        tagArray.addAll(tripTagAdapter.getSelectedTag());
 
-        editText = (EditText)rootView.findViewById(R.id.trip_spoil);
-        tripInfo.setTripSpoil(getEditTextInput(editText));
-        tripInfo.setFiles(uploadFiles);
+        tripInfo.setTag(tagArray);
     }
 
     private String getEditTextInput(EditText editText){
@@ -139,7 +129,7 @@ public class AddTagFragment extends FragmentPager {
         }
     }
 
-    TreeMap<String, String> uploadFiles;
+    ArrayList<String> uploadFiles;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -150,35 +140,14 @@ public class AddTagFragment extends FragmentPager {
                     Uri uri = data.getData();
                     Log.d(TAG, "File Uri: " + uri.toString());
 
-                    File file = new File(uri.getPath());
-                    Log.d(TAG, "File Name: " + file.getName());
-                    isUploading = true;
-                    UploadTask uploadTask = storage.getReference().child("images/"+file.getName()).putFile(uri, metadata);
-                    uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                            Log.i(TAG, "Upload is " + progress + "% done");
-
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(context, "UPLOAD ERROR", Toast.LENGTH_SHORT).show();
-                            isUploading = false;
-                        }
-                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            uploadFiles.put(taskSnapshot.getMetadata().getName(), taskSnapshot.getDownloadUrl().toString());
-                            isUploading = false;
-                            Log.i(TAG, taskSnapshot.getMetadata().getName() + ": is upload success" );
-                            Toast.makeText(context, taskSnapshot.getMetadata().getName() + ": is upload success", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    fileList.add(uri);
                 }
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public ArrayList<Uri> getFileList() {
+        return fileList;
     }
 }
