@@ -2,56 +2,57 @@ package com.tinyandfriend.project.friendstrip;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.firebase.storage.FirebaseStorage;
+import com.tinyandfriend.project.friendstrip.adapter.FileCardViewAdapter;
 import com.tinyandfriend.project.friendstrip.adapter.TagListViewAdapter;
+import com.tinyandfriend.project.friendstrip.info.FileInfo;
 import com.tinyandfriend.project.friendstrip.info.TripInfo;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import static android.app.Activity.RESULT_OK;
 
-public class AddTagFragment extends FragmentPager {
+public class FragmentAddTag extends FragmentPager {
 
 
     private Context context;
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
-    private String TAG = "ADD_TAG_FRAGMENT";
-    private boolean isUploading = false;
-    private View rootView;
+    private static final String TAG = "ADD_TAG_FRAGMENT";
     private TagListViewAdapter regionTagAdapter;
     private TagListViewAdapter tripTagAdapter;
     private TagListViewAdapter placeTagAdapter;
-    private ArrayList<Uri> fileList;
+    private ArrayList<FileInfo> fileInfos;
+    private FileCardViewAdapter fileCardViewAdapter;
+    private ImageView headerImage;
+    private int[] tempHeaderImage = {
+            R.drawable.pic1, R.drawable.pic2, R.drawable.pic3,
+            R.drawable.pic4, R.drawable.pic5, R.drawable.pic6,
+            R.drawable.pic7, R.drawable.pic8, R.drawable.pic9,
+            R.drawable.pic10};
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_add_tag, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_add_tag, container, false);
         context = getContext();
-        ListView regionListView = (ListView) rootView.findViewById(R.id.tag_region);
-        regionTagAdapter = new TagListViewAdapter(context, R.array.tag_region, R.layout.tag_listview_row);
-        regionListView.setAdapter(regionTagAdapter);
 
-        ListView tripListView = (ListView) rootView.findViewById(R.id.tag_trip);
-        tripTagAdapter = new TagListViewAdapter(context, R.array.tag_trip, R.layout.tag_listview_row);
-        tripListView.setAdapter(tripTagAdapter);
-
-        ListView placeListView = (ListView) rootView.findViewById(R.id.tag_place);
-        placeTagAdapter = new TagListViewAdapter(context, R.array.tag_place, R.layout.tag_listview_row);
-        placeListView.setAdapter(placeTagAdapter);
+        setUpTagListView(rootView);
 
         Button uploadButton = (Button) rootView.findViewById(R.id.upload_button);
         uploadButton.setOnClickListener(new View.OnClickListener() {
@@ -60,20 +61,50 @@ public class AddTagFragment extends FragmentPager {
                 showFileChooser();
             }
         });
-        fileList = new ArrayList<>();
         uploadFiles = new ArrayList<>();
+
+        fileInfos = new ArrayList<>();
+        fileCardViewAdapter = new FileCardViewAdapter(fileInfos);
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.file_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(fileCardViewAdapter);
+
+        Random random = new Random();
+        int imgResource = tempHeaderImage[random.nextInt(9)];
+        headerImage = (ImageView) rootView.findViewById(R.id.header_image);
+        headerImage.setImageResource(imgResource);
+        headerImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         return rootView;
     }
 
+    private void setUpTagListView(View view) {
+        ListView regionListView = (ListView) view.findViewById(R.id.tag_region);
+        regionTagAdapter = new TagListViewAdapter(context, R.array.tag_region, R.layout.tag_listview_row);
+        regionListView.setAdapter(regionTagAdapter);
+
+        ListView tripListView = (ListView) view.findViewById(R.id.tag_trip);
+        tripTagAdapter = new TagListViewAdapter(context, R.array.tag_trip, R.layout.tag_listview_row);
+        tripListView.setAdapter(tripTagAdapter);
+
+        ListView placeListView = (ListView) view.findViewById(R.id.tag_place);
+        placeTagAdapter = new TagListViewAdapter(context, R.array.tag_place, R.layout.tag_listview_row);
+        placeListView.setAdapter(placeTagAdapter);
+    }
+
     @Override
     boolean validateFrom() {
-        return !isUploading;
+        return true;
+    }
+
+    public void onClickAddImgHeader(View view){
+
     }
 
     @Override
     void setInfo(Object info) {
-        TripInfo tripInfo = (TripInfo)info;
+        TripInfo tripInfo = (TripInfo) info;
 
         ArrayList<String> tagArray = new ArrayList<>();
         tagArray.addAll(placeTagAdapter.getSelectedTag());
@@ -83,13 +114,6 @@ public class AddTagFragment extends FragmentPager {
         tripInfo.setTag(tagArray);
     }
 
-    private String getEditTextInput(EditText editText){
-        String input;
-        input = editText.getText().toString();
-        if(input.isEmpty())
-            input = null;
-        return input;
-    }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -110,7 +134,7 @@ public class AddTagFragment extends FragmentPager {
 
     private void showFileChooser() {
         Intent intent;
-        if (Build.VERSION.SDK_INT <19){
+        if (Build.VERSION.SDK_INT < 19) {
             intent = new Intent(Intent.ACTION_GET_CONTENT);
         } else {
             intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
@@ -136,18 +160,21 @@ public class AddTagFragment extends FragmentPager {
         switch (requestCode) {
             case FILE_SELECT_CODE:
                 if (resultCode == RESULT_OK) {
+                    FileInfo fileInfo = new FileInfo();
                     // Get the Uri of the selected file
-                    Uri uri = data.getData();
-                    Log.d(TAG, "File Uri: " + uri.toString());
-
-                    fileList.add(uri);
+                    fileInfo.setUri(data.getData());
+                    File file = new File(fileInfo.getUri().getPath());
+                    fileInfo.setFileName(file.getName());
+                    fileInfos.add(fileInfo);
+                    Log.d(TAG, fileInfo.getFileName() + " Uri: " + fileInfo.getUri());
+                    fileCardViewAdapter.notifyDataSetChanged();
                 }
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public ArrayList<Uri> getFileList() {
-        return fileList;
+    public ArrayList<FileInfo> getFileList() {
+        return fileInfos;
     }
 }

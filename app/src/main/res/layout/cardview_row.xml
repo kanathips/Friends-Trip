@@ -1,88 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    card_view:cardCornerRadius="4dp">
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        card_view:cardCornerRadius="4dp">
+        android:orientation="vertical">
 
-
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="8dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="8dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/name_card"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:text="Mark"
-                        android:textSize="22dp" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="right"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/count_people"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="Mark"
-                        android:textSize="15dp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <RelativeLayout
+            <TextView
+                android:id="@+id/name_card"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/image_card"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_gravity="center" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="Mark"
+                android:textSize="22sp" />
 
-                <TextView
-                    android:id="@+id/date_card"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/image_card"
-                    android:layout_alignTop="@+id/image_card"
-                    android:layout_alignRight="@+id/image_card"
-                    android:layout_alignBottom="@+id/image_card"
-                    android:gravity="bottom"
-                    android:layout_marginLeft="80dp"
-                    android:text="asdfaszdfg"
-                    android:textColor="@color/white"
-                    android:textSize="14dp" />
+            <TextView
+                android:id="@+id/count_people"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:text="Mark"
+                android:textSize="15sp" />
+        </RelativeLayout>
 
-            </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
+            <ImageView
+                android:id="@+id/image_card"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_gravity="center" />
 
+            <TextView
+                android:id="@+id/date_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/image_card"
+                android:layout_alignLeft="@+id/image_card"
+                android:layout_alignRight="@+id/image_card"
+                android:layout_alignTop="@+id/image_card"
+                android:layout_marginLeft="80dp"
+                android:gravity="bottom"
+                android:text="asdfaszdfg"
+                android:textColor="@color/white"
+                android:textSize="14dp" />
 
-
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-</LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

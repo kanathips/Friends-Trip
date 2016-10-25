@@ -8,56 +8,44 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.OvershootInterpolator;
-import android.widget.EditText;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.tinyandfriend.project.friendstrip.adapter.CardView_Adapter;
-import com.tinyandfriend.project.friendstrip.info.CardView_Info;
+import com.tinyandfriend.project.friendstrip.adapter.TripRoomCardViewAdapter;
+import com.tinyandfriend.project.friendstrip.info.CardViewInfo;
 import com.tinyandfriend.project.friendstrip.info.TripInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
-import jp.wasabeef.recyclerview.animators.FadeInDownAnimator;
-import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 
-public class Fragment_Join extends Fragment {
+public class FragmentJoin extends Fragment {
 
-    private RecyclerView recyclerView;
-    private CardView_Adapter adapter;
-    private List<CardView_Info> albumList;
+    private List<CardViewInfo> albumList;
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     private ArrayList<String> rooms;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment__join, container, false);
 
-        //////////////////////////////////////// CardView /////////////////////////////////////////////////////
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
 
         albumList = new ArrayList<>();
-        adapter = new CardView_Adapter(getActivity(), albumList);
+        TripRoomCardViewAdapter adapter = new TripRoomCardViewAdapter(getActivity(), albumList);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(0), false));
-//        recyclerView.setItemAnimator(new DefaultItemAnimator());
-//        recyclerView.setAdapter(adapter);
 
         final ScaleInAnimationAdapter alphaAdapter = new ScaleInAnimationAdapter(adapter);
         alphaAdapter.setFirstOnly(false);
@@ -75,7 +63,7 @@ public class Fragment_Join extends Fragment {
                         if(!rooms.contains(key)){
                             rooms.add(key);
                             TripInfo tripInfo = item.getValue(TripInfo.class);
-                            CardView_Info cardView_info = new CardView_Info(tripInfo.getTripName(),
+                            CardViewInfo cardView_info = new CardViewInfo(tripInfo.getTripName(),
                                     tripInfo.getStartDate() + " ถึง " + tripInfo.getEndDate(), tripInfo.getNumberMember(), R.drawable.pic4);
                             albumList.add(0,cardView_info);
                         }

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <android.support.design.widget.TextInputLayout
+                app:met_floatingLabel="highlight"
+                app:met_primaryColor="?colorAccent"
+                app:met_helperTextColor="?colorAccent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/trip_name_layout"
+                android:hint="ชื่อห้อง"
+                android:singleLine="true" >
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:layout_width="match_parent"
+                    app:met_primaryColor="@color/colorAccent"
+                    android:singleLine="true"
+                    android:id="@+id/trip_name"
+                    app:met_maxCharacters="28"
+                    android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="วันเริ่ม"
+                        android:textColor="@color/darkLow"
+                        android:textSize="16dp"
+                        android:id="@+id/textView2" />
+
+                    <EditText
+                        android:id="@+id/trip_start"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:enabled="false"
+                        android:gravity="center"
+                        android:hint="dd-mm-yyyy"
+                        android:singleLine="true"
+                        android:textColorHint="@color/whiteLow"
+                        android:textSize="15dp" />
+
+                    <ImageButton
+                        android:id="@+id/alert_dialog_start_date"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_alignBottom="@+id/editText"
+                        android:layout_toRightOf="@+id/editText"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/calendar" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginLeft="15dp"
+                    android:layout_weight="1.1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ถึง"
+                        android:textColor="@color/darkLow"
+                        android:textSize="16dp" />
+
+                    <EditText
+                        android:id="@+id/trip_end"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:enabled="false"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:hint="dd-mm-yyyy"
+                        android:textColorHint="@color/whiteLow"
+                        android:textSize="15dp" />
+
+                    <ImageButton
+                        android:id="@+id/alert_dialog_end_date"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_alignBottom="@+id/editText"
+                        android:layout_toRightOf="@+id/editText"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/calendar" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                app:met_floatingLabel="highlight"
+                app:met_primaryColor="?colorAccent"
+                app:met_helperTextColor="?colorAccent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="จำนวนผู้เข้ารวม"
+                android:layout_weight="0.7"
+                android:id="@+id/number_member_layout">
+
+                <EditText
+                    android:textSize="16dp"
+                    android:layout_weight="0.7"
+                    android:inputType="number"
+                    android:id="@+id/number_member"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                app:met_floatingLabel="highlight"
+                app:met_primaryColor="?colorAccent"
+                app:met_helperTextColor="?colorAccent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="ค่าใช้จ่ายประมาณ(บาท)"
+                android:id="@+id/expend_layout"
+                android:layout_weight="1" >
+                <EditText
+                    android:textSize="16dp"
+                    android:layout_weight="1"
+                    android:inputType="number"
+                    android:id="@+id/expend"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_marginLeft="5dp"
+                app:met_floatingLabel="highlight"
+                app:met_helperTextColor="?colorAccent"
+                android:id="@+id/trip_spoil_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="รายละเอียดทริป"
+                app:met_baseColor="@android:color/black"
+                app:met_primaryColor="?colorAccent" >
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/trip_spoil"
+                    android:textSize="16dp"
+                    android:maxLines="3"
+                    app:met_maxCharacters="256"
+                    app:met_primaryColor="@color/colorAccent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_gravity="top"
+        map:mapType="hybrid"
+        map:uiZoomControls="false">
+
+        <Button
+            android:textColor="@color/white"
+            android:background="@color/colorAccent"
+            android:id="@+id/editMap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|top"
+            android:paddingEnd="4dp"
+            android:paddingRight="4dp"
+            android:text="เพิ่มสถานที่" />
+    </fragment>
+
+
+
+</LinearLayout>

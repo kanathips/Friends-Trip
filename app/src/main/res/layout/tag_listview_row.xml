@@ -7,9 +7,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tag Test"
+        android:text="น้ำพุร้อนธรรมชาติ"
         android:layout_centerVertical="true"
         android:layout_gravity="center_vertical"
+        android:maxEms="6"
         android:id="@+id/tag_name"/>
 
     <CheckBox

@@ -17,16 +17,14 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCU1Eo0tI6FAYFXQglVw4sFrkvwStPfedg" />
 
-
-        <activity
-            android:name=".SplashActivity"
-            android:theme="@style/SplashTheme">
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
 
         <activity android:name=".SignInActivity" />
         <activity android:name=".SignUpActivity" />
@@ -44,6 +42,7 @@
         <activity android:name=".UserInfoActivity" />
         <activity android:name=".AddPlaceActivity" />
         <activity android:name=".MainActivity"/>
+        <!--<activity android:name=".MapMainActivity"/>-->
     </application>
 
 </manifest>

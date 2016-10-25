@@ -10,7 +10,7 @@ import android.view.ViewGroup;
  * Created by StandAlone on 12/10/2559.
  */
 
-public class Fragment_Notification extends Fragment{
+public class FragmentNotification extends Fragment{
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_notification, container, false);

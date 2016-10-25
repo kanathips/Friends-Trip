@@ -4,14 +4,14 @@ package com.tinyandfriend.project.friendstrip.info;
  * Created by StandAlone on 21/10/2559.
  */
 
-public class CardView_Info {
+public class CardViewInfo {
 
     private String name_card;
     private String date_card;
     private String count_people;
     private int pic_id;
 
-    public CardView_Info(String name_card, String date_card, String count_people, int pic_id) {
+    public CardViewInfo(String name_card, String date_card, String count_people, int pic_id) {
         this.name_card = name_card;
         this.date_card = date_card;
         this.count_people = count_people;

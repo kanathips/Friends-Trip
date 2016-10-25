@@ -6,6 +6,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import static com.tinyandfriend.project.friendstrip.R.id.editText;
 
@@ -31,6 +32,7 @@ public class DateSelect implements DatePickerDialog.OnDateSetListener{
         int dd = calendar.get(Calendar.DAY_OF_MONTH);
 
         datePicker = new DatePickerDialog(context, this, yy, mm, dd);
+        datePicker.getDatePicker().setMinDate(new Date().getTime());
     }
 
     @Override

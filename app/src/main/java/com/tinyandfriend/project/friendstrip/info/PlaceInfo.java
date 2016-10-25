@@ -8,14 +8,14 @@ import android.os.Parcelable;
  */
 public class PlaceInfo implements Parcelable {
     String name;
-    LatLng location;
+    FireBaseLatLng location;
     int day;
     String address;
     String id;
 
     public PlaceInfo(Parcel in) {
         name = in.readString();
-        location = in.readParcelable(LatLng.class.getClassLoader());
+        location = in.readParcelable(FireBaseLatLng.class.getClassLoader());
         day = in.readInt();
         address = in.readString();
         id = in.readString();
@@ -85,15 +85,15 @@ public class PlaceInfo implements Parcelable {
         this.day = day;
     }
 
-    public LatLng getLocation() {
+    public FireBaseLatLng getLocation() {
         return location;
     }
 
     public void setLocationFromGms(com.google.android.gms.maps.model.LatLng location) {
-        this.location = new LatLng(location);
+        this.location = new FireBaseLatLng(location);
     }
 
-    public void setLocation(LatLng location) {
+    public void setLocation(FireBaseLatLng location) {
         this.location = location;
     }
 

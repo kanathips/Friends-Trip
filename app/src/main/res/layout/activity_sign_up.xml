@@ -162,7 +162,7 @@
                     android:layout_weight=".5"
                     android:enabled="false"
                     android:gravity="center"
-                    android:hint="DD / MM / YYYY"
+                    android:hint="dd-mm-yyyy"
                     android:textColorHint="@color/whiteLow"
                     android:textSize="15dp" />
 

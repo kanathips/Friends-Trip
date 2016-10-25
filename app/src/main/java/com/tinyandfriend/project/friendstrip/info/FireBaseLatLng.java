@@ -8,30 +8,30 @@ import android.os.Parcelable;
  * Created by NewWy on 22/10/2559.
  */
 
-public class LatLng implements Parcelable {
+public class FireBaseLatLng implements Parcelable {
 
     double latitude;
     double longitude;
 
-    public LatLng(double latitude, double longitude) {
+    public FireBaseLatLng(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
-    protected LatLng(Parcel in) {
+    protected FireBaseLatLng(Parcel in) {
         latitude = in.readDouble();
         longitude = in.readDouble();
     }
 
-    public static final Creator<LatLng> CREATOR = new Creator<LatLng>() {
+    public static final Creator<FireBaseLatLng> CREATOR = new Creator<FireBaseLatLng>() {
         @Override
-        public LatLng createFromParcel(Parcel in) {
-            return new LatLng(in);
+        public FireBaseLatLng createFromParcel(Parcel in) {
+            return new FireBaseLatLng(in);
         }
 
         @Override
-        public LatLng[] newArray(int size) {
-            return new LatLng[size];
+        public FireBaseLatLng[] newArray(int size) {
+            return new FireBaseLatLng[size];
         }
     };
 
@@ -55,12 +55,12 @@ public class LatLng implements Parcelable {
         this.longitude = longitude;
     }
 
-    public  LatLng (com.google.android.gms.maps.model.LatLng latLng){
+    public FireBaseLatLng(com.google.android.gms.maps.model.LatLng latLng){
         this.latitude = latLng.latitude;
         this.longitude = latLng.longitude;
     }
 
-    public LatLng(){
+    public FireBaseLatLng(){
 
     }
 
