@@ -40,13 +40,14 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     public void onClickLogin(View view) {
-        final ProgressDialog progressDialog = new ProgressDialog(this);
+
         if (!validateForm())
             return;
 
+        final ProgressDialog progressDialog = ProgressDialog.show(SignInActivity.this, "เข้าสู่ระบบ", "กำลังทำการเข้าสู่ระบบ...");
+
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
-
 
         try {
             SignInInfo signInInfo = new SignInInfo(email, password);
@@ -84,12 +85,16 @@ public class SignInActivity extends AppCompatActivity {
                                 })
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
+//                        progressDialog.show(SignInActivity.this, "เข้าสู่ระบบ", "กำลังทำการเข้าสู่ระบบ...");
+//                        startActivity(new Intent(SignInActivity.this, ReVerifyEmailActivity.class));
+//                        finish();
                     } else if(task.isSuccessful()) {
                         Log.v(TAG, "SignIn:OnComplete: Sign In Pass");
-                        progressDialog.show(SignInActivity.this, "เข้าสู่ระบบ", "กำลังทำการเข้าสู่ระบบ...");
                         startActivity(new Intent(SignInActivity.this, MainActivity.class));
                         finish();
                     }
+                    progressDialog.dismiss();
+
                 }
             });
         } catch (IllegalArgumentException e) {

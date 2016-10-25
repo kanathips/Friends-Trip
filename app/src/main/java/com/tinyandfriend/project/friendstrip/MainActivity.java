@@ -66,8 +66,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     startActivity(new Intent(MainActivity.this, SignInActivity.class));
                     finish();
                 } else if (!firebaseUser.isEmailVerified()) {
-                    toastText = "Please verify your email";
-                    startActivity(new Intent(MainActivity.this, ReVerifyEmailActivity.class));
+                    startActivity(new Intent(MainActivity.this, SignInActivity.class));
                     finish();
                 } else {
                     if ((username = firebaseUser.getDisplayName()) == null)
@@ -146,6 +145,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 }
         );
+
+
     }
 
 
