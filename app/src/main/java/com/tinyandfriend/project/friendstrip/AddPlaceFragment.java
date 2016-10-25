@@ -2,9 +2,12 @@ package com.tinyandfriend.project.friendstrip;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
@@ -14,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -24,6 +28,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.rengwuxian.materialedittext.MaterialEditText;
 import com.tinyandfriend.project.friendstrip.info.TripInfo;
 import com.tinyandfriend.project.friendstrip.info.PlaceInfo;
 
@@ -69,7 +74,9 @@ public class AddPlaceFragment extends FragmentPager implements OnMapReadyCallbac
         //Add datepicker to edittext
 
         final EditText startTripEditText = (EditText) rootView.findViewById(R.id.trip_start);
-        startTripEditText.setOnClickListener(new View.OnClickListener() {
+        final ImageButton startImageButton = (ImageButton) rootView.findViewById(R.id.alert_dialog_start_date);
+
+        startImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DateSelect dateSelect = new DateSelect(context, startTripEditText);
@@ -78,8 +85,9 @@ public class AddPlaceFragment extends FragmentPager implements OnMapReadyCallbac
         });
 
         final EditText endTripEditText = (EditText) rootView.findViewById(R.id.trip_end);
+        final ImageButton endImageButton = (ImageButton) rootView.findViewById(R.id.alert_dialog_end_date);
 
-        endTripEditText.setOnClickListener(new View.OnClickListener() {
+        endImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DateSelect dateSelect = new DateSelect(context, endTripEditText);
@@ -97,6 +105,8 @@ public class AddPlaceFragment extends FragmentPager implements OnMapReadyCallbac
                 onClickEditMap();
             }
         });
+
+
         return rootView;
     }
 
@@ -118,6 +128,7 @@ public class AddPlaceFragment extends FragmentPager implements OnMapReadyCallbac
             Log.e(TAG, e.getMessage());
             tripDuration = 0;
         }
+
         Intent intent = new Intent(context, AddPlaceActivity.class);
         intent.putExtra("placeInfos", placeInfos);
 
@@ -180,40 +191,58 @@ public class AddPlaceFragment extends FragmentPager implements OnMapReadyCallbac
         boolean valid = true;
         String checkString;
         String errorText;
+        EditText editText;
+
         if (placeInfos.size() == 0) {
             valid = false;
             Toast.makeText(context, "กรุณาเพิ่มสถานที่ท่องเที่ยว", Toast.LENGTH_SHORT).show();
         }
 
-        EditText editText = (EditText) rootView.findViewById(R.id.trip_name);
-        checkString = editText.getText().toString();
+//        EditText editText = (EditText) rootView.findViewById(R.id.trip_name);
+        MaterialEditText editText_name = (MaterialEditText) rootView.findViewById(R.id.trip_name);
+        TextInputLayout textInputLayout = (TextInputLayout) rootView.findViewById(R.id.trip_name_layout);
+
+        checkString = editText_name.getText().toString();
         if (checkString.isEmpty()) {
             valid = false;
             errorText = "กรุณาตั้งชื่อห้อง";
-        } else {
+        }else if(checkString.length()>28) {
+            valid = false;
+            errorText = "กรุณากรอกชื่อห้องไม่เกิน 28 ตัวอักษร";
+        }else {
             errorText = null;
         }
-        editText.setError(errorText);
+//        editText.setError(errorText);
+        editText_name.setError(errorText);
 
         editText = (EditText) rootView.findViewById(R.id.number_member);
+        textInputLayout = (TextInputLayout) rootView.findViewById(R.id.number_member_layout);
         checkString = editText.getText().toString();
         if (checkString.isEmpty()) {
             valid = false;
             errorText = "กรุณาใส่จำนวนผู้เข้าร่วม";
-        } else {
-            errorText = null;
-        }
-        editText.setError(errorText);
-
-        editText = (EditText) rootView.findViewById(R.id.expend);
-        checkString = editText.getText().toString();
-        if (checkString.isEmpty()) {
+        }else if(Integer.parseInt(checkString) > 20){
             valid = false;
-            errorText = "กรุณาใส่ค่าใช้จ่ายโดยประมาณ";
+            errorText = "กรุณาใส่จำนวนผู้เข้าร่วมไม่เกิน 20 คน";
+        }else {
+            errorText = null;
+        }
+//        editText.setError(errorText);
+        textInputLayout.setError(errorText);
+
+
+        MaterialEditText trip_spoil = (MaterialEditText) rootView.findViewById(R.id.trip_spoil);
+        textInputLayout = (TextInputLayout) rootView.findViewById(R.id.trip_spoil_layout);
+
+        checkString = trip_spoil.getText().toString();
+        if (checkString.length() > 256) {
+            valid = false;
+            errorText = "กรุณาใส่ไม่เกิน 128 ตัวอักษร";
         } else {
             errorText = null;
         }
-        editText.setError(errorText);
+//        trip_spoil.setError(errorText);
+        textInputLayout.setError(errorText);
 
         EditText startDate = (EditText) rootView.findViewById(R.id.trip_start);
 
@@ -266,6 +295,27 @@ public class AddPlaceFragment extends FragmentPager implements OnMapReadyCallbac
         }
         endEditText.setError(errorText);
 
+        endDate = endEditText.getText().toString();
+
+        try {
+            if (endDate.isEmpty()) {
+                errorText = "กรุณาใส่วันสิ้นสุดทริป";
+                valid = false;
+            } else {
+                endTime = getTime(simpleDateFormat, endDate);
+                if (endTime < startTime) {
+                    errorText = "วันเริ่มต้นต้องมาก่อนวันจบ";
+                    valid = false;
+                } else {
+                    errorText = null;
+                }
+            }
+        } catch (ParseException e) {
+            errorText = "รูปแบบวันไม่ถูกต้อง";
+            valid = false;
+        }
+        endEditText.setError(errorText);
+
         return valid;
     }
 
@@ -274,6 +324,7 @@ public class AddPlaceFragment extends FragmentPager implements OnMapReadyCallbac
         TripInfo tripInfo = (TripInfo) createTripInfo;
 
         EditText editText;
+        MaterialEditText editText_name;
 
         editText = (EditText) rootView.findViewById(R.id.trip_start);
         tripInfo.setStartDate(editText.getText().toString());
@@ -292,8 +343,8 @@ public class AddPlaceFragment extends FragmentPager implements OnMapReadyCallbac
         editText = (EditText) rootView.findViewById(R.id.number_member);
         tripInfo.setNumberMember(editText.getText().toString());
 
-        editText = (EditText) rootView.findViewById(R.id.trip_name);
-        tripInfo.setTripName(editText.getText().toString());
+        editText_name = (MaterialEditText) rootView.findViewById(R.id.trip_name);
+        tripInfo.setTripName(editText_name.getText().toString());
 
     }
 
