@@ -3,7 +3,8 @@
     <color name="colorblue">#3300FF</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#167991</color>
+    <color name="fabBackGround">#B4E6F3</color>
     <!--<color name="ColorPrimary">#e62117</color>-->
     <!--<color name="ColorPrimaryDark">#c31c13</color>-->
     <color name="tabsScrollColor">#8a140e</color>

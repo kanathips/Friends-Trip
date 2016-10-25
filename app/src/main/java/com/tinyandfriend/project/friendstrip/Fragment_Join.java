@@ -3,6 +3,7 @@ package com.tinyandfriend.project.friendstrip;
 /**
  * Created by StandAlone on 12/10/2559.
  */
+
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -10,14 +11,22 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.widget.EditText;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tinyandfriend.project.friendstrip.adapter.CardView_Adapter;
 import com.tinyandfriend.project.friendstrip.info.CardView_Info;
+import com.tinyandfriend.project.friendstrip.info.TripInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +41,11 @@ public class Fragment_Join extends Fragment {
     private RecyclerView recyclerView;
     private CardView_Adapter adapter;
     private List<CardView_Info> albumList;
+    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+    private ArrayList<String> rooms;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment__join, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment__join, container, false);
 
         //////////////////////////////////////// CardView /////////////////////////////////////////////////////
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
@@ -42,45 +53,47 @@ public class Fragment_Join extends Fragment {
         albumList = new ArrayList<>();
         adapter = new CardView_Adapter(getActivity(), albumList);
 
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(),1);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(0), false));
 //        recyclerView.setItemAnimator(new DefaultItemAnimator());
 //        recyclerView.setAdapter(adapter);
 
-        ScaleInAnimationAdapter alphaAdapter = new ScaleInAnimationAdapter(adapter);
+        final ScaleInAnimationAdapter alphaAdapter = new ScaleInAnimationAdapter(adapter);
         alphaAdapter.setFirstOnly(false);
         alphaAdapter.setDuration(250);
         recyclerView.setAdapter(alphaAdapter);
 
+        rooms = new ArrayList<>();
 
-        prepareAlbums();
+        reference.child("tripRoom").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue() != null) {
+                    for (DataSnapshot item : dataSnapshot.getChildren()) {
+                        String key = item.getKey();
+                        if(!rooms.contains(key)){
+                            rooms.add(key);
+                            TripInfo tripInfo = item.getValue(TripInfo.class);
+                            CardView_Info cardView_info = new CardView_Info(tripInfo.getTripName(),
+                                    tripInfo.getStartDate() + " ถึง " + tripInfo.getEndDate(), tripInfo.getNumberMember(), R.drawable.pic4);
+                            albumList.add(0,cardView_info);
+                        }
+                    }
+                    alphaAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         return rootView;
     }
 
     /////////////////////////////////////////////////////// Start class CardView /////////////////////////////////////////////////////
-
-    private void prepareAlbums() {
-        int[] pic = {R.drawable.pic1,R.drawable.pic2,R.drawable.pic3,R.drawable.pic4,R.drawable.pic5,
-                R.drawable.pic6,R.drawable.pic7,R.drawable.pic8,R.drawable.pic9,R.drawable.pic10};
-
-        String[] card_names = {"มาเที่ยวทะเลกันเถอะ", "น้ำตกใสแจ๋วปลาชุม", "เดินทางไปด้วยกันนะ", "เมืองแห่งการท่องเที่ยว",
-                "มาเที่ยวทะเลกันเถอะ", "น้ำตกใสแจ๋วปลาชุม", "เดินทางไปด้วยกันนะ", "เมืองแห่งการท่องเที่ยว", "มาเที่ยวทะเลกันเถอะ", "น้ำตกใสแจ๋วปลาชุม"};
-
-        String[] dates = {"Date : 01-10-2559 to 07-10-2559","Date : 01-10-2559 to 07-10-2559","Date : 01-10-2559 to 07-10-2559","Date : 01-10-2559 to 07-10-2559",
-                "Date : 01-10-2559 to 07-10-2559","Date : 01-10-2559 to 07-10-2559","Date : 01-10-2559 to 07-10-2559","Date : 01-10-2559 to 07-10-2559",
-                "Date : 01-10-2559 to 07-10-2559","Date : 01-10-2559 to 07-10-2559"};
-
-        String[] counts = {"Joined 7","Joined 4","Joined 3","Joined 5","Joined 7","Joined 4","Joined 3","Joined 5","Joined 7","Joined 4"};
-
-        for(int i=0;i<=pic.length-1;i++){
-            CardView_Info cardView_info = new CardView_Info(card_names[i],dates[i],counts[i],pic[i]);
-            albumList.add(cardView_info);
-        }
-
-        adapter.notifyDataSetChanged();
-    }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 

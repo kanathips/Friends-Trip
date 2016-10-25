@@ -8,10 +8,10 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -111,7 +112,13 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
 
     private void setupAddPlaceFab(int tripDuration) {
         if (tripDuration == 0 || tripDuration == 1) {
-
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_place_button);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addPlace(placeInfos, placeInfo, googleMap);
+                }
+            });
         } else {
 
             ArrayList<String> fabSheetTexts = new ArrayList<>();
@@ -130,7 +137,7 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
             ListView sheetView = (ListView) findViewById(R.id.fab_sheet);
             View overlay = findViewById(R.id.overlay);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, fabSheetTexts);
-            int sheetColor = getResources().getColor(R.color.colorAccent);
+            int sheetColor = getResources().getColor(R.color.fabBackGround);
             int fabColor = getResources().getColor(R.color.colorPrimary);
 
             sheetView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -140,13 +147,15 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
                         return;
                     if (originalPlaceInfos.contains(placeInfo) || placeInfos.contains(placeInfo)) {
                         Toast.makeText(AddPlaceActivity.this, "คุณเลือกสถานที่นี้ไปแล้ว", Toast.LENGTH_SHORT).show();
-                        return;                    }
-                    if(position < 5){
+                        return;
+                    }
+                    if (position < 5) {
                         placeInfo.setDay(position + 1);
                         addPlace(placeInfos, placeInfo, googleMap);
-                    }else{
+                    } else {
                         setupDialog(placeInfos, placeInfo, googleMap);
                     }
+                    materialSheetFab.hideSheet();
                 }
             });
 
@@ -156,11 +165,25 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
         }
     }
 
-    private void addPlace(ArrayList<PlaceInfo> placeInfos, PlaceInfo placeInfo, GoogleMap googleMap){
+    @Override
+    public void onBackPressed() {
+        if (materialSheetFab == null) {
+            super.onBackPressed();
+        }else if(materialSheetFab.isSheetVisible()){
+            materialSheetFab.hideSheet();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
+    private void addPlace(ArrayList<PlaceInfo> placeInfos, PlaceInfo placeInfo, GoogleMap googleMap) {
+        if (placeInfo == null)
+            return;
         placeInfos.add(placeInfo);
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.title(placeInfo.getName());
-        markerOptions.position(placeInfo.getLocation());
+        markerOptions.position(placeInfo.getLocation().toGmsLatLng());
         markerOptions.snippet(placeInfo.getAddress());
         googleMap.addMarker(markerOptions).setTag(placeInfo.getDay());
     }
@@ -173,7 +196,7 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
     @Override
     public void onPlaceSelected(Place place) {
         placeInfo = new PlaceInfo();
-        placeInfo.setLocation(place.getLatLng());
+        placeInfo.setLocationFromGms(place.getLatLng());
         placeInfo.setName(place.getName().toString());
         placeInfo.setId(place.getId());
         placeInfo.setAddress(place.getAddress().toString());
@@ -198,9 +221,9 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
         for (int i = 0; i < originalPlaceInfos.size(); i++) {
             PlaceInfo info = originalPlaceInfos.get(i);
             MarkerOptions options = new MarkerOptions();
-            options.position(info.getLocation());
+            options.position(info.getLocation().toGmsLatLng());
             options.title(info.getName());
-            builder.include(info.getLocation());
+            builder.include(info.getLocation().toGmsLatLng());
             googleMap.addMarker(options);
         }
 
@@ -211,7 +234,7 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
             googleMap.animateCamera(cu);
         } else if (originalPlaceInfos.size() == 1) {
             PlaceInfo info = originalPlaceInfos.get(0);
-            CameraPosition test = CameraPosition.fromLatLngZoom(info.getLocation(), 17);
+            CameraPosition test = CameraPosition.fromLatLngZoom(info.getLocation().toGmsLatLng(), 17);
             CameraUpdate cu = CameraUpdateFactory.newCameraPosition(test);
             googleMap.animateCamera(cu);
         }
@@ -249,11 +272,11 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
                 .setCancelable(false)
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                            public void onClick(DialogInterface dialog, int id) {
                                 int tripDay = Integer.parseInt(userInput.getText().toString());
 
-                                if(tripDay > tripDuration || tripDay == 0){
-                                    userInput.setError("ข้อมูลไม่ถูกต้อง");
+                                if (tripDay > tripDuration || tripDay == 0) {
+                                    Toast.makeText(AddPlaceActivity.this, "วันที่ไม่ถูกต้อง (เกินวันที่กำหนดไว้)", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
                                 placeInfo.setDay(tripDay);
@@ -262,7 +285,7 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
                         })
                 .setNegativeButton("Cancel",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                            public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
                         });

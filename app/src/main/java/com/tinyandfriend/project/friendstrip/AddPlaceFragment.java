@@ -7,9 +7,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -24,7 +24,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.tinyandfriend.project.friendstrip.info.CreateTripInfo;
+import com.tinyandfriend.project.friendstrip.info.TripInfo;
 import com.tinyandfriend.project.friendstrip.info.PlaceInfo;
 
 import java.text.ParseException;
@@ -54,11 +54,12 @@ public class AddPlaceFragment extends FragmentPager implements OnMapReadyCallbac
         rootView = inflater.inflate(R.layout.add_place_fragment, container, false);
 
         context = getContext();
-        activity = (AppCompatActivity)getActivity();
+        activity = (AppCompatActivity) getActivity();
         pixelWidth = getResources().getDisplayMetrics().widthPixels;
         pixelHeight = getResources().getDisplayMetrics().heightPixels;
 
-        placeInfos = new ArrayList<>();;
+        placeInfos = new ArrayList<>();
+        ;
 
         //Add Toolbar
 
@@ -89,7 +90,7 @@ public class AddPlaceFragment extends FragmentPager implements OnMapReadyCallbac
         MapFragment mapFragment = (MapFragment) activity.getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        Button editMapButton = (Button)rootView.findViewById(R.id.editMap);
+        Button editMapButton = (Button) rootView.findViewById(R.id.editMap);
         editMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,6 +104,10 @@ public class AddPlaceFragment extends FragmentPager implements OnMapReadyCallbac
     public void onClickEditMap() {
         EditText startEditText = (EditText) rootView.findViewById(R.id.trip_start);
         EditText endEditText = (EditText) rootView.findViewById(R.id.trip_end);
+
+        if(!isValidTripDate(startEditText, endEditText)){
+            return;
+        }
         long tripDuration;
         try {
             String startDate = startEditText.getText().toString();
@@ -124,10 +129,14 @@ public class AddPlaceFragment extends FragmentPager implements OnMapReadyCallbac
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         long diff;
-        Date dateStart = simpleDateFormat.parse(startDate);
-        Date dateEnd = simpleDateFormat.parse(endDate);
-        diff = Math.round((dateEnd.getTime() - dateStart.getTime()) / (double) 86400000);
+        long startTime = getTime(simpleDateFormat, startDate);
+        long endTime = getTime(simpleDateFormat, endDate);
+        diff = Math.round((endTime - startTime) / (double) 86400000);
         return diff + 1;
+    }
+
+    private long getTime(SimpleDateFormat dateFormat, String date) throws ParseException {
+        return dateFormat.parse(date).getTime();
     }
 
     @Override
@@ -146,9 +155,9 @@ public class AddPlaceFragment extends FragmentPager implements OnMapReadyCallbac
                 for (int i = 0; i < placeInfos.size(); i++) {
                     PlaceInfo info = placeInfos.get(i);
                     MarkerOptions options = new MarkerOptions();
-                    options.position(info.getLocation());
+                    options.position(info.getLocation().toGmsLatLng());
                     options.title(info.getName());
-                    builder.include(info.getLocation());
+                    builder.include(info.getLocation().toGmsLatLng());
                     googleMap.addMarker(options);
                 }
 
@@ -159,7 +168,7 @@ public class AddPlaceFragment extends FragmentPager implements OnMapReadyCallbac
                     googleMap.animateCamera(cu);
                 } else if (placeInfos.size() == 1) {
                     PlaceInfo info = placeInfos.get(0);
-                    CameraPosition test = CameraPosition.fromLatLngZoom(info.getLocation(), 17);
+                    CameraPosition test = CameraPosition.fromLatLngZoom(info.getLocation().toGmsLatLng(), 17);
                     CameraUpdate cu = CameraUpdateFactory.newCameraPosition(test);
                     googleMap.animateCamera(cu);
                 }
@@ -171,85 +180,122 @@ public class AddPlaceFragment extends FragmentPager implements OnMapReadyCallbac
         boolean valid = true;
         String checkString;
         String errorText;
-        if(placeInfos.size() == 0){
+        if (placeInfos.size() == 0) {
             valid = false;
             Toast.makeText(context, "กรุณาเพิ่มสถานที่ท่องเที่ยว", Toast.LENGTH_SHORT).show();
         }
 
-        EditText editText = (EditText)rootView.findViewById(R.id.trip_name);
+        EditText editText = (EditText) rootView.findViewById(R.id.trip_name);
         checkString = editText.getText().toString();
-        if(checkString.isEmpty()){
+        if (checkString.isEmpty()) {
             valid = false;
             errorText = "กรุณาตั้งชื่อห้อง";
-        }else{
+        } else {
             errorText = null;
         }
         editText.setError(errorText);
 
-        editText = (EditText)rootView.findViewById(R.id.trip_start);
+        editText = (EditText) rootView.findViewById(R.id.number_member);
         checkString = editText.getText().toString();
-        if(checkString.isEmpty()){
-            errorText = "กรุณาใส่วันเริ่มทริป";
-        }else {
-            errorText = null;
-        }
-        editText.setError(errorText);
-
-        editText = (EditText)rootView.findViewById(R.id.trip_end);
-        checkString = editText.getText().toString();
-        if(checkString.isEmpty()){
-            errorText = "กรุณาใส่วันสิ้นสุดทริป";
-        }else {
-            errorText = null;
-        }
-        editText.setError(errorText);
-
-        editText = (EditText)rootView.findViewById(R.id.number_member);
-        checkString = editText.getText().toString();
-        if(checkString.isEmpty()){
+        if (checkString.isEmpty()) {
+            valid = false;
             errorText = "กรุณาใส่จำนวนผู้เข้าร่วม";
-        }else {
+        } else {
             errorText = null;
         }
         editText.setError(errorText);
 
-        editText = (EditText)rootView.findViewById(R.id.expend);
+        editText = (EditText) rootView.findViewById(R.id.expend);
         checkString = editText.getText().toString();
-        if(checkString.isEmpty()){
+        if (checkString.isEmpty()) {
+            valid = false;
             errorText = "กรุณาใส่ค่าใช้จ่ายโดยประมาณ";
-        }else {
+        } else {
             errorText = null;
         }
         editText.setError(errorText);
 
+        EditText startDate = (EditText) rootView.findViewById(R.id.trip_start);
+
+        EditText endDate = (EditText) rootView.findViewById(R.id.trip_end);
+        boolean validDate = isValidTripDate(startDate, endDate);
+        return valid && validDate;
+
+    }
+
+    private boolean isValidTripDate(EditText startEditText, EditText endEditText) {
+
+        String startDate = startEditText.getText().toString();
+        String errorText;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        long startTime = 0, endTime = 0;
+        boolean valid = true;
+
+        try {
+            if (startDate.isEmpty()) {
+                errorText = "กรุณาใส่วันเริ่มทริป";
+                valid = false;
+            } else {
+                startTime = getTime(simpleDateFormat, startDate);
+                errorText = null;
+            }
+        } catch (ParseException e) {
+            errorText = "รูปแบบวันไม่ถูกต้อง";
+            valid = false;
+        }
+        startEditText.setError(errorText);
+
+        String endDate = endEditText.getText().toString();
+
+        try {
+            if (endDate.isEmpty()) {
+                errorText = "กรุณาใส่วันสิ้นสุดทริป";
+                valid = false;
+            } else {
+                endTime = getTime(simpleDateFormat, endDate);
+                if (endTime < startTime) {
+                    errorText = "วันเริ่มต้นต้องมาก่อนวันจบ";
+                    valid = false;
+                } else {
+                    errorText = null;
+                }
+            }
+        } catch (ParseException e) {
+            errorText = "รูปแบบวันไม่ถูกต้อง";
+            valid = false;
+        }
+        endEditText.setError(errorText);
 
         return valid;
     }
 
     @Override
     public void setInfo(Object createTripInfo) {
-        CreateTripInfo tripInfo = (CreateTripInfo)createTripInfo;
+        TripInfo tripInfo = (TripInfo) createTripInfo;
 
         EditText editText;
 
-        editText = (EditText)rootView.findViewById(R.id.trip_start);
+        editText = (EditText) rootView.findViewById(R.id.trip_start);
         tripInfo.setStartDate(editText.getText().toString());
 
-        editText = (EditText)rootView.findViewById(R.id.trip_end);
+        editText = (EditText) rootView.findViewById(R.id.trip_end);
         tripInfo.setEndDate(editText.getText().toString());
+
+        editText = (EditText)rootView.findViewById(R.id.trip_spoil);
+        tripInfo.setTripSpoil(editText.getText().toString());
 
         tripInfo.setPlaceInfos(placeInfos);
 
-        editText = (EditText)rootView.findViewById(R.id.expend);
+        editText = (EditText) rootView.findViewById(R.id.expend);
         tripInfo.setExpense(editText.getText().toString());
 
-        editText = (EditText)rootView.findViewById(R.id.number_member);
+        editText = (EditText) rootView.findViewById(R.id.number_member);
         tripInfo.setNumberMember(editText.getText().toString());
 
-        editText = (EditText)rootView.findViewById(R.id.trip_name);
+        editText = (EditText) rootView.findViewById(R.id.trip_name);
         tripInfo.setTripName(editText.getText().toString());
-    }
 
+    }
 
 
     @Override

@@ -1,13 +1,9 @@
 package com.tinyandfriend.project.friendstrip;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
-//import android.support.annotation.NonNull;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -163,41 +159,57 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private boolean validateForm() {
-        if (!validateCheck(getfNameTextLayout(),getfNameEditText(),false,false,false)) {  return false;   }
-        if (!validateCheck(getlNameTextLayout(),getlNameEditText(),false,false,false)) {  return false;   }
-        if (!validateCheck(getEmailTextLayout(),getEmailEditText(),false,true,false)) {  return false;   }
-        if (!validateCheck(getRePasswordTextLayout(),getRePasswordEditText(),true,false,false)) {  return false;   }
-        if (!validateCheck(getPasswordTextLayout(),getPasswordEditText(),true,false,false)) {  return false;   }
-        if (!validateCheck(getDisplayNameTextLayout(),getDisplayNameEditText(),false,false,false)) {  return false;   }
-        if (!validateCheck(getPhoneNumberTextLayout(),getPhoneNumberEditText(),false,false,false)) {  return false;   }
-        if (!validateCheck(getCitizenIdTextLayout(),getCitizenIdEditText(),false,false,true)) {  return false;   }
+        if (!validateCheck(getfNameTextLayout(), getfNameEditText(), false, false, false)) {
+            return false;
+        }
+        if (!validateCheck(getlNameTextLayout(), getlNameEditText(), false, false, false)) {
+            return false;
+        }
+        if (!validateCheck(getEmailTextLayout(), getEmailEditText(), false, true, false)) {
+            return false;
+        }
+        if (!validateCheck(getRePasswordTextLayout(), getRePasswordEditText(), true, false, false)) {
+            return false;
+        }
+        if (!validateCheck(getPasswordTextLayout(), getPasswordEditText(), true, false, false)) {
+            return false;
+        }
+        if (!validateCheck(getDisplayNameTextLayout(), getDisplayNameEditText(), false, false, false)) {
+            return false;
+        }
+        if (!validateCheck(getPhoneNumberTextLayout(), getPhoneNumberEditText(), false, false, false)) {
+            return false;
+        }
+        if (!validateCheck(getCitizenIdTextLayout(), getCitizenIdEditText(), false, false, true)) {
+            return false;
+        }
 
         return valid;
 
     }
 
-    private boolean validateCheck(TextInputLayout textInputLayout,EditText editText,boolean isPassword,boolean isEmail,boolean isCitizenId) {
+    private boolean validateCheck(TextInputLayout textInputLayout, EditText editText, boolean isPassword, boolean isEmail, boolean isCitizenId) {
         if (editText.getText().toString().trim().isEmpty()) {
             textInputLayout.setError("จำเป็นต้องใส่");
             requestFocus(editText);
             valid = false;
             return false;
-        } else if(!getPasswordText().equals(getRePasswordText())&&isPassword){
+        } else if (!getPasswordText().equals(getRePasswordText()) && isPassword) {
             textInputLayout.setError("รหัสผ่านไม่ตรงกัน");
             requestFocus(editText);
             valid = false;
             return false;
-        }else if(!Validator.validateEmail(getEmailText())&&isEmail){
+        } else if (!Validator.validateEmail(getEmailText()) && isEmail) {
             textInputLayout.setError("รูปแบบอีเมลไม่ถูกต้อง");
             requestFocus(editText);
             valid = false;
             return false;
-        }else if(!Validator.validateCitizenId(getCitizenIdText())&&isCitizenId){
+        } else if (!Validator.validateCitizenId(getCitizenIdText()) && isCitizenId) {
             textInputLayout.setError("รหัสบัตรประจำตัวประชาชนไม่ถูกต้อง");
             requestFocus(editText);
             valid = false;
             return false;
-        }else {
+        } else {
             textInputLayout.setErrorEnabled(false);
         }
         valid = true;
@@ -332,8 +344,6 @@ public class SignUpActivity extends AppCompatActivity {
                                             }
                                             progressDialog.dismiss();
                                         }
-
-                                        //
                                         @Override
                                         public void onCancelled(DatabaseError databaseError) {
                                             Toast.makeText(SignUpActivity.this, "ชื่อที่ใช้ในระบบ " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
@@ -341,15 +351,12 @@ public class SignUpActivity extends AppCompatActivity {
                                     });
                         }
                     }
-
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         Toast.makeText(SignUpActivity.this, "บัตรปชช " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
-
 
 
 //    private boolean validateFrom() {

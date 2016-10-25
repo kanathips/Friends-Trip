@@ -3,8 +3,6 @@ package com.tinyandfriend.project.friendstrip.info;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.android.gms.maps.model.LatLng;
-
 /**
  * Created by NewWy on 10/10/2559.
  */
@@ -89,6 +87,10 @@ public class PlaceInfo implements Parcelable {
 
     public LatLng getLocation() {
         return location;
+    }
+
+    public void setLocationFromGms(com.google.android.gms.maps.model.LatLng location) {
+        this.location = new LatLng(location);
     }
 
     public void setLocation(LatLng location) {

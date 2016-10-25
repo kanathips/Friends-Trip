@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 new View.OnClickListener(){
                     @Override
                     public void onClick(View view) {
+                        startActivity(new Intent(MainActivity.this, CreateTripActivity.class));
                     }
                 }
         );
@@ -127,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             case(2):
                                 onSelectSomeThing();
                         }
-                        Toast.makeText(MainActivity.this, "Selected page position: " + position, Toast.LENGTH_SHORT).show();
                     }
 
                     // This method will be invoked when the current page is scrolled
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void onSelectSomeThing() {
         FloatingActionButton actionButton = (FloatingActionButton) findViewById(R.id.fab);
-        actionButton.setBackgroundResource(R.drawable.ic_location_city_white_36dp);
+        actionButton.setImageResource(R.drawable.ic_location_city_white_36dp);
     }
 
     private void onSelectJoinPage() {
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(MainActivity.this, CreateTripActivity.class));
             }
         });
-        actionButton.setBackgroundResource(R.drawable.ic_directions_walk_white_36dp);
+        actionButton.setImageResource(R.drawable.ic_add_white_24dp);
     }
 
     private void onSelectFriendPage(){
@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(MainActivity.this, AddFriendsActivity.class));
             }
         });
-        actionButton.setBackgroundResource(R.drawable.ic_group_white_36dp);
+        actionButton.setImageResource(R.drawable.ic_group_white_36dp);
     }
 
     @Override
@@ -197,9 +197,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -252,11 +249,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             firebaseAuth.removeAuthStateListener(authStateListener);
         }
     }
-
-//    public void onDestroy() {
-//        super.onDestroy();
-//        if (authStateListener != null) {
-//            firebaseAuth.removeAuthStateListener(authStateListener);
-//        }
-//    }
 }

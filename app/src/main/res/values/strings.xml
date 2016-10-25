@@ -17,26 +17,55 @@
     <string name="title_activity_main">Main</string>
 
     <string-array name="tag_trip">
-        <item>ปั่นจักรยาน</item>
-        <item>แคมป์ปิ้ง</item>
-        <item>ปีนเขา</item>
-        <item>เดินทางไกล</item>
-        <item>ค้างคืน</item>
+        <item>ท่องเที่ยวเชิงนิเวศ</item>
+        <item>ท่องเที่ยวเชิงนันทนาการ</item>
+        <item>ท่องเที่ยวเชิงธรณีวิทยา</item>
+        <item>ท่องเที่ยวเชิงเกษตร</item>
+        <item>ท่องเที่ยวเชิงดาราศาสตร์</item>
+        <item>ท่องเที่ยวเชิงประวัติศาสตร์</item>
+        <item>ท่องเที่ยวงานชมวัฒนธรรมและประเพณี</item>
+        <item>ท่องเที่ยวชมวิถีชีวิตในชนบท</item>
+        <item>ท่องเที่ยวเชิงสุขภาพ</item>
+        <item>ท่องเที่ยวเชิงทัศนศึกษาและศาสนา</item>
+        <item>ท่องเที่ยวเชิงกีฬา</item>
+        <item>ท่องเที่ยวแบบผจญภัย</item>
+        <item>ท่องเที่ยวพำนักระยะยาว</item>
+        <item>ท่องเที่ยวเพื่อการประชุม</item>
     </string-array>
     <string-array name="tag_place">
         <item>ภูเขา</item>
         <item>น้ำตก</item>
-        <item>วัด</item>
+        <item>ศาสนสถาน</item>
+        <item>ถ้ำ</item>
+        <item>เกาะ</item>
         <item>ทะเล</item>
+        <item>สวนสัตว์</item>
+        <item>สวนสนุก</item>
         <item>สวนดอกไม้</item>
+        <item>น้ำพุร้อนธรรมชาติ</item>
+        <item>ผา</item>
+        <item>อุทยาน</item>
+        <item>พิพิธภัณฑ์</item>
+        <item>สถานศึกษา</item>
+        <item>ต่างประเทศ</item>
+        <item>ห้างสรรพสินค้า</item>
+        <item>ร้านอาหาร</item>
+        <item>ป่า</item>
+        <item>เขื่อน</item>
+        <item>สวนสาธรณะ</item>
+        <item>สนามกีฬา</item>
+        <item>ยิม</item>
+        <item>คอนเสิร์ต</item>
+        <item>ผับบาร์</item>
+        <item>สนามแข่งรถ</item>
     </string-array>
     <string-array name="tag_region">
-        <item>กลาง</item>
-        <item>ตะวันออก</item>
-        <item>ตะวันตก</item>
-        <item>ใต้</item>
-        <item>เหนือ</item>
-        <item>ตะวันออกเฉียงเหนือ</item>
+        <item>ภาคกลาง</item>
+        <item>ภาคตะวันออก</item>
+        <item>ภาคตะวันตก</item>
+        <item>ภาคใต้</item>
+        <item>ภาคเหนือ</item>
+        <item>ภาคตะวันออกเฉียงเหนือ</item>
     </string-array>
 
     <string name="app_name_card">Card View</string>

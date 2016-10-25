@@ -39,6 +39,19 @@
         android:id="@+id/expend"
         android:hint="ค่าใช้จ่ายโดยประมาณ" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="รายละเอียดทริป"
+        android:textAppearance="?android:textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/trip_spoil"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="start|top"
+        android:maxLength="512" />
 
     <fragment
         android:id="@+id/map"
@@ -53,11 +66,10 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right|bottom"
-            android:text="Edit"
+            android:layout_gravity="right|top"
+            android:text="เพิ่มสถานที่"
+            android:paddingEnd="4dp"
             android:id="@+id/editMap"
-            android:padding="10dp"
-            android:layout_marginTop="20dp"
-            android:paddingRight="10dp"/>
+            android:paddingRight="4dp" />
     </fragment>
 </LinearLayout>
