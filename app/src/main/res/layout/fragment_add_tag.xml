@@ -7,7 +7,6 @@
 
 
     <RelativeLayout
-
         android:layout_width="match_parent"
         android:layout_height="180dp">
 
@@ -21,13 +20,14 @@
             android:layout_alignParentTop="true" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/floatingActionButton3"
+            android:id="@+id/choose_pic_room"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_photo_white_24dp" />
+            android:src="@drawable/ic_photo_white_24dp"
+            />
     </RelativeLayout>
 
 
@@ -186,6 +186,7 @@
             android:text="เพิ่มเอกสาร" />
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/file_recycler_view"
             android:background="#ECECEC"
             android:layout_width="match_parent"
             android:orientation="horizontal"

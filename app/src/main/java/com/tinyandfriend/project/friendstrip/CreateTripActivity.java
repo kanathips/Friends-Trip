@@ -30,6 +30,7 @@ import com.tinyandfriend.project.friendstrip.info.FileInfo;
 import com.tinyandfriend.project.friendstrip.info.TripInfo;
 import com.tinyandfriend.project.friendstrip.view.NoSwipeViewPager;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class CreateTripActivity extends AppCompatActivity {
     private ArrayList<FragmentPager> fragmentPagers;
     private TripInfo tripInfo;
     private StorageMetadata metadata;
-    private ArrayList<String> uploadedFiles;
+    private boolean isThumbnailFinish = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,27 +93,36 @@ public class CreateTripActivity extends AppCompatActivity {
                     adb.setMessage("ยินยันการสร้างห้องหรือไม่");
                     adb.setIcon(android.R.drawable.ic_dialog_alert);
                     adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
+                       public void onClick(DialogInterface dialog, int which) {
                             if (currentFragment.validateFrom()) {
                                 final ProgressDialog processDialog = ProgressDialog.show(CreateTripActivity.this, null, "กำลังสร้างทริป โปรดรอสักครู่");
                                 currentFragment.setInfo(tripInfo);
 
-                                FragmentAddTag addTagFragment = (FragmentAddTag) currentFragment;
+                                final FragmentAddTag addTagFragment = (FragmentAddTag) currentFragment;
                                 final ArrayList<FileInfo> fileInfos = addTagFragment.getFileList();
                                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                                 tripInfo.setOwnerUID(user.getUid());
                                 final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("tripRoom").push();
+
+                                if (fileInfos.size() == 0) {
+                                    processDialog.dismiss();
+                                    CreateTripActivity.this
+                                            .finish();
+                                } else if (fileInfos.size() > 0) {
+                                    processDialog.setMessage("กำลังอัพโหลดไฟล์");
+                                    for (int i = 0; i < fileInfos.size(); i++) {
+                                        uploadFile(fileInfos, i, reference, processDialog);
+                                    }
+                                }
+
+                                Uri uri = addTagFragment.getThumbnailUri();
+                                uploadThumbnail(uri, reference);
+
+
                                 reference.setValue(tripInfo).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        if (fileInfos.size() == 0) {
-                                            CreateTripActivity.this.finish();
-                                        } else if (fileInfos.size() > 0) {
-                                            processDialog.setMessage("กำลังอัพโหลดไฟล์");
-                                            for (int i = 0; i < fileInfos.size(); i++) {
-                                                uploadFile(fileInfos, i, reference, processDialog);
-                                            }
-                                        }
+                                        finish();
                                     }
                                 });
                             }
@@ -140,18 +150,37 @@ public class CreateTripActivity extends AppCompatActivity {
         }
     }
 
+    private void uploadThumbnail(Uri thumbnailUri, final DatabaseReference databaseReference) {
+        isThumbnailFinish = false;
+        StorageMetadata metadata = new StorageMetadata.Builder()
+                .setContentType("image/jpeg")
+                .build();
+        UploadTask uploadTask = storage.getReference().child(databaseReference.getKey() + "/thumbnail/thumbnail.jpg").putFile(thumbnailUri, metadata);
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("thumbnail", taskSnapshot.getDownloadUrl().toString());
+                databaseReference.updateChildren(map);
+                isThumbnailFinish = true;
+                Log.i("Trip_Room Upload", taskSnapshot.getDownloadUrl().toString());
+
+            }
+        });
+    }
+
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
     private void uploadFile(final ArrayList<FileInfo> fileInfos, final int position, final DatabaseReference reference, final ProgressDialog processDialog) {
         Uri uri = fileInfos.get(position).getUri();
         final String fileName = fileInfos.get(position).getFileName();
-        UploadTask uploadTask = storage.getReference().child("trip_document/" + reference.getKey() + "/" + fileName).putFile(uri, metadata);
+        UploadTask uploadTask = storage.getReference().child(reference.getKey() + "/trip_document/" + fileName).putFile(uri, metadata);
         uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                 int progress = (int) ((100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount());
                 processDialog.setMessage(fileName + " : " + progress + "%");
-                Log.i(TAG, fileName+ " upload is " + progress + "% done");
+                Log.i(TAG, fileName + " upload is " + progress + "% done");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -171,7 +200,7 @@ public class CreateTripActivity extends AppCompatActivity {
                 if (position + 1 == fileInfos.size()) {
                     processDialog.setMessage("อัพโหลดเสร็จสิ้น");
                     processDialog.dismiss();
-                    CreateTripActivity.this.finish();
+
                 }
             }
         });

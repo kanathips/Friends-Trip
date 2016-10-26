@@ -1,5 +1,7 @@
 package com.tinyandfriend.project.friendstrip.info;
 
+import android.net.Uri;
+
 /**
  * Created by StandAlone on 21/10/2559.
  */
@@ -10,12 +12,28 @@ public class CardViewInfo {
     private String date_card;
     private String count_people;
     private int pic_id;
+    private String thumbnail;
 
     public CardViewInfo(String name_card, String date_card, String count_people, int pic_id) {
         this.name_card = name_card;
         this.date_card = date_card;
         this.count_people = count_people;
         this.pic_id = pic_id;
+    }
+
+    public CardViewInfo(String name_card, String date_card, String count_people, String thumbnail) {
+        this.name_card = name_card;
+        this.date_card = date_card;
+        this.count_people = count_people;
+        this.thumbnail = thumbnail;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
     public int getPic_id() {

@@ -27,11 +27,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
-<<<<<<< HEAD:app/src/main/java/com/tinyandfriend/project/friendstrip/FragmentAddPlace.java
-=======
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.tinyandfriend.project.friendstrip.info.TripInfo;
->>>>>>> refs/remotes/origin/Mark_branch:app/src/main/java/com/tinyandfriend/project/friendstrip/AddPlaceFragment.java
 import com.tinyandfriend.project.friendstrip.info.PlaceInfo;
 import com.tinyandfriend.project.friendstrip.info.TripInfo;
 

@@ -115,6 +115,14 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
                     if (info.getName().equals(marker.getTitle())) {
                         placeInfos.remove(info);
                         marker.remove();
+                        return;
+                    }
+                }
+                for(PlaceInfo info: originalPlaceInfos){
+                    if(info.getName().equals(marker.getTitle())){
+                        originalPlaceInfos.remove(info);
+                        marker.remove();
+                        return;
                     }
                 }
             }
@@ -175,6 +183,12 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (placeInfo == null)
+                        return;
+                    if (originalPlaceInfos.contains(placeInfo) || placeInfos.contains(placeInfo)) {
+                        Toast.makeText(AddPlaceActivity.this, "คุณเลือกสถานที่นี้ไปแล้ว", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     addPlace(placeInfos, placeInfo, googleMap);
                 }
             });

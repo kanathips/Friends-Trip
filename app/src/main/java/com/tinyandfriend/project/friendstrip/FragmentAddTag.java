@@ -1,10 +1,16 @@
 package com.tinyandfriend.project.friendstrip;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -34,6 +41,7 @@ public class FragmentAddTag extends FragmentPager {
 
     private Context context;
     private static final String TAG = "ADD_TAG_FRAGMENT";
+    private static final int ID_REQUEST = 99;
     private TagListViewAdapter regionTagAdapter;
     private TagListViewAdapter tripTagAdapter;
     private TagListViewAdapter placeTagAdapter;
@@ -45,6 +53,7 @@ public class FragmentAddTag extends FragmentPager {
             R.drawable.pic4, R.drawable.pic5, R.drawable.pic6,
             R.drawable.pic7, R.drawable.pic8, R.drawable.pic9,
             R.drawable.pic10};
+    private Uri thumbnailUri;
 
     @Nullable
     @Override
@@ -71,13 +80,32 @@ public class FragmentAddTag extends FragmentPager {
         recyclerView.setAdapter(fileCardViewAdapter);
 
         Random random = new Random();
-        int imgResource = tempHeaderImage[random.nextInt(9)];
+        int ranInt = random.nextInt(9);
+        int imgResource = tempHeaderImage[ranInt];
         headerImage = (ImageView) rootView.findViewById(R.id.header_image);
         headerImage.setImageResource(imgResource);
         headerImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        thumbnailUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
+                context.getResources().getResourcePackageName(imgResource) + '/' +
+                context.getResources().getResourceTypeName(imgResource) + '/' +
+                context.getResources().getResourceEntryName(imgResource) );
+
+        FloatingActionButton floatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.choose_pic_room);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                startActivityForResult(i, ID_REQUEST);
+
+            }
+
+        });
+
 
         return rootView;
     }
+
 
     private void setUpTagListView(View view) {
         ListView regionListView = (ListView) view.findViewById(R.id.tag_region);
@@ -170,8 +198,35 @@ public class FragmentAddTag extends FragmentPager {
                     fileCardViewAdapter.notifyDataSetChanged();
                 }
                 break;
+            case ID_REQUEST:
+                if (requestCode == ID_REQUEST && resultCode == RESULT_OK && null != data) {
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+                    Cursor cursor = context.getContentResolver().query(selectedImage,
+                            filePathColumn, null, null, null);
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String picturePath = cursor.getString(columnIndex);
+                    cursor.close();
+
+                    TripInfo tripInfo = new TripInfo();
+
+                    ImageView imageView = (ImageView) getView().findViewById(R.id.header_image);
+                    imageView.setImageURI(selectedImage);
+                    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    thumbnailUri = selectedImage;
+                }
+                break;
         }
         super.onActivityResult(requestCode, resultCode, data);
+
+
+    }
+
+    public Uri getThumbnailUri(){
+        return thumbnailUri;
     }
 
     public ArrayList<FileInfo> getFileList() {
