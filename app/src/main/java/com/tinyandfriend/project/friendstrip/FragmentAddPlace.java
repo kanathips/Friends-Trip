@@ -2,12 +2,10 @@ package com.tinyandfriend.project.friendstrip;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -28,7 +26,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.rengwuxian.materialedittext.MaterialEditText;
-import com.tinyandfriend.project.friendstrip.info.TripInfo;
 import com.tinyandfriend.project.friendstrip.info.PlaceInfo;
 import com.tinyandfriend.project.friendstrip.info.TripInfo;
 
@@ -154,7 +151,7 @@ public class FragmentAddPlace extends FragmentPager implements OnMapReadyCallbac
             if (resultCode == Activity.RESULT_OK) {
                 placeInfos = data.getParcelableArrayListExtra("placeInfos");
                 LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
+                googleMap.clear();
                 for (int i = 0; i < placeInfos.size(); i++) {
                     PlaceInfo info = placeInfos.get(i);
                     MarkerOptions options = new MarkerOptions();
