@@ -1,5 +1,7 @@
 package com.tinyandfriend.project.friendstrip.info;
 
+import android.net.Uri;
+
 import java.util.ArrayList;
 
 /**
@@ -18,6 +20,16 @@ public class TripInfo {
     private ArrayList<PlaceInfo> placeInfos;
     private ArrayList<String> files;
     private String ownerUID;
+    private String thumbnail;
+
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
 
     public String getOwnerUID() {
         return ownerUID;

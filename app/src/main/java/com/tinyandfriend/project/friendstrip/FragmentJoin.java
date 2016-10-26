@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -54,22 +55,35 @@ public class FragmentJoin extends Fragment {
 
         rooms = new ArrayList<>();
 
-        reference.child("tripRoom").addValueEventListener(new ValueEventListener() {
+        reference.child("tripRoom").addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getValue() != null) {
-                    for (DataSnapshot item : dataSnapshot.getChildren()) {
-                        String key = item.getKey();
-                        if(!rooms.contains(key)){
-                            rooms.add(key);
-                            TripInfo tripInfo = item.getValue(TripInfo.class);
-                            CardViewInfo cardView_info = new CardViewInfo(tripInfo.getTripName(),
-                                    tripInfo.getStartDate() + " ถึง " + tripInfo.getEndDate(), tripInfo.getNumberMember(), R.drawable.pic4);
-                            albumList.add(0,cardView_info);
-                        }
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                {
+                    String key = dataSnapshot.getKey();
+                    if (key != null && !rooms.contains(key)) {
+                        rooms.add(dataSnapshot.getKey());
+                        TripInfo tripInfo = dataSnapshot.getValue(TripInfo.class);
+                        CardViewInfo cardView_info = new CardViewInfo(tripInfo.getTripName(),
+                                tripInfo.getStartDate() + " ถึง " + tripInfo.getEndDate(), tripInfo.getNumberMember(), tripInfo.getThumbnail());
+                        albumList.add(0, cardView_info);
                     }
                     alphaAdapter.notifyDataSetChanged();
                 }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
