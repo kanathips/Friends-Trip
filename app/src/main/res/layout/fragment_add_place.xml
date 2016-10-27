@@ -31,6 +31,7 @@
                     android:singleLine="true"
                     android:id="@+id/trip_name"
                     app:met_maxCharacters="28"
+                    android:maxLength="28"
                     android:layout_height="wrap_content" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -134,6 +135,7 @@
                     android:layout_weight="0.7"
                     android:inputType="number"
                     android:id="@+id/number_member"
+                    android:maxLength="2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </android.support.design.widget.TextInputLayout>
@@ -152,6 +154,7 @@
                     android:layout_weight="1"
                     android:inputType="number"
                     android:id="@+id/expend"
+                    android:maxLength="6"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </android.support.design.widget.TextInputLayout>
@@ -173,6 +176,7 @@
                     android:textSize="16dp"
                     android:maxLines="3"
                     app:met_maxCharacters="256"
+                    android:maxLength="256"
                     app:met_primaryColor="@color/colorAccent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />

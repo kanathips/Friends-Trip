@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseUser firebaseUser;
     private FirebaseAuth firebaseAuth;
     private String username;
+    private String userEmail;
     private FirebaseAuth.AuthStateListener authStateListener;
     private boolean stateFlag = true;
 
@@ -35,6 +37,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         firebaseAuth = FirebaseAuth.getInstance();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        final View header=navigationView.getHeaderView(0);
+/*View view=navigationView.inflateHeaderView(R.layout.nav_header_main);*/
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -53,14 +61,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     startActivity(new Intent(MainActivity.this, SignInActivity.class));
                     finish();
                 } else {
-                    if ((username = firebaseUser.getDisplayName()) == null)
-                        username = firebaseUser.getEmail();
-                    toastText = "Welcome : " + username;
+                    TextView username_nav = (TextView) header.findViewById(R.id.username_nav_header) ;
+                    TextView email_nav = (TextView) header.findViewById(R.id.email_nav_header);
+                    username = firebaseUser.getDisplayName();
+                    userEmail = firebaseUser.getEmail();
+                    username_nav.setText(username);
+                    email_nav.setText(userEmail);
                 }
-                Toast.makeText(MainActivity.this, toastText, Toast.LENGTH_SHORT).show();
+
                 stateFlag = false;
             }
         };
+
+
+
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -82,8 +97,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+
+
 
 
         ////////////////////////////////////////////////////////// Fragement///////////////////////////////////////////////////////////
