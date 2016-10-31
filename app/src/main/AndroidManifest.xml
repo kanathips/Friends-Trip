@@ -48,7 +48,8 @@
                 android:value=".MainActivity" />
         </activity>
 
-        <activity android:name=".UserInfoActivity" />
+        <activity android:name=".UserInfoActivity"
+            android:theme="@style/AppTheme_ed"/>
         <activity android:name=".AddPlaceActivity" />
         <activity android:name=".MainActivity" />
          <!--<activity android:name=".MapMainActivity"/> -->
