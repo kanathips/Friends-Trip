@@ -1,4 +1,4 @@
-package com.tinyandfriend.project.friendstrip;
+package com.tinyandfriend.project.friendstrip.fragment;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -24,6 +24,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.tinyandfriend.project.friendstrip.FragmentPager;
+import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.adapter.FileCardViewAdapter;
 import com.tinyandfriend.project.friendstrip.adapter.TagListViewAdapter;
 import com.tinyandfriend.project.friendstrip.info.FileInfo;
@@ -122,7 +124,7 @@ public class FragmentAddTag extends FragmentPager {
     }
 
     @Override
-    boolean validateFrom() {
+    public boolean validateFrom() {
         return true;
     }
 
@@ -131,7 +133,7 @@ public class FragmentAddTag extends FragmentPager {
     }
 
     @Override
-    void setInfo(Object info) {
+    public void setInfo(Object info) {
         TripInfo tripInfo = (TripInfo) info;
 
         ArrayList<String> tagArray = new ArrayList<>();

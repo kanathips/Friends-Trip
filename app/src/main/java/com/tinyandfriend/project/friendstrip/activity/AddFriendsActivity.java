@@ -1,4 +1,4 @@
-package com.tinyandfriend.project.friendstrip;
+package com.tinyandfriend.project.friendstrip.activity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.tinyandfriend.project.friendstrip.R;
 
 import java.util.HashMap;
 import java.util.Iterator;

@@ -1,4 +1,4 @@
-package com.tinyandfriend.project.friendstrip;
+package com.tinyandfriend.project.friendstrip.view;
 
 import android.app.DatePickerDialog;
 import android.content.Context;

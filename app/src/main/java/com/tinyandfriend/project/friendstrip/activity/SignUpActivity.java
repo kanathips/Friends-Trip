@@ -1,4 +1,4 @@
-package com.tinyandfriend.project.friendstrip;
+package com.tinyandfriend.project.friendstrip.activity;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputFilter;
-import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -28,6 +26,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.tinyandfriend.project.friendstrip.R;
+import com.tinyandfriend.project.friendstrip.Validator;
 import com.tinyandfriend.project.friendstrip.adapter.AuthAdapter;
 import com.tinyandfriend.project.friendstrip.info.SignUpInfo;
 

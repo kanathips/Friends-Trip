@@ -1,4 +1,4 @@
-package com.tinyandfriend.project.friendstrip;
+package com.tinyandfriend.project.friendstrip.activity;
 
 //import android.support.v4.app.FragmentManager;
 
@@ -23,7 +23,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,13 +41,11 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.gordonwong.materialsheetfab.MaterialSheetFab;
-import com.tinyandfriend.project.friendstrip.adapter.PlaceInfoAdapter;
+import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.info.PlaceInfo;
 import com.tinyandfriend.project.friendstrip.listener.OnInfoWindowElemTouchListener;
 import com.tinyandfriend.project.friendstrip.view.MapWrapperLayout;
 import com.tinyandfriend.project.friendstrip.view.SingleSheetFAB;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 

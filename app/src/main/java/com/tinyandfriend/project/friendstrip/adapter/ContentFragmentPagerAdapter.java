@@ -5,9 +5,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.tinyandfriend.project.friendstrip.FragmentNotification;
-import com.tinyandfriend.project.friendstrip.FragmentFriends;
-import com.tinyandfriend.project.friendstrip.FragmentJoin;
+import com.tinyandfriend.project.friendstrip.fragment.FragmentNotification;
+import com.tinyandfriend.project.friendstrip.fragment.FragmentFriends;
+import com.tinyandfriend.project.friendstrip.fragment.FragmentJoin;
 import com.tinyandfriend.project.friendstrip.R;
 
 /**

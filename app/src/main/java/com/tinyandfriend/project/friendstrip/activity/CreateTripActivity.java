@@ -1,4 +1,4 @@
-package com.tinyandfriend.project.friendstrip;
+package com.tinyandfriend.project.friendstrip.activity;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -23,12 +23,18 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.UploadTask;
+import com.tinyandfriend.project.friendstrip.fragment.FragmentAddPlace;
+import com.tinyandfriend.project.friendstrip.fragment.FragmentAddTag;
+import com.tinyandfriend.project.friendstrip.FragmentPager;
+import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.adapter.FragmentPagerAdapter;
 import com.tinyandfriend.project.friendstrip.info.FileInfo;
 import com.tinyandfriend.project.friendstrip.info.TripInfo;
 import com.tinyandfriend.project.friendstrip.view.NoSwipeViewPager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class CreateTripActivity extends AppCompatActivity {
@@ -38,7 +44,6 @@ public class CreateTripActivity extends AppCompatActivity {
     private ArrayList<FragmentPager> fragmentPagers;
     private TripInfo tripInfo;
     private StorageMetadata metadata;
-    private boolean isThumbnailFinish = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,7 +101,7 @@ public class CreateTripActivity extends AppCompatActivity {
                                 final FragmentAddTag addTagFragment = (FragmentAddTag) currentFragment;
                                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                                 tripInfo.setOwnerUID(user.getUid());
-                                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("tripRoom").push();
+                                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
                                 upload(addTagFragment, reference, processDialog);
                             }
@@ -129,18 +134,22 @@ public class CreateTripActivity extends AppCompatActivity {
                 .setContentType("image/jpeg")
                 .build();
 
+        final DatabaseReference tripRoomReference = databaseReference.child("tripRoom").push();
+
         Uri thumbNailUri = fragmentAddTag.getThumbnailUri();
-        UploadTask uploadTask = storage.getReference().child(databaseReference.getKey() + "/thumbnail/thumbnail.jpg").putFile(thumbNailUri, metadata);
+        UploadTask uploadTask = storage.getReference().child(tripRoomReference.getKey() + "/thumbnail/thumbnail.jpg").putFile(thumbNailUri, metadata);
         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 tripInfo.setThumbnail(taskSnapshot.getDownloadUrl().toString());
                 ArrayList<FileInfo> fileInfos = fragmentAddTag.getFileList();
-                ArrayList<String> successFiles = new ArrayList<String>();
+                ArrayList<String> successFiles = new ArrayList<>();
                 if (fileInfos.size() == 0) {
-                    databaseReference.setValue(tripInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    tripRoomReference.setValue(tripInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            updateTripRoom(databaseReference, tripRoomReference.getKey(), user.getUid());
                             processDialog.dismiss();
                             CreateTripActivity.this.finish();
                         }
@@ -149,7 +158,7 @@ public class CreateTripActivity extends AppCompatActivity {
                 } else if (fileInfos.size() > 0) {
                     processDialog.setMessage("กำลังอัพโหลดไฟล์");
                     for (int i = 0; i < fileInfos.size(); i++) {
-                        uploadFile(fileInfos, i, databaseReference, processDialog, successFiles);
+                        uploadFile(fileInfos, i, tripRoomReference, processDialog, successFiles);
                     }
                 }
             }
@@ -188,6 +197,8 @@ public class CreateTripActivity extends AppCompatActivity {
                     reference.setValue(tripInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            updateTripRoom(reference, reference.getKey(), user.getUid());
                             processDialog.dismiss();
                             CreateTripActivity.this.finish();
                         }
@@ -196,7 +207,25 @@ public class CreateTripActivity extends AppCompatActivity {
                 }
             }
         });
-
-
     }
+
+
+    private void updateTripRoom(final DatabaseReference reference, final String tripId, final String userUid){
+        DatabaseReference tripReference = reference.child("tripRoom").child(tripId).child("members");
+        Map<String, Object> map = new HashMap<>();
+        map.put(userUid, true);
+        tripReference.updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                updateUserProfile(reference, tripId, userUid);
+            }
+        });
+    }
+
+    private void updateUserProfile(DatabaseReference reference, String tripId, String userUid){
+        Map<String, Object> updateMap = new HashMap<>();
+        updateMap.put("tripId", tripId);
+        reference.child("users").child(userUid).updateChildren(updateMap);
+    }
+
 }

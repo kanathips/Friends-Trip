@@ -1,7 +1,5 @@
 package com.tinyandfriend.project.friendstrip.info;
 
-import android.net.Uri;
-
 import java.util.ArrayList;
 
 /**
@@ -11,10 +9,10 @@ import java.util.ArrayList;
 public class TripInfo {
 
     private String tripName;
-    String startDate;
-    String endDate;
+    private String startDate;
+    private String endDate;
     private String tripSpoil;
-    private String numberMember;
+    private int maxMember;
     private String expense;
     private ArrayList<String> tag;
     private ArrayList<PlaceInfo> placeInfos;
@@ -50,12 +48,12 @@ public class TripInfo {
         this.files = files;
     }
 
-    public String getNumberMember() {
-        return numberMember;
+    public int getMaxMember() {
+        return maxMember;
     }
 
-    public void setNumberMember(String numberMember) {
-        this.numberMember = numberMember;
+    public void setMaxMember(int maxMember) {
+        this.maxMember = maxMember;
     }
 
     public ArrayList<PlaceInfo> getPlaceInfos() {

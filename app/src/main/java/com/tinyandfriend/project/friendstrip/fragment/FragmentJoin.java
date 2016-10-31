@@ -1,4 +1,4 @@
-package com.tinyandfriend.project.friendstrip;
+package com.tinyandfriend.project.friendstrip.fragment;
 
 /**
  * Created by StandAlone on 12/10/2559.
@@ -20,7 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.adapter.TripRoomCardViewAdapter;
 import com.tinyandfriend.project.friendstrip.info.CardViewInfo;
 import com.tinyandfriend.project.friendstrip.info.TripInfo;
@@ -64,7 +64,7 @@ public class FragmentJoin extends Fragment {
                         rooms.add(dataSnapshot.getKey());
                         TripInfo tripInfo = dataSnapshot.getValue(TripInfo.class);
                         CardViewInfo cardView_info = new CardViewInfo(tripInfo.getTripName(),
-                                tripInfo.getStartDate() + " ถึง " + tripInfo.getEndDate(), tripInfo.getNumberMember(), tripInfo.getThumbnail());
+                                tripInfo.getStartDate() + " ถึง " + tripInfo.getEndDate(), tripInfo.getMaxMember(), tripInfo.getThumbnail());
                         albumList.add(0, cardView_info);
                     }
                     alphaAdapter.notifyDataSetChanged();

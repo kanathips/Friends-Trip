@@ -8,6 +8,6 @@ import android.support.v4.view.ViewPager;
  */
 
 public abstract class FragmentPager extends Fragment implements ViewPager.OnPageChangeListener {
-    abstract boolean validateFrom();
-    abstract void setInfo(Object info);
+    public abstract boolean validateFrom();
+    public abstract void setInfo(Object info);
 }

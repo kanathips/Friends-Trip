@@ -10,18 +10,18 @@ public class CardViewInfo {
 
     private String name_card;
     private String date_card;
-    private String count_people;
+    private int count_people;
     private int pic_id;
     private String thumbnail;
 
-    public CardViewInfo(String name_card, String date_card, String count_people, int pic_id) {
+    public CardViewInfo(String name_card, String date_card, int count_people, int pic_id) {
         this.name_card = name_card;
         this.date_card = date_card;
         this.count_people = count_people;
         this.pic_id = pic_id;
     }
 
-    public CardViewInfo(String name_card, String date_card, String count_people, String thumbnail) {
+    public CardViewInfo(String name_card, String date_card, int count_people, String thumbnail) {
         this.name_card = name_card;
         this.date_card = date_card;
         this.count_people = count_people;
@@ -60,11 +60,11 @@ public class CardViewInfo {
         this.date_card = date_card;
     }
 
-    public String getCount_people() {
+    public int getCount_people() {
         return count_people;
     }
 
-    public void setCount_people(String count_people) {
+    public void setCount_people(int count_people) {
         this.count_people = count_people;
     }
 }
