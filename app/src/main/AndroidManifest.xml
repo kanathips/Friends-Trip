@@ -30,7 +30,7 @@
         </activity>
         <activity android:name=".activity.SignInActivity" />
         <activity android:name=".activity.SignUpActivity" />
-        <activity android:name=".activity.AddFriendsActivity" />
+        <activity android:name=".fragment.FragmentAddFriend" />
         <activity android:name=".activity.ForgetPasswordActivity" />
         <activity android:name=".activity.CreateTripActivity" />
         <activity android:name=".activity.SelectTripActivity" />
@@ -45,7 +45,6 @@
         <activity android:name=".activity.UserInfoActivity" />
         <activity android:name=".activity.AddPlaceActivity" />
         <activity android:name=".activity.MainActivity" />
-        <!-- <activity android:name=".MapMainActivity"/> -->
         <activity android:name=".activity.ChatActivity"></activity>
     </application>
 

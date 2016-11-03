@@ -1,0 +1,70 @@
+package com.tinyandfriend.project.friendstrip.adapter;
+
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.tinyandfriend.project.friendstrip.R;
+import com.tinyandfriend.project.friendstrip.info.CardViewInfo;
+import com.tinyandfriend.project.friendstrip.info.FriendListInfo;
+
+import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
+/**
+ * Created by NewWy on 31/10/2559.
+ */
+
+public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.FriendListHolder> {
+    private final Context context;
+    private final List<FriendListInfo> friendList;
+
+    public class FriendListHolder extends RecyclerView.ViewHolder{
+
+        TextView friendName;
+        CircleImageView friendPhoto;
+
+        public FriendListHolder(View itemView) {
+            super(itemView);
+            friendPhoto = (CircleImageView)itemView.findViewById(R.id.friend_photo);
+            friendName = (TextView)itemView.findViewById(R.id.friend_name);
+        }
+    }
+
+    public FriendListAdapter(Context context, List<FriendListInfo> friendList) {
+        this.context = context;
+        this.friendList = friendList;
+    }
+
+    @Override
+    public FriendListHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.friend_list_row, parent, false);
+        return new FriendListHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(FriendListHolder holder, int position) {
+
+        FriendListInfo friendInfo = friendList.get(position);
+
+        holder.friendName.setText(friendInfo.getFriendName());
+
+        if (friendInfo.getFriendPhotoUrl() != null) {
+            Glide.with(context)
+                    .load(friendInfo.getFriendPhotoUrl()).centerCrop()
+                    .into(holder.friendPhoto);
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return friendList.size();
+    }
+
+}

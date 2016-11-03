@@ -1,12 +1,14 @@
 package com.tinyandfriend.project.friendstrip.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,11 +18,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.astuetz.PagerSlidingTabStrip;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.tinyandfriend.project.friendstrip.R;
-import com.tinyandfriend.project.friendstrip.adapter.ContentFragmentPagerAdapter;
+import com.tinyandfriend.project.friendstrip.fragment.FragmentAddFriend;
+import com.tinyandfriend.project.friendstrip.fragment.FragmentFriendList;
+import com.tinyandfriend.project.friendstrip.fragment.FragmentJoin;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -30,6 +37,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String userEmail;
     private FirebaseAuth.AuthStateListener authStateListener;
     private boolean stateFlag = true;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+    private String userUid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,55 +54,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        final View header=navigationView.getHeaderView(0);
-/*View view=navigationView.inflateHeaderView(R.layout.nav_header_main);*/
+        final View header = navigationView.getHeaderView(0);
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(stateFlag == false){
+                if (stateFlag == false) {
                     stateFlag = true;
                     return;
                 }
                 firebaseUser = firebaseAuth.getCurrentUser();
-                String toastText = "";
+
                 if (firebaseUser == null) {
-                    toastText = "Please Sign In";
                     startActivity(new Intent(MainActivity.this, SignInActivity.class));
                     finish();
                 } else if (!firebaseUser.isEmailVerified()) {
                     startActivity(new Intent(MainActivity.this, SignInActivity.class));
                     finish();
                 } else {
-                    TextView username_nav = (TextView) header.findViewById(R.id.username_nav_header) ;
+                    TextView username_nav = (TextView) header.findViewById(R.id.username_nav_header);
                     TextView email_nav = (TextView) header.findViewById(R.id.email_nav_header);
                     username = firebaseUser.getDisplayName();
                     userEmail = firebaseUser.getEmail();
                     username_nav.setText(username);
                     email_nav.setText(userEmail);
+                    userUid = firebaseUser.getUid();
                 }
 
                 stateFlag = false;
             }
         };
 
-
-
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        FragmentJoin fragmentJoin = new FragmentJoin();
+        transaction.replace(R.id.fragment_container, fragmentJoin);
+        transaction.commit();
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(
-                new View.OnClickListener(){
-                    @Override
-                    public void onClick(View view) {
-                        startActivity(new Intent(MainActivity.this, CreateTripActivity.class));
-                    }
-                }
-        );
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -97,57 +102,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-
-
-
-
-        ////////////////////////////////////////////////////////// Fragement///////////////////////////////////////////////////////////
-        // Get the ViewPager and set it's PagerAdapter so that it can display items
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new ContentFragmentPagerAdapter(getSupportFragmentManager()));
-
-        // Give the PagerSlidingTabStrip the ViewPager
-        PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-        // Attach the view pager to the tab strip
-        tabsStrip.setViewPager(viewPager);
-
-        tabsStrip.setOnPageChangeListener(
-                new ViewPager.OnPageChangeListener(){
-
-                    // This method will be invoked when a new page becomes selected.
-                    @Override
-                    public void onPageSelected(int position) {
-                        switch (position){
-                            case(0):
-                                onSelectJoinPage();
-                                break;
-                            case(1):
-                                onSelectFriendPage();
-                                break;
-                            case(2):
-                                onSelectSomeThing();
-                        }
-                    }
-
-                    // This method will be invoked when the current page is scrolled
-                    @Override
-                    public void onPageScrolled(int position, float positionOffset,
-                                               int positionOffsetPixels) {
-                        // Code goes here
-                    }
-
-                    // Called when the scroll state changes:
-                    // SCROLL_STATE_IDLE, SCROLL_STATE_DRAGGING, SCROLL_STATE_SETTLING
-                    @Override
-                    public void onPageScrollStateChanged(int state) {
-                        // Code goes here
-                    }
-                }
-        );
-
-
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
-
 
 
     private void onSelectSomeThing() {
@@ -166,23 +122,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         actionButton.setImageResource(R.drawable.ic_add_white_24dp);
     }
 
-    private void onSelectFriendPage(){
-        FloatingActionButton actionButton = (FloatingActionButton) findViewById(R.id.fab);
-        actionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, AddFriendsActivity.class));
-            }
-        });
-        actionButton.setImageResource(R.drawable.ic_group_white_36dp);
-    }
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }else {
             super.onBackPressed();
         }
     }
@@ -194,13 +139,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    private void onSelectFriendPage(){
+        final FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        FragmentFriendList fragmentFriendList = FragmentFriendList.newInstance(userUid);
+        transaction.replace(R.id.fragment_container, fragmentFriendList);
+        transaction.addToBackStack("FriendList");
+        transaction.commit();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_friend:
+                onSelectFriendPage();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -228,10 +182,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_log_out) {
             firebaseAuth.signOut();
-            startActivity(new Intent(this,SignInActivity.class));
+            startActivity(new Intent(this, SignInActivity.class));
             finish();
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -240,14 +193,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onStart() {
         super.onStart();
+        client.connect();
         firebaseAuth.addAuthStateListener(authStateListener);
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
         if (authStateListener != null) {
             firebaseAuth.removeAuthStateListener(authStateListener);
         }
+        client.disconnect();
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Main Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
     }
 }

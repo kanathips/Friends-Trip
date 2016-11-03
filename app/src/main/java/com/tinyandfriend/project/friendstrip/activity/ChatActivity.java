@@ -56,7 +56,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    String tripId = dataSnapshot.getValue().toString();
+                    String tripId = dataSnapshot.getValue(String.class);
                     setupView(messageEditText, sendButton, reference, tripId);
                     setupChat(recyclerView, reference, tripId);
                 }

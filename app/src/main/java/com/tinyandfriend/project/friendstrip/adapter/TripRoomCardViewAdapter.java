@@ -20,13 +20,15 @@ public class TripRoomCardViewAdapter extends RecyclerView.Adapter<TripRoomCardVi
     private List<CardViewInfo> albumList;
 
     class TripRoomHolder extends RecyclerView.ViewHolder {
-        TextView titles,date_card,count;
+        TextView titles, tripStart,count;
         ImageView thumbnail;
+        TextView tripEnd;
 
         TripRoomHolder(View itemView) {
             super(itemView);
             titles = (TextView) itemView.findViewById(R.id.name_card);
-            date_card = (TextView) itemView.findViewById(R.id.date_card);
+            tripStart = (TextView) itemView.findViewById(R.id.trip_start);
+            tripEnd = (TextView) itemView.findViewById(R.id.trip_end);
             count = (TextView) itemView.findViewById(R.id.count_people);
             thumbnail = (ImageView) itemView.findViewById(R.id.image_card);
         }
@@ -51,16 +53,16 @@ public class TripRoomCardViewAdapter extends RecyclerView.Adapter<TripRoomCardVi
         CardViewInfo album = albumList.get(position);
 
         holder.titles.setText(album.getName_card());
-        holder.date_card.setText(album.getDate_card());
+        holder.tripStart.setText(album.getTripStart());
+        holder.tripEnd.setText(album.getTripEnd());
         holder.count.setText(Integer.toString(album.getCount_people()));
 
         if (album.getThumbnail() != null) {
             System.out.println(album.getName_card() + "     " + album.getThumbnail());
 //            Picasso.with(mContext).load(album.getThumbnail()).into(holder.thumbnail);
             Glide.with(mContext)
-                    .load(album.getThumbnail())
+                    .load(album.getThumbnail()).centerCrop()
                     .into(holder.thumbnail);
-            holder.thumbnail.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }
     }
 
