@@ -1,4 +1,4 @@
-package com.tinyandfriend.project.friendstrip;
+package com.tinyandfriend.project.friendstrip.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -26,8 +26,12 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.rengwuxian.materialedittext.MaterialEditText;
+import com.tinyandfriend.project.friendstrip.FragmentPager;
+import com.tinyandfriend.project.friendstrip.R;
+import com.tinyandfriend.project.friendstrip.activity.AddPlaceActivity;
 import com.tinyandfriend.project.friendstrip.info.PlaceInfo;
 import com.tinyandfriend.project.friendstrip.info.TripInfo;
+import com.tinyandfriend.project.friendstrip.view.DateSelect;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -330,7 +334,7 @@ public class FragmentAddPlace extends FragmentPager implements OnMapReadyCallbac
         tripInfo.setExpense(editText.getText().toString());
 
         editText = (EditText) rootView.findViewById(R.id.number_member);
-        tripInfo.setNumberMember(editText.getText().toString());
+        tripInfo.setMaxMember(Integer.parseInt(editText.getText().toString()));
 
         editText_name = (MaterialEditText) rootView.findViewById(R.id.trip_name);
         tripInfo.setTripName(editText_name.getText().toString());

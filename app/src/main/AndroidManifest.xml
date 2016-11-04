@@ -19,20 +19,21 @@
             android:value="AIzaSyCU1Eo0tI6FAYFXQglVw4sFrkvwStPfedg" />
 
         <activity
-            android:name=".SplashActivity"
+            android:name=".activity.SplashActivity"
             android:theme="@style/SplashTheme">
-
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignInActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".AddFriendsActivity" />
-        <activity android:name=".ForgetPasswordActivity" />
-        <activity android:name=".CreateTripActivity" />
+        <activity android:name=".activity.SignInActivity" />
+        <activity android:name=".activity.SignUpActivity" />
+        <activity android:name=".fragment.FragmentAddFriend" />
+        <activity android:name=".activity.ForgetPasswordActivity" />
+        <activity android:name=".activity.CreateTripActivity" />
+        <activity android:name=".activity.SelectTripActivity" />
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -40,20 +41,11 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <activity
-            android:name=".JoinDetail"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
 
-        <activity android:name=".UserInfoActivity"
-            android:theme="@style/AppTheme_ed"/>
-        <activity android:name=".AddPlaceActivity" />
-        <activity android:name=".MainActivity" />
-         <!--<activity android:name=".MapMainActivity"/> -->
-        <!--<activity android:name=".JoinDetail"></activity>-->
+        <activity android:name=".activity.UserInfoActivity" />
+        <activity android:name=".activity.AddPlaceActivity" />
+        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.ChatActivity"></activity>
     </application>
 
 </manifest>

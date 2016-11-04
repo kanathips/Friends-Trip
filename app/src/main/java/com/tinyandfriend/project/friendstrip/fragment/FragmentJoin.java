@@ -1,12 +1,15 @@
-package com.tinyandfriend.project.friendstrip;
+package com.tinyandfriend.project.friendstrip.fragment;
 
 /**
  * Created by StandAlone on 12/10/2559.
  */
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +23,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.tinyandfriend.project.friendstrip.R;
+import com.tinyandfriend.project.friendstrip.activity.CreateTripActivity;
+import com.tinyandfriend.project.friendstrip.activity.MainActivity;
 import com.tinyandfriend.project.friendstrip.adapter.TripRoomCardViewAdapter;
 import com.tinyandfriend.project.friendstrip.info.CardViewInfo;
 import com.tinyandfriend.project.friendstrip.info.TripInfo;
@@ -35,6 +40,7 @@ public class FragmentJoin extends Fragment {
     private List<CardViewInfo> albumList;
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     private ArrayList<String> rooms;
+    private Context context;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment__join, container, false);
@@ -55,6 +61,18 @@ public class FragmentJoin extends Fragment {
 
         rooms = new ArrayList<>();
 
+        context = getContext();
+
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(new Intent(context, CreateTripActivity.class));
+                    }
+                }
+        );
+
         reference.child("tripRoom").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -64,7 +82,7 @@ public class FragmentJoin extends Fragment {
                         rooms.add(dataSnapshot.getKey());
                         TripInfo tripInfo = dataSnapshot.getValue(TripInfo.class);
                         CardViewInfo cardView_info = new CardViewInfo(tripInfo.getTripName(),
-                                tripInfo.getStartDate() + " ถึง " + tripInfo.getEndDate(), tripInfo.getNumberMember(), tripInfo.getThumbnail());
+                                tripInfo.getStartDate(), tripInfo.getEndDate(), tripInfo.getMaxMember(), tripInfo.getThumbnail());
                         albumList.add(0, cardView_info);
                     }
                     alphaAdapter.notifyDataSetChanged();
@@ -136,7 +154,4 @@ public class FragmentJoin extends Fragment {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
-
-    /////////////////////////////////////////////////////// End class CardView /////////////////////////////////////////////////////
-
 }

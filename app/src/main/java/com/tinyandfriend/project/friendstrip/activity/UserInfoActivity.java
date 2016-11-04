@@ -1,6 +1,5 @@
-package com.tinyandfriend.project.friendstrip;
+package com.tinyandfriend.project.friendstrip.activity;
 
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -16,10 +15,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tinyandfriend.project.friendstrip.info.SignUpInfo;
 
+import com.tinyandfriend.project.friendstrip.R;
+import com.tinyandfriend.project.friendstrip.info.UserInfo;
+
 public class UserInfoActivity extends AppCompatActivity {
+
     private EditText emailEditText;
-    private EditText rePasswordEditText;
-    private EditText passwordEditText;
     private EditText displayNameEditText;
     private EditText phoneNumberEditText;
     private EditText bDateEditText;
@@ -27,9 +28,10 @@ public class UserInfoActivity extends AppCompatActivity {
     private EditText lNameEditText;
     private TextView email_show;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+    private FirebaseUser user = firebaseAuth.getCurrentUser();
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-    private DataSnapshot dataSnapshot;
+    private static final String USERS_CHILD = "users";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,7 @@ public class UserInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_info);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(firebaseUser.getDisplayName().toString());
+        toolbar.setTitle(user.getDisplayName());
 
         setEmailEditText((EditText) findViewById(R.id.email));
         setRePasswordEditText((EditText) findViewById(R.id.repassword));
@@ -47,19 +49,22 @@ public class UserInfoActivity extends AppCompatActivity {
         setfNameEditText((EditText) findViewById(R.id.first_name));
         setlNameEditText((EditText) findViewById(R.id.last_name));
         setEmail_show((TextView) findViewById(R.id.user_profile_short_bio));
+        setPhoneNumberEditText((EditText) findViewById(R.id.phonenumber));
+        String userEmail = user.getEmail();
+        String userUid = user.getUid();
 
-        email_show.setText(firebaseUser.getEmail().toString());
+        getEmail_show().setText(userEmail);
 
-        reference.child("users").child(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.child(USERS_CHILD).child(userUid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                SignUpInfo signUpInfo = dataSnapshot.getValue(SignUpInfo.class);
-                fNameEditText.setText(signUpInfo.getfName());
-                lNameEditText.setText(signUpInfo.getlName());
-                emailEditText.setText(signUpInfo.getEmail());
-                displayNameEditText.setText(signUpInfo.getDisplayName());
-                bDateEditText.setText(signUpInfo.getDateOfBirth());
-//                phoneNumberEditText.setText(signUpInfo.getPhoneNumber());
+                UserInfo userInfo = dataSnapshot.getValue(UserInfo.class);
+                getfNameEditText().setText(userInfo.getfName());
+                getlNameEditText().setText(userInfo.getlName());
+                getEmailEditText().setText(userInfo.getEmail());
+                getDisplayNameEditText().setText(userInfo.getDisplayName());
+                getbDateEditText().setText(userInfo.getDateOfBirth());
+                getPhoneNumberEditText().setText(userInfo.getPhoneNumber());
             }
 
             @Override
@@ -67,12 +72,6 @@ public class UserInfoActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-
-
-
     }
 
     public TextView getEmail_show() {
@@ -91,20 +90,10 @@ public class UserInfoActivity extends AppCompatActivity {
         this.emailEditText = emailEditText;
     }
 
-    public EditText getRePasswordEditText() {
-        return rePasswordEditText;
-    }
-
     public void setRePasswordEditText(EditText rePasswordEditText) {
-        this.rePasswordEditText = rePasswordEditText;
-    }
-
-    public EditText getPasswordEditText() {
-        return passwordEditText;
     }
 
     public void setPasswordEditText(EditText passwordEditText) {
-        this.passwordEditText = passwordEditText;
     }
 
     public EditText getDisplayNameEditText() {

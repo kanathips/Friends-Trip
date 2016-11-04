@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -33,7 +34,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/navigation_header_image" />
+                    android:src="@drawable/navigation_header_image"
+                    android:contentDescription="User Profile Photo" />
 
 
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -44,9 +46,9 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="-60dp"
                     android:elevation="5dp"
-                    android:src="@drawable/user"
-                    app:civ_border_color="#FF000000"
-                    app:civ_border_width="2dp" />
+                    android:src="@drawable/user"/>
+                    <!--app:civ_border_color="#FF000000"-->
+                    <!--app:civ_border_width="2dp" />-->
 
                 <RelativeLayout
                     android:id="@+id/profile_layout"
@@ -74,7 +76,7 @@
                         android:layout_below="@+id/add_friend"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="35dp"
-                        android:text="Jirateep.t06@gmail.com"
+                        android:text="USER_EMAIL"
                         android:textColor="#fff"
                         android:textSize="14sp" />
                 </RelativeLayout>
@@ -104,7 +106,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:baselineAligned="false">
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/fNameTextLayout"
@@ -184,46 +187,46 @@
                     android:textColorHint="@color/whiteLow" />
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/passwordTextLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColorHint="@color/whiteLow"
-                app:passwordToggleEnabled="true">
+            <!--<android.support.design.widget.TextInputLayout-->
+                <!--android:id="@+id/passwordTextLayout"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textColorHint="@color/whiteLow"-->
+                <!--app:passwordToggleEnabled="true">-->
 
-                <EditText
-                    android:id="@+id/password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:ems="10"
-                    android:hint="รหัสผ่าน"
-                    android:maxLength="12"
-                    android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-                    android:inputType="textPassword"
-                    android:textColorHint="@color/whiteLow" />
-            </android.support.design.widget.TextInputLayout>
+                <!--<EditText-->
+                    <!--android:id="@+id/password"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center_horizontal"-->
+                    <!--android:ems="10"-->
+                    <!--android:hint="รหัสผ่าน"-->
+                    <!--android:maxLength="12"-->
+                    <!--android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"-->
+                    <!--android:inputType="textPassword"-->
+                    <!--android:textColorHint="@color/whiteLow" />-->
+            <!--</android.support.design.widget.TextInputLayout>-->
 
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/rePasswordTextLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColorHint="@color/whiteLow"
-                app:passwordToggleEnabled="true">
+            <!--<android.support.design.widget.TextInputLayout-->
+                <!--android:id="@+id/rePasswordTextLayout"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textColorHint="@color/whiteLow"-->
+                <!--app:passwordToggleEnabled="true">-->
 
-                <EditText
-                    android:id="@+id/repassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:ems="10"
-                    android:hint="ยืนยันรหัสผ่าน"
-                    android:maxLength="12"
-                    android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-                    android:inputType="textPassword"
-                    android:textColorHint="@color/whiteLow" />
-            </android.support.design.widget.TextInputLayout>
+                <!--<EditText-->
+                    <!--android:id="@+id/repassword"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center_horizontal"-->
+                    <!--android:ems="10"-->
+                    <!--android:hint="ยืนยันรหัสผ่าน"-->
+                    <!--android:maxLength="12"-->
+                    <!--android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"-->
+                    <!--android:inputType="textPassword"-->
+                    <!--android:textColorHint="@color/whiteLow" />-->
+            <!--</android.support.design.widget.TextInputLayout>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -236,7 +239,7 @@
                     android:layout_height="wrap_content"
                     android:text="วันเกิด"
                     android:textColor="#000000"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
 
                 <EditText
                     android:id="@+id/birth_date"
@@ -247,16 +250,13 @@
                     android:gravity="center"
                     android:hint="dd-mm-yyyy"
                     android:textColorHint="@color/whiteLow"
-                    android:textSize="15dp" />
+                    android:textSize="15sp"
+                    android:inputType="date" />
 
                 <ImageButton
                     android:id="@+id/alert_dialog_date_picker"
                     android:layout_width="53dp"
                     android:layout_height="35dp"
-                    android:layout_alignBottom="@+id/editText"
-                    android:layout_toRightOf="@+id/editText"
-                    android:onClick="onClickDate"
-                    android:scaleType="centerInside"
                     android:src="@drawable/calendar" />
 
 
@@ -274,19 +274,18 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:hint="เบอร์โทรศัพท์"
-                    android:inputType="number"
+                    android:inputType="phone"
                     android:maxLength="15"
                     android:textColorHint="@color/whiteLow" />
             </android.support.design.widget.TextInputLayout>
 
             <Button
                 android:layout_marginTop="25dp"
-                android:layout_gravity="right"
+                android:layout_gravity="end"
                 android:id="@+id/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/colorRed"
-                android:onClick="onClickSignUp"
                 android:text="บันทึก"
                 android:textColor="@color/white" />
 
@@ -299,15 +298,3 @@
 
 
 </android.support.design.widget.CoordinatorLayout>
-
-<!--<TextView-->
-<!--android:id="@+id/user_profile_name"-->
-<!--android:layout_width="wrap_content"-->
-<!--android:layout_height="wrap_content"-->
-<!--android:layout_centerHorizontal="true"-->
-<!--android:layout_marginTop="76dp"-->
-<!--android:text="zStandAlonez"-->
-<!--android:textColor="#fff"-->
-<!--android:textSize="24sp"-->
-<!--android:textStyle="bold" />-->
-

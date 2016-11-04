@@ -1,29 +1,38 @@
 package com.tinyandfriend.project.friendstrip.info;
 
-import android.net.Uri;
-
 /**
  * Created by StandAlone on 21/10/2559.
  */
 
 public class CardViewInfo {
 
+    private String tripEnd;
     private String name_card;
-    private String date_card;
-    private String count_people;
+    private String tripStart;
+    private int count_people;
     private int pic_id;
     private String thumbnail;
 
-    public CardViewInfo(String name_card, String date_card, String count_people, int pic_id) {
+    public String getTripEnd() {
+        return tripEnd;
+    }
+
+    public void setTripEnd(String tripEnd) {
+        this.tripEnd = tripEnd;
+    }
+
+    public CardViewInfo(String name_card, String tripStart, String tripEnd, int count_people, int pic_id) {
         this.name_card = name_card;
-        this.date_card = date_card;
+        this.tripStart = tripStart;
+        this.tripEnd = tripEnd;
         this.count_people = count_people;
         this.pic_id = pic_id;
     }
 
-    public CardViewInfo(String name_card, String date_card, String count_people, String thumbnail) {
+    public CardViewInfo(String name_card, String tripStart, String tripEnd, int count_people, String thumbnail) {
         this.name_card = name_card;
-        this.date_card = date_card;
+        this.tripStart = tripStart;
+        this.tripEnd = tripEnd;
         this.count_people = count_people;
         this.thumbnail = thumbnail;
     }
@@ -52,19 +61,19 @@ public class CardViewInfo {
         this.name_card = name_card;
     }
 
-    public String getDate_card() {
-        return date_card;
+    public String getTripStart() {
+        return tripStart;
     }
 
-    public void setDate_card(String date_card) {
-        this.date_card = date_card;
+    public void setTripStart(String tripStart) {
+        this.tripStart = tripStart;
     }
 
-    public String getCount_people() {
+    public int getCount_people() {
         return count_people;
     }
 
-    public void setCount_people(String count_people) {
+    public void setCount_people(int count_people) {
         this.count_people = count_people;
     }
 }
