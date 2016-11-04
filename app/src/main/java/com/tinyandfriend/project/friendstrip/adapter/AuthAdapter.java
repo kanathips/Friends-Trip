@@ -21,9 +21,9 @@ public class AuthAdapter {
         mAuth = firebaseAuth;
     }
 
-    public Task<AuthResult> signUp(SignUpInfo signUpInfo) throws NullPointerException {
-        String email = signUpInfo.getEmail();
-        String password = signUpInfo.getPassword();
+    public Task<AuthResult> signUp(SignUpInfo userInfo) throws NullPointerException {
+        String email = userInfo.getEmail();
+        String password = userInfo.getPassword();
         return mAuth.createUserWithEmailAndPassword(email, password);
     }
 

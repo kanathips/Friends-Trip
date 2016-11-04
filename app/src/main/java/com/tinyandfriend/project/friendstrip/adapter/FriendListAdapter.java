@@ -16,20 +16,16 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-/**
- * Created by NewWy on 31/10/2559.
- */
-
 public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.FriendListHolder> {
     private final Context context;
     private final List<FriendListInfo> friendList;
 
-    public class FriendListHolder extends RecyclerView.ViewHolder{
+    class FriendListHolder extends RecyclerView.ViewHolder{
 
         TextView friendName;
         CircleImageView friendPhoto;
 
-        public FriendListHolder(View itemView) {
+        FriendListHolder(View itemView) {
             super(itemView);
             friendPhoto = (CircleImageView)itemView.findViewById(R.id.friend_photo);
             friendName = (TextView)itemView.findViewById(R.id.friend_name);

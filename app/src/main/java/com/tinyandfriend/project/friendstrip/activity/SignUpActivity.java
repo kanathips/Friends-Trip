@@ -36,9 +36,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by NewWy on 3/10/2559.
- */
 public class SignUpActivity extends AppCompatActivity {
     private static final String TAG = "SignUpActivity";
     private FirebaseAuth firebaseAuth;
@@ -138,19 +135,19 @@ public class SignUpActivity extends AppCompatActivity {
         if (!validateForm())
             return;
 
-        SignUpInfo signUpInfo = new SignUpInfo();
+        SignUpInfo userInfo = new SignUpInfo();
         try {
 
-            signUpInfo.setEmail(getEmailText());
-            signUpInfo.setPassword(getPasswordText(), getRePasswordText());
-            signUpInfo.setDisplayName(getDisplayNameText());
-            signUpInfo.setCitizenId(getCitizenIdText());
-            signUpInfo.setDateOfBirth(getBDateText());
-            signUpInfo.setfName(getFNameText());
-            signUpInfo.setlName(getLNameText());
-            signUpInfo.setPhoneNumber(getPhoneNumberText());
+            userInfo.setEmail(getEmailText());
+            userInfo.setPassword(getPasswordText(), getRePasswordText());
+            userInfo.setDisplayName(getDisplayNameText());
+            userInfo.setCitizenId(getCitizenIdText());
+            userInfo.setDateOfBirth(getBDateText());
+            userInfo.setfName(getFNameText());
+            userInfo.setlName(getLNameText());
+            userInfo.setPhoneNumber(getPhoneNumberText());
 
-            signUp(signUpInfo);
+            signUp(userInfo);
 
 
         } catch (IllegalArgumentException e) {
@@ -219,75 +216,39 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void onClickSignUp_Cancel(View view) {
-//        startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
         finish();
     }
 
-    public void signUp(final SignUpInfo signUpInfo) {
+    public void signUp(final SignUpInfo userInfo) {
         final ProgressDialog progressDialog = ProgressDialog.show(SignUpActivity.this, "สมัครสมาชิก", "กำลังทำรายการโปรดรอ...");
-        final boolean[] valid = {true};
-        dbReference.child("citizenIdIndex").orderByChild("citizenId").equalTo(signUpInfo.getCitizenId())
+        dbReference.child("citizenIdIndex").orderByChild("citizenId").equalTo(userInfo.getCitizenId())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             Toast.makeText(SignUpActivity.this, "เลขบัตรประจำตัวประชาชนนี้ ถูกใช้ไปแล้ว", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                         } else {
-//                            AuthAdapter authAdapter = new AuthAdapter(firebaseAuth);
-//                            authAdapter.signUp(signUpInfo).addOnCompleteListener(
-//                                    new OnCompleteListener<AuthResult>() {
-//                                        @Override
-//                                        public void onComplete(@NonNull Task<AuthResult> task) {
-//                                            Log.i("SignUpActiviy", "SignUp:OnComplete: " + task.isSuccessful());
-//                                            Exception exception = task.getException();
-//
-//                                            if (!task.isSuccessful() && exception != null) {
-//                                                String errorText;
-//                                                if (exception instanceof FirebaseAuthWeakPasswordException == true) {
-//                                                    errorText = "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร";
-//                                                }
-//                                                Toast.makeText(SignUpActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
-//                                            } else {
-////                                                FirebaseUser user = task.getResult().getUser();
-////                                                user.sendEmailVerification();
-////                                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(signUpInfo.getDisplayName()).build();
-////
-////                                                user.updateProfile(profileUpdates);
-////                                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-////                                                databaseReference.child("users").child(user.getUid()).setValue(signUpInfo);
-////
-////                                                Map<String, Object> citizenIdMap = new HashMap<>();
-////                                                citizenIdMap.put("citizenId", signUpInfo.getCitizenId());
-////                                                databaseReference.child("citizenIdIndex").child(user.getUid()).setValue(citizenIdMap);
-////
-////                                                Map<String, Object> displayNameMap = new HashMap<>();
-////                                                databaseReference.child("displayNameIndex").child(user.getUid()).setValue(displayNameMap);
-////
-////                                                //TODO Change this line to show user abount a Sign up Successful
-////                                                Toast.makeText(SignUpActivity.this, "สมัครสมาชิกถูกต้อง", Toast.LENGTH_SHORT).show();
-////                                                finish();
-//                                            }
-//                                        }
-//                                    });
-//                        }
-                            dbReference.child("displayNameIndex").orderByChild("displayName").equalTo(signUpInfo.getDisplayName())
+                            dbReference.child("displayNameIndex").orderByChild("displayName").equalTo(userInfo.getDisplayName())
                                     .addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
-                                            if (dataSnapshot.exists())
+                                            if (dataSnapshot.exists()) {
                                                 Toast.makeText(SignUpActivity.this, "ชื่อที่ใช้ในระบบนี้ ถูกใช้ไปแล้ว", Toast.LENGTH_SHORT).show();
+                                                progressDialog.dismiss();
+                                            }
                                             else {
                                                 AuthAdapter authAdapter = new AuthAdapter(firebaseAuth);
-                                                authAdapter.signUp(signUpInfo).addOnCompleteListener(
+                                                authAdapter.signUp(userInfo).addOnCompleteListener(
                                                         new OnCompleteListener<AuthResult>() {
                                                             @Override
                                                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                                                Log.i("SignUpActiviy", "SignUp:OnComplete: " + task.isSuccessful());
+                                                                Log.i("SignUpActivity", "SignUp:OnComplete: " + task.isSuccessful());
                                                                 Exception exception = task.getException();
 
                                                                 if (!task.isSuccessful() && exception != null) {
                                                                     String errorText;
-                                                                    if (exception instanceof FirebaseAuthWeakPasswordException == true) {
+                                                                    if (exception instanceof FirebaseAuthWeakPasswordException) {
                                                                         errorText = "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร";
                                                                     } else {
                                                                         errorText = exception.getMessage();
@@ -296,11 +257,11 @@ public class SignUpActivity extends AppCompatActivity {
                                                                 } else {
                                                                     FirebaseUser user = task.getResult().getUser();
                                                                     user.sendEmailVerification();
-                                                                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(signUpInfo.getDisplayName()).build();
+                                                                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(userInfo.getDisplayName()).build();
 
                                                                     user.updateProfile(profileUpdates);
                                                                     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                                                                    databaseReference.child("users").child(user.getUid()).setValue(signUpInfo).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                    databaseReference.child("users").child(user.getUid()).setValue(userInfo).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                         @Override
                                                                         public void onComplete(@NonNull Task<Void> task) {
                                                                             if (task.isSuccessful()) {
@@ -312,7 +273,7 @@ public class SignUpActivity extends AppCompatActivity {
                                                                     });
 
                                                                     Map<String, Object> citizenIdMap = new HashMap<>();
-                                                                    citizenIdMap.put("citizenId", signUpInfo.getCitizenId());
+                                                                    citizenIdMap.put("citizenId", userInfo.getCitizenId());
                                                                     databaseReference.child("citizenIdIndex").child(user.getUid()).setValue(citizenIdMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                         @Override
                                                                         public void onComplete(@NonNull Task<Void> task) {
@@ -325,7 +286,7 @@ public class SignUpActivity extends AppCompatActivity {
                                                                     });
 
                                                                     Map<String, Object> displayNameMap = new HashMap<>();
-                                                                    displayNameMap.put("displayName", signUpInfo.getDisplayName());
+                                                                    displayNameMap.put("displayName", userInfo.getDisplayName());
                                                                     databaseReference.child("displayNameIndex").child(user.getUid()).setValue(displayNameMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                         @Override
                                                                         public void onComplete(@NonNull Task<Void> task) {
@@ -346,6 +307,7 @@ public class SignUpActivity extends AppCompatActivity {
                                             }
                                             progressDialog.dismiss();
                                         }
+
                                         @Override
                                         public void onCancelled(DatabaseError databaseError) {
                                             Toast.makeText(SignUpActivity.this, "ชื่อที่ใช้ในระบบ " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
@@ -354,6 +316,7 @@ public class SignUpActivity extends AppCompatActivity {
                                     });
                         }
                     }
+
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         Toast.makeText(SignUpActivity.this, "บัตรปชช " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
