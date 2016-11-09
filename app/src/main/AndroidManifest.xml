@@ -28,9 +28,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".activity.SignInActivity" />
         <activity android:name=".activity.SignUpActivity" />
-        <activity android:name=".fragment.FragmentAddFriend" />
+        <!--<activity android:name=".fragment.FragmentAddFriend" />-->
         <activity android:name=".activity.ForgetPasswordActivity" />
         <activity android:name=".activity.CreateTripActivity" />
         <activity android:name=".activity.SelectTripActivity" />
@@ -41,6 +42,14 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".JoinDetail"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
 
         <activity android:name=".activity.UserInfoActivity" />
         <activity android:name=".activity.AddPlaceActivity" />

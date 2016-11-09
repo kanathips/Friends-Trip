@@ -12,6 +12,7 @@ public class CardViewInfo {
     private int count_people;
     private int pic_id;
     private String thumbnail;
+    private String tripId;
 
     public String getTripEnd() {
         return tripEnd;
@@ -21,20 +22,30 @@ public class CardViewInfo {
         this.tripEnd = tripEnd;
     }
 
-    public CardViewInfo(String name_card, String tripStart, String tripEnd, int count_people, int pic_id) {
+    public CardViewInfo(String tripId,String name_card, String tripStart, String tripEnd, int count_people, int pic_id) {
         this.name_card = name_card;
         this.tripStart = tripStart;
         this.tripEnd = tripEnd;
         this.count_people = count_people;
         this.pic_id = pic_id;
+        this.tripId = tripId;
     }
 
-    public CardViewInfo(String name_card, String tripStart, String tripEnd, int count_people, String thumbnail) {
+    public CardViewInfo(String tripId,String name_card, String tripStart, String tripEnd, int count_people, String thumbnail) {
         this.name_card = name_card;
         this.tripStart = tripStart;
         this.tripEnd = tripEnd;
         this.count_people = count_people;
         this.thumbnail = thumbnail;
+        this.tripId = tripId;
+    }
+
+    public String getTripId() {
+        return tripId;
+    }
+
+    public void setTripId(String tripId) {
+        this.tripId = tripId;
     }
 
     public String getThumbnail() {
