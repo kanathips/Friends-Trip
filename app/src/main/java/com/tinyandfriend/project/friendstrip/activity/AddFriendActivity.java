@@ -1,14 +1,10 @@
-package com.tinyandfriend.project.friendstrip.fragment;
+package com.tinyandfriend.project.friendstrip.activity;
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,47 +21,60 @@ import com.google.firebase.database.ValueEventListener;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.info.FriendListInfo;
 
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 import static com.tinyandfriend.project.friendstrip.info.FriendStatus.Approving;
 import static com.tinyandfriend.project.friendstrip.info.FriendStatus.Pending;
 
-public class FragmentAddFriend extends Fragment {
+public class AddFriendActivity extends AppCompatActivity {
 
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     private Button addButton;
     private TextView targetNameTextView;
     private ProgressDialog progressDialog;
-    private View rootView;
-    private Context context;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_add_friend, container, false);
-        addButton = (Button) rootView.findViewById(R.id.add_friend_button);
-        context = getContext();
-        targetNameTextView = (TextView) rootView.findViewById(R.id.target_name);
-        progressDialog = new ProgressDialog(context);
-        Button searchButton = (Button) rootView.findViewById(R.id.search_button);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_friend);
+        addButton = (Button) findViewById(R.id.add_friend_button);
+        targetNameTextView = (TextView) findViewById(R.id.target_name);
+        progressDialog = new ProgressDialog(this);
+        Button searchButton = (Button) findViewById(R.id.search_button);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onclickSearch(v);
             }
         });
-
-        return rootView;
     }
+//
+//    @Nullable
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+//        rootView = inflater.inflate(R.layout.activity_add_friend, container, false);
+//        addButton = (Button) rootView.findViewById(R.id.add_friend_button);
+//        context = getContext();
+//        targetNameTextView = (TextView) rootView.findViewById(R.id.target_name);
+//        progressDialog = new ProgressDialog(context);
+//        Button searchButton = (Button) rootView.findViewById(R.id.search_button);
+//        searchButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onclickSearch(v);
+//            }
+//        });
+//
+//        return rootView;
+//    }
 
     public void onclickSearch(View view) {
-        String searchText = ((EditText) rootView.findViewById(R.id.search_text)).getText().toString();
+        String searchText = ((EditText) findViewById(R.id.search_text)).getText().toString();
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         progressDialog.setMessage("กำลังค้นหา");
         progressDialog.show();
 
+        assert user != null;
         if (searchText.equals(user.getDisplayName())) {
             return;
         }
@@ -111,7 +120,7 @@ public class FragmentAddFriend extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(context, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddFriendActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
             }
         });
@@ -125,7 +134,7 @@ public class FragmentAddFriend extends Fragment {
      * @param senderUID the UID of sender
      */
     private void addFriend(final String targetUID, final String senderUID) {
-        final ProgressDialog tempProgressDialog = new ProgressDialog(context);
+        final ProgressDialog tempProgressDialog = new ProgressDialog(this);
         final int[] checkStatus = {1};
 
         tempProgressDialog.show();
@@ -151,7 +160,7 @@ public class FragmentAddFriend extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
                 if (checkStatus[0] >= 2) {
                     tempProgressDialog.dismiss();
-                }else{
+                } else {
                     checkStatus[0]++;
                 }
             }
@@ -178,7 +187,7 @@ public class FragmentAddFriend extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
                 if (checkStatus[0] >= 2) {
                     tempProgressDialog.dismiss();
-                }else{
+                } else {
                     checkStatus[0]++;
                 }
             }

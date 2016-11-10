@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -29,7 +30,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private Uri userPhotoUrl;
+    private String userPhotoUrl;
     private String username;
     private EditText messageEditText;
     private Button sendButton;
@@ -42,7 +43,9 @@ public class ChatActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userUid = user.getUid();
         username = user.getDisplayName();
-        userPhotoUrl = user.getPhotoUrl();
+        if(user.getPhotoUrl() != null) {
+            userPhotoUrl = user.getPhotoUrl().toString();
+        }
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.message_recyclerview);
         messageEditText = (EditText) findViewById(R.id.message_editText);

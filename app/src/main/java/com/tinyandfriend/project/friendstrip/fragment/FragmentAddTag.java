@@ -49,7 +49,6 @@ public class FragmentAddTag extends FragmentPager {
     private TagListViewAdapter placeTagAdapter;
     private ArrayList<FileInfo> fileInfos;
     private FileCardViewAdapter fileCardViewAdapter;
-    private ImageView headerImage;
     private int[] tempHeaderImage = {
             R.drawable.pic1, R.drawable.pic2, R.drawable.pic3,
             R.drawable.pic4, R.drawable.pic5, R.drawable.pic6,
@@ -84,7 +83,7 @@ public class FragmentAddTag extends FragmentPager {
         Random random = new Random();
         int ranInt = random.nextInt(9);
         int imgResource = tempHeaderImage[ranInt];
-        headerImage = (ImageView) rootView.findViewById(R.id.header_image);
+        ImageView headerImage = (ImageView) rootView.findViewById(R.id.header_image);
         headerImage.setImageResource(imgResource);
         headerImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
         thumbnailUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
@@ -201,12 +200,13 @@ public class FragmentAddTag extends FragmentPager {
                 }
                 break;
             case ID_REQUEST:
-                if (requestCode == ID_REQUEST && resultCode == RESULT_OK && null != data) {
+                if (resultCode == RESULT_OK && null != data) {
                     Uri selectedImage = data.getData();
                     String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
                     Cursor cursor = context.getContentResolver().query(selectedImage,
                             filePathColumn, null, null, null);
+                    assert cursor != null;
                     cursor.moveToFirst();
 
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);

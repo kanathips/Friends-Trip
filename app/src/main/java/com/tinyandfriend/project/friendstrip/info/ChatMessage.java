@@ -9,12 +9,12 @@ public class ChatMessage {
 
     private String text;
     private String name;
-    private Uri photoUrl;
+    private String photoUrl;
 
     public ChatMessage() {
     }
 
-    public ChatMessage(String text, String name, Uri photoUrl) {
+    public ChatMessage(String text, String name, String photoUrl) {
         this.text = text;
         this.name = name;
         this.photoUrl = photoUrl;
@@ -36,11 +36,11 @@ public class ChatMessage {
         this.name = name;
     }
 
-    public Uri getPhotoUrl() {
+    public String getPhotoUrl() {
         return photoUrl;
     }
 
-    public void setPhotoUrl(Uri photoUrl) {
+    public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
     }
 

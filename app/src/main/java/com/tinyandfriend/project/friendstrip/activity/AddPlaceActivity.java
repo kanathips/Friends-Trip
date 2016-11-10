@@ -41,6 +41,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.gordonwong.materialsheetfab.MaterialSheetFab;
+import com.tinyandfriend.project.friendstrip.MapUtils;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.info.PlaceInfo;
 import com.tinyandfriend.project.friendstrip.listener.OnInfoWindowElemTouchListener;
@@ -61,6 +62,7 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
     private MaterialSheetFab<SingleSheetFAB> materialSheetFab;
     private int tripDuration;
     private ViewGroup infoWindow;
+    private MapUtils mapUtils;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -287,6 +289,7 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
         setUpInfoWindow(googleMap);
 
         markStartPlace(googleMap);
+        mapUtils = new MapUtils(googleMap);
         googleMap.getUiSettings().setMapToolbarEnabled(false);
 
         if (mapFlag)
@@ -307,17 +310,21 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
             googleMap.addMarker(options).setTag(info.getDay());
         }
 
-        if (originalPlaceInfos.size() > 1) {
-            LatLngBounds latLngBounds = builder.build();
-            int padding = (int) (pixelWidth * 0.15);
-            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(latLngBounds, pixelWidth, pixelHeight, padding);
-            googleMap.animateCamera(cu);
-        } else if (originalPlaceInfos.size() == 1) {
-            PlaceInfo info = originalPlaceInfos.get(0);
-            CameraPosition test = CameraPosition.fromLatLngZoom(info.getLocation().toGmsLatLng(), 17);
-            CameraUpdate cu = CameraUpdateFactory.newCameraPosition(test);
-            googleMap.animateCamera(cu);
-        }
+
+
+        mapUtils.updateCamera(placeInfos, pixelWidth, pixelHeight);
+//
+//        if (originalPlaceInfos.size() > 1) {
+//            LatLngBounds latLngBounds = builder.build();
+//            int padding = (int) (pixelWidth * 0.15);
+//            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(latLngBounds, pixelWidth, pixelHeight, padding);
+//            googleMap.animateCamera(cu);
+//        } else if (originalPlaceInfos.size() == 1) {
+//            PlaceInfo info = originalPlaceInfos.get(0);
+//            CameraPosition test = CameraPosition.fromLatLngZoom(info.getLocation().toGmsLatLng(), 17);
+//            CameraUpdate cu = CameraUpdateFactory.newCameraPosition(test);
+//            googleMap.animateCamera(cu);
+//        }
     }
 
     public void onClickChangeMapType(View view) {

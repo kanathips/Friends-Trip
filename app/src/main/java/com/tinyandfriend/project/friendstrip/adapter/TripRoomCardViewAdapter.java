@@ -1,6 +1,10 @@
 package com.tinyandfriend.project.friendstrip.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.tinyandfriend.project.friendstrip.activity.JoinDetailActivity;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.info.CardViewInfo;
 
@@ -23,6 +28,7 @@ public class TripRoomCardViewAdapter extends RecyclerView.Adapter<TripRoomCardVi
         TextView titles, tripStart,count;
         ImageView thumbnail;
         TextView tripEnd;
+        CardView cardView;
 
         TripRoomHolder(View itemView) {
             super(itemView);
@@ -31,6 +37,7 @@ public class TripRoomCardViewAdapter extends RecyclerView.Adapter<TripRoomCardVi
             tripEnd = (TextView) itemView.findViewById(R.id.trip_end);
             count = (TextView) itemView.findViewById(R.id.count_people);
             thumbnail = (ImageView) itemView.findViewById(R.id.image_card);
+            cardView = (CardView) itemView.findViewById(R.id.card_view);
         }
     }
 
@@ -50,7 +57,7 @@ public class TripRoomCardViewAdapter extends RecyclerView.Adapter<TripRoomCardVi
     @Override
     public void onBindViewHolder(final TripRoomHolder holder, int position) {
 
-        CardViewInfo album = albumList.get(position);
+        final CardViewInfo album = albumList.get(position);
 
         holder.titles.setText(album.getName_card());
         holder.tripStart.setText(album.getTripStart());
@@ -58,11 +65,29 @@ public class TripRoomCardViewAdapter extends RecyclerView.Adapter<TripRoomCardVi
         holder.count.setText(Integer.toString(album.getCount_people()));
 
         if (album.getThumbnail() != null) {
-            System.out.println(album.getName_card() + "     " + album.getThumbnail());
-//            Picasso.with(mContext).load(album.getThumbnail()).into(holder.thumbnail);
             Glide.with(mContext)
                     .load(album.getThumbnail()).centerCrop()
                     .into(holder.thumbnail);
+
+            holder.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, JoinDetailActivity.class);
+                    intent.putExtra("key_room",album.getTripId());
+                    intent.putExtra("start_date",holder.tripStart.getText().toString());
+                    intent.putExtra("end_date",holder.tripEnd.getText().toString());
+                    intent.putExtra("count_people",holder.count.getText().toString());
+                    intent.putExtra("name_trip",holder.titles.getText().toString());
+                    intent.putExtra("pic_thumbnail",album.getThumbnail().toString());
+
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, holder.thumbnail, "profile");
+
+                    mContext.startActivity(intent, options.toBundle());
+
+
+//                mContext.startActivity(new Intent(mContext,JoinDetailActivity.class));
+                }
+            });
         }
     }
 
