@@ -45,8 +45,8 @@
                     android:layout_below="@+id/header_cover_image"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="-60dp"
-                    android:elevation="5dp"
-                    android:src="@drawable/user"/>
+                    android:src="@drawable/ic_account_circle_white_24dp"
+                    android:elevation="5dp" />
                     <!--app:civ_border_color="#FF000000"-->
                     <!--app:civ_border_width="2dp" />-->
 
@@ -64,6 +64,7 @@
                         android:id="@+id/add_friend"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:visibility="invisible"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="16dp"
                         android:layout_marginTop="16dp"
@@ -165,7 +166,6 @@
                     android:layout_gravity="center_horizontal"
                     android:ems="10"
                     android:hint="อีเมลล์"
-                    android:inputType="textEmailAddress"
                     android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@_.-"
                     android:textColorHint="@color/whiteLow" />
             </android.support.design.widget.TextInputLayout>
@@ -257,6 +257,7 @@
                     android:id="@+id/alert_dialog_date_picker"
                     android:layout_width="53dp"
                     android:layout_height="35dp"
+                    android:scaleType="centerInside"
                     android:src="@drawable/calendar" />
 
 
@@ -282,7 +283,7 @@
             <Button
                 android:layout_marginTop="25dp"
                 android:layout_gravity="end"
-                android:id="@+id/button"
+                android:id="@+id/confirm_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/colorRed"

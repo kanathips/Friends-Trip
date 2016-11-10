@@ -58,8 +58,6 @@ public class TripRoomCardViewAdapter extends RecyclerView.Adapter<TripRoomCardVi
         holder.count.setText(Integer.toString(album.getCount_people()));
 
         if (album.getThumbnail() != null) {
-            System.out.println(album.getName_card() + "     " + album.getThumbnail());
-//            Picasso.with(mContext).load(album.getThumbnail()).into(holder.thumbnail);
             Glide.with(mContext)
                     .load(album.getThumbnail()).centerCrop()
                     .into(holder.thumbnail);

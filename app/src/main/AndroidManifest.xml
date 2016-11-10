@@ -30,7 +30,7 @@
         </activity>
         <activity android:name=".activity.SignInActivity" />
         <activity android:name=".activity.SignUpActivity" />
-        <activity android:name=".fragment.FragmentAddFriend" />
+        <activity android:name=".activity.AddFriendActivity" />
         <activity android:name=".activity.ForgetPasswordActivity" />
         <activity android:name=".activity.CreateTripActivity" />
         <activity android:name=".activity.SelectTripActivity" />
@@ -42,10 +42,10 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".activity.UserInfoActivity" />
+        <activity android:name=".activity.EditUserInfoActivity" />
         <activity android:name=".activity.AddPlaceActivity" />
         <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.ChatActivity"></activity>
+        <activity android:name=".activity.ChatActivity" />
     </application>
 
 </manifest>

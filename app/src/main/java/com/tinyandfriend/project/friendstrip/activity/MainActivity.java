@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (stateFlag == false) {
+                if (!stateFlag) {
                     stateFlag = true;
                     return;
                 }
@@ -84,10 +84,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(contentFragmentPagerAdapter);
 
-        // Give the PagerSlidingTabStrip the ViewPager
         PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-        // Attach the view pager to the tab strip
         tabsStrip.setViewPager(viewPager);
+
+
 
     }
 
@@ -115,25 +115,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.nav_profile) {
-            // Handle the camera action
-            startActivity(new Intent(this, UserInfoActivity.class));
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        } else if (id == R.id.nav_log_out) {
-            firebaseAuth.signOut();
-            startActivity(new Intent(this, SignInActivity.class));
-            finish();
+        switch(id){
+            case R.id.nav_profile:
+                startActivity(new Intent(this, EditUserInfoActivity.class));
+                break;
+            case R.id.nav_log_out:
+                firebaseAuth.signOut();
+                startActivity(new Intent(this, SignInActivity.class));
+                finish();
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

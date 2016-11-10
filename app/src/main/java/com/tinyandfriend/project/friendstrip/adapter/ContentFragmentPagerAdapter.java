@@ -30,10 +30,10 @@ package com.tinyandfriend.project.friendstrip.adapter;
 
 public class ContentFragmentPagerAdapter extends FragmentPagerAdapter  implements PagerSlidingTabStrip.IconTabProvider {
 
-    final int PAGE_COUNT = 3;
+    private final int PAGE_COUNT = 3;
     private String userUid;
 
-    private String tabTitles[] = new String[] { "JOIN", "CREATE", "FRIENDS" };
+    private String tabTitles[] = new String[] { "JOIN", "NOTIFICATION", "FRIENDS" };
 
     private int tabIcons[] = {R.drawable.ic_directions_walk_white_36dp, R.drawable.ic_announcement_white_36dp, R.drawable.ic_group_white_36dp};
 
@@ -50,7 +50,6 @@ public class ContentFragmentPagerAdapter extends FragmentPagerAdapter  implement
     @Override
 
     public int getCount() {
-
         return PAGE_COUNT;
 
     }

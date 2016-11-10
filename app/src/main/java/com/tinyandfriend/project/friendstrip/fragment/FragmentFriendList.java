@@ -1,10 +1,10 @@
 package com.tinyandfriend.project.friendstrip.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,15 +12,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tinyandfriend.project.friendstrip.R;
+import com.tinyandfriend.project.friendstrip.activity.AddFriendActivity;
 import com.tinyandfriend.project.friendstrip.adapter.FriendListAdapter;
 import com.tinyandfriend.project.friendstrip.info.FriendListInfo;
 
@@ -56,7 +55,7 @@ public class FragmentFriendList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.fragment_friend, container, false);
-        Context context = getContext();
+        final Context context = getContext();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         RecyclerView recyclerView = (RecyclerView) rootview.findViewById(R.id.friend_list);
 
@@ -74,12 +73,16 @@ public class FragmentFriendList extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        FragmentManager manager = getFragmentManager();
-                        FragmentTransaction transaction = manager.beginTransaction();
-                        FragmentAddFriend fragmentAddFriend = new FragmentAddFriend();
-                        transaction.replace(R.id.fragment_container, fragmentAddFriend);
-                        transaction.addToBackStack("AddFriend");
-                        transaction.commit();
+//                        FragmentManager manager = getFragmentManager();
+//                        FragmentTransaction transaction = manager.beginTransaction();
+//                        AddFriendActivity fragmentAddFriend = new AddFriendActivity();
+//                        transaction.replace(R.id.fragment_container, fragmentAddFriend);
+//                        transaction.addToBackStack("AddFriend");
+//                        transaction.commit();
+//                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+//                        ft.add(new AddFriendActivity(), null);
+//                        ft.commit();
+                        startActivity(new Intent(context, AddFriendActivity.class));
                     }
                 }
         );
