@@ -111,6 +111,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        if(id == R.id.action_friend){
+            startActivity(new Intent(this, ChatActivity.class));
+        }
 
         return super.onOptionsItemSelected(item);
     }

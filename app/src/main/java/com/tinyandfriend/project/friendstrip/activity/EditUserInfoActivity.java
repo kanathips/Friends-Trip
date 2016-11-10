@@ -1,14 +1,15 @@
 package com.tinyandfriend.project.friendstrip.activity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -18,23 +19,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.tinyandfriend.project.friendstrip.R;
-import com.tinyandfriend.project.friendstrip.info.TripInfo;
 import com.tinyandfriend.project.friendstrip.info.UserInfo;
 
 import java.util.HashMap;
@@ -80,7 +79,7 @@ public class EditUserInfoActivity extends AppCompatActivity {
         setup(userUid);
         getEmailShow().setText(userEmail);
 
-        setChangeProfilePhoto(userUid);
+//        setProfilePhoto(userUid);
     }
 
     private void setup(String userUid) {
@@ -94,6 +93,11 @@ public class EditUserInfoActivity extends AppCompatActivity {
                 getDisplayNameEditText().setText(userInfo.getDisplayName());
                 getbDateEditText().setText(userInfo.getDateOfBirth());
                 getPhoneNumberEditText().setText(userInfo.getPhoneNumber());
+                if (userInfo.getProfilePhoto() != null && !userInfo.getProfilePhoto().isEmpty()) {
+                    Glide.with(EditUserInfoActivity.this)
+                            .load(userInfo.getProfilePhoto()).centerCrop()
+                            .into(circleImageView);
+                }
             }
 
             @Override
@@ -104,9 +108,14 @@ public class EditUserInfoActivity extends AppCompatActivity {
 
         setupConfirmButton(userUid);
 
-        metadata = new StorageMetadata.Builder()
-                .setContentType("image/jpeg")
-                .build();
+
+        circleImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, PHOTO_CHOOSE);
+            }
+        });
     }
 
     private void setupConfirmButton(final String userUid) {
@@ -120,20 +129,37 @@ public class EditUserInfoActivity extends AppCompatActivity {
                 builder.setPositiveButton("ยืนยัน", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         final Map<String, Object> userInfoMap = getUserInfoMap();
-                        userInfoMap.put(PROFILE_PHOTO_CHILD, null);
+                        final ProgressDialog progressDialog = ProgressDialog.show(EditUserInfoActivity.this, "", "กำลังอัพเดตข้อมูล");
                         if (selectedImage != null) {
-                            storageReference.child(PROFILE_PHOTO_DIR + "/" + user + ".jpg").putFile(selectedImage, metadata).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                    if(task.isSuccessful()){
-                                        userInfoMap.put(PROFILE_PHOTO_CHILD, task.getResult().getDownloadUrl());
+                            storageReference.child(PROFILE_PHOTO_DIR + "/" + user + ".jpg").putFile(selectedImage, metadata)
+                                    .addOnSuccessListener(
+                                            new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                                @Override
+                                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                    String profileUrl = taskSnapshot.getDownloadUrl().toString();
+                                                    userInfoMap.put(PROFILE_PHOTO_CHILD,profileUrl);
+                                                    reference.child(USERS_CHILD).child(userUid).updateChildren(userInfoMap);
+                                                    UserProfileChangeRequest.Builder profileBuilder = new UserProfileChangeRequest.Builder();
+                                                    profileBuilder.setPhotoUri(Uri.parse(profileUrl));
+                                                    FirebaseAuth.getInstance().getCurrentUser().updateProfile(profileBuilder.build());
+                                                    Toast.makeText(EditUserInfoActivity.this, "อัพเดตข้อมูลเสร็จสิ้น", Toast.LENGTH_SHORT).show();
+                                                    progressDialog.dismiss();
+                                                }
+                                            }
+                                    ).addOnFailureListener(
+                                    new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            progressDialog.dismiss();
+                                            Toast.makeText(EditUserInfoActivity.this, "ไม่สามารถอัพโหลดไฟล์รูปได้", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
-                                    reference.child(USERS_CHILD).child(userUid).updateChildren(userInfoMap);
-                                    Toast.makeText(EditUserInfoActivity.this, "FIN", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                            );
+                        } else {
+                            reference.child(USERS_CHILD).child(userUid).updateChildren(userInfoMap);
+                            progressDialog.dismiss();
+                            Toast.makeText(EditUserInfoActivity.this, "อัพเดตข้อมูลเสร็จสิ้น", Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -146,7 +172,7 @@ public class EditUserInfoActivity extends AppCompatActivity {
         });
     }
 
-    private void setChangeProfilePhoto(String userUid) {
+    private void setProfilePhoto(String userUid) {
         circleImageView = (CircleImageView) findViewById(R.id.user_profile_photo);
         reference.child(USERS_CHILD).child(userUid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -163,14 +189,6 @@ public class EditUserInfoActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
-
-        circleImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, PHOTO_CHOOSE);
             }
         });
     }
@@ -244,6 +262,11 @@ public class EditUserInfoActivity extends AppCompatActivity {
         setlNameEditText((EditText) findViewById(R.id.last_name));
         setEmailShow((TextView) findViewById(R.id.user_profile_short_bio));
         setPhoneNumberEditText((EditText) findViewById(R.id.phonenumber));
+        circleImageView = (CircleImageView) findViewById(R.id.user_profile_photo);
+
+        metadata = new StorageMetadata.Builder()
+                .setContentType("image/jpeg")
+                .build();
     }
 
     public TextView getEmailShow() {

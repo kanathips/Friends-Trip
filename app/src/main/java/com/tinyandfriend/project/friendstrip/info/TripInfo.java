@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by NewWy on 9/10/2559.
  */
 
-public class TripInfo {
+public class TripInfo extends Object{
 
     private String tripName;
     private String startDate;

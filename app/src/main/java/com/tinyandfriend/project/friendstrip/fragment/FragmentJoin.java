@@ -52,7 +52,7 @@ public class FragmentJoin extends Fragment {
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(0), false));
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(10), true));
 
         final ScaleInAnimationAdapter alphaAdapter = new ScaleInAnimationAdapter(adapter);
         alphaAdapter.setFirstOnly(false);
@@ -81,7 +81,7 @@ public class FragmentJoin extends Fragment {
                     if (key != null && !rooms.contains(key)) {
                         rooms.add(dataSnapshot.getKey());
                         TripInfo tripInfo = dataSnapshot.getValue(TripInfo.class);
-                        CardViewInfo cardView_info = new CardViewInfo(tripInfo.getTripName(),
+                        CardViewInfo cardView_info = new CardViewInfo(key,tripInfo.getTripName(),
                                 tripInfo.getStartDate(), tripInfo.getEndDate(), tripInfo.getMaxMember(), tripInfo.getThumbnail());
                         albumList.add(0, cardView_info);
                     }

@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.tinyandfriend.project.friendstrip.FragmentPager;
+import com.tinyandfriend.project.friendstrip.MapUtils;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.activity.AddPlaceActivity;
 import com.tinyandfriend.project.friendstrip.info.PlaceInfo;
@@ -154,28 +155,8 @@ public class FragmentAddPlace extends FragmentPager implements OnMapReadyCallbac
         if (requestCode == ADD_PLACE_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
                 placeInfos = data.getParcelableArrayListExtra("placeInfos");
-                LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                googleMap.clear();
-                for (int i = 0; i < placeInfos.size(); i++) {
-                    PlaceInfo info = placeInfos.get(i);
-                    MarkerOptions options = new MarkerOptions();
-                    options.position(info.getLocation().toGmsLatLng());
-                    options.title(info.getName());
-                    builder.include(info.getLocation().toGmsLatLng());
-                    googleMap.addMarker(options);
-                }
-
-                if (placeInfos.size() > 1) {
-                    LatLngBounds latLngBounds = builder.build();
-                    int padding = (int) (pixelWidth * 0.15);
-                    CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(latLngBounds, pixelWidth, pixelHeight, padding);
-                    googleMap.animateCamera(cu);
-                } else if (placeInfos.size() == 1) {
-                    PlaceInfo info = placeInfos.get(0);
-                    CameraPosition test = CameraPosition.fromLatLngZoom(info.getLocation().toGmsLatLng(), 17);
-                    CameraUpdate cu = CameraUpdateFactory.newCameraPosition(test);
-                    googleMap.animateCamera(cu);
-                }
+                MapUtils mapUtils = new MapUtils(googleMap);
+                mapUtils.markPlace(placeInfos, pixelWidth, pixelHeight);
             }
         }
     }
@@ -191,9 +172,9 @@ public class FragmentAddPlace extends FragmentPager implements OnMapReadyCallbac
             Toast.makeText(context, "กรุณาเพิ่มสถานที่ท่องเที่ยว", Toast.LENGTH_SHORT).show();
         }
 
-//        EditText editText = (EditText) rootView.findViewById(R.id.trip_name);
+
         MaterialEditText editText_name = (MaterialEditText) rootView.findViewById(R.id.trip_name);
-        TextInputLayout textInputLayout = (TextInputLayout) rootView.findViewById(R.id.trip_name_layout);
+        TextInputLayout textInputLayout;
 
         checkString = editText_name.getText().toString();
         if (checkString.isEmpty()) {
@@ -205,7 +186,6 @@ public class FragmentAddPlace extends FragmentPager implements OnMapReadyCallbac
         }else {
             errorText = null;
         }
-//        editText.setError(errorText);
         editText_name.setError(errorText);
 
         editText = (EditText) rootView.findViewById(R.id.number_member);

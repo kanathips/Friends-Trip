@@ -14,6 +14,15 @@ public class UserInfo extends Object{
     private String lName;
     private String phoneNumber;
     private String dateOfBirth;
+    private String profilePhoto;
+
+    public String getProfilePhoto() {
+        return profilePhoto;
+    }
+
+    public void setProfilePhoto(String profilePhoto) {
+        this.profilePhoto = profilePhoto;
+    }
 
     public UserInfo() {
 
