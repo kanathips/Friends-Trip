@@ -285,11 +285,12 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
+        mapUtils = new MapUtils(googleMap);
 
         setUpInfoWindow(googleMap);
 
         markStartPlace(googleMap);
-        mapUtils = new MapUtils(googleMap);
+
         googleMap.getUiSettings().setMapToolbarEnabled(false);
 
         if (mapFlag)

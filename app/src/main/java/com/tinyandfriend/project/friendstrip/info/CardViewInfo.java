@@ -13,6 +13,7 @@ public class CardViewInfo {
     private int pic_id;
     private String thumbnail;
     private String tripId;
+    private String tripSpoil;
 
     public String getTripEnd() {
         return tripEnd;
@@ -22,22 +23,33 @@ public class CardViewInfo {
         this.tripEnd = tripEnd;
     }
 
-    public CardViewInfo(String tripId,String name_card, String tripStart, String tripEnd, int count_people, int pic_id) {
+
+    public CardViewInfo(String tripId,String name_card, String tripStart, String tripEnd, int count_people,String tripSpoil, int pic_id) {
         this.name_card = name_card;
         this.tripStart = tripStart;
         this.tripEnd = tripEnd;
         this.count_people = count_people;
         this.pic_id = pic_id;
         this.tripId = tripId;
+        this.tripSpoil = tripSpoil;
     }
 
-    public CardViewInfo(String tripId,String name_card, String tripStart, String tripEnd, int count_people, String thumbnail) {
+    public CardViewInfo(String tripId,String name_card, String tripStart, String tripEnd, int count_people,String tripSpoil, String thumbnail) {
         this.name_card = name_card;
         this.tripStart = tripStart;
         this.tripEnd = tripEnd;
         this.count_people = count_people;
         this.thumbnail = thumbnail;
         this.tripId = tripId;
+        this.tripSpoil = tripSpoil;
+    }
+
+    public String getTripSpoil() {
+        return tripSpoil;
+    }
+
+    public void setTripSpoil(String tripSpoil) {
+        this.tripSpoil = tripSpoil;
     }
 
     public String getTripId() {

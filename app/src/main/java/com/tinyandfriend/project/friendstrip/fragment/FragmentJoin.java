@@ -25,7 +25,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.activity.CreateTripActivity;
-import com.tinyandfriend.project.friendstrip.activity.MainActivity;
 import com.tinyandfriend.project.friendstrip.adapter.TripRoomCardViewAdapter;
 import com.tinyandfriend.project.friendstrip.info.CardViewInfo;
 import com.tinyandfriend.project.friendstrip.info.TripInfo;
@@ -41,14 +40,18 @@ public class FragmentJoin extends Fragment {
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     private ArrayList<String> rooms;
     private Context context;
+    int pixelWidth;
+    int pixelHeight;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment__join, container, false);
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        pixelWidth = getResources().getDisplayMetrics().widthPixels;
+        pixelHeight = getResources().getDisplayMetrics().heightPixels;
 
         albumList = new ArrayList<>();
-        TripRoomCardViewAdapter adapter = new TripRoomCardViewAdapter(getActivity(), albumList);
+        TripRoomCardViewAdapter adapter = new TripRoomCardViewAdapter(getActivity(), albumList,pixelWidth,pixelHeight);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -82,7 +85,7 @@ public class FragmentJoin extends Fragment {
                         rooms.add(dataSnapshot.getKey());
                         TripInfo tripInfo = dataSnapshot.getValue(TripInfo.class);
                         CardViewInfo cardView_info = new CardViewInfo(key,tripInfo.getTripName(),
-                                tripInfo.getStartDate(), tripInfo.getEndDate(), tripInfo.getMaxMember(), tripInfo.getThumbnail());
+                                tripInfo.getStartDate(), tripInfo.getEndDate(), tripInfo.getMaxMember(),tripInfo.getTripSpoil(), tripInfo.getThumbnail());
                         albumList.add(0, cardView_info);
                     }
                     alphaAdapter.notifyDataSetChanged();

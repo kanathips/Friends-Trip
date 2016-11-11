@@ -30,8 +30,8 @@
                     app:met_primaryColor="@color/colorAccent"
                     android:singleLine="true"
                     android:id="@+id/trip_name"
-                    app:met_maxCharacters="28"
-                    android:maxLength="28"
+                    app:met_maxCharacters="32"
+                    android:maxLength="32"
                     android:layout_height="wrap_content" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -167,7 +167,7 @@
                 android:id="@+id/trip_spoil_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="รายละเอียดทริป"
+                android:hint="สปอยทริป"
                 app:met_baseColor="@android:color/black"
                 app:met_primaryColor="?colorAccent" >
 
@@ -175,8 +175,8 @@
                     android:id="@+id/trip_spoil"
                     android:textSize="16dp"
                     android:maxLines="3"
-                    app:met_maxCharacters="256"
-                    android:maxLength="256"
+                    app:met_maxCharacters="32"
+                    android:maxLength="32"
                     app:met_primaryColor="@color/colorAccent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />

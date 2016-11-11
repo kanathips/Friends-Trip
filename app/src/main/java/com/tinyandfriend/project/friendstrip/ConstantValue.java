@@ -7,4 +7,5 @@ package com.tinyandfriend.project.friendstrip;
 public class ConstantValue {
 
     public static final String TRIPROOM_CHILD = "tripRoom";
+    public static final String TAGINDEX_CHILD = "tagIndex";
 }

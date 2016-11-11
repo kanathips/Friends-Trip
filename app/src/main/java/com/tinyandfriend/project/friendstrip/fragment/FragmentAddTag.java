@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,7 +18,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -33,7 +31,8 @@ import com.tinyandfriend.project.friendstrip.info.TripInfo;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import static android.app.Activity.RESULT_OK;
@@ -140,7 +139,12 @@ public class FragmentAddTag extends FragmentPager {
         tagArray.addAll(regionTagAdapter.getSelectedTag());
         tagArray.addAll(tripTagAdapter.getSelectedTag());
 
-        tripInfo.setTag(tagArray);
+
+        Map<String, Boolean> tagMap = new HashMap<>();
+        for(String tag: tagArray){
+            tagMap.put(tag, true);
+        }
+        tripInfo.setTag(tagMap);
     }
 
 
