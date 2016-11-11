@@ -287,9 +287,8 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
         this.googleMap = googleMap;
 
         setUpInfoWindow(googleMap);
-
-        markStartPlace(googleMap);
         mapUtils = new MapUtils(googleMap);
+        markStartPlace(googleMap);
         googleMap.getUiSettings().setMapToolbarEnabled(false);
 
         if (mapFlag)
@@ -313,18 +312,6 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
 
 
         mapUtils.updateCamera(placeInfos, pixelWidth, pixelHeight);
-//
-//        if (originalPlaceInfos.size() > 1) {
-//            LatLngBounds latLngBounds = builder.build();
-//            int padding = (int) (pixelWidth * 0.15);
-//            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(latLngBounds, pixelWidth, pixelHeight, padding);
-//            googleMap.animateCamera(cu);
-//        } else if (originalPlaceInfos.size() == 1) {
-//            PlaceInfo info = originalPlaceInfos.get(0);
-//            CameraPosition test = CameraPosition.fromLatLngZoom(info.getLocation().toGmsLatLng(), 17);
-//            CameraUpdate cu = CameraUpdateFactory.newCameraPosition(test);
-//            googleMap.animateCamera(cu);
-//        }
     }
 
     public void onClickChangeMapType(View view) {

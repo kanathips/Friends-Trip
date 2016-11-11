@@ -1,12 +1,13 @@
 package com.tinyandfriend.project.friendstrip.info;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by NewWy on 9/10/2559.
  */
 
-public class TripInfo extends Object{
+public class TripInfo {
 
     private String tripName;
     private String startDate;
@@ -14,7 +15,7 @@ public class TripInfo extends Object{
     private String tripSpoil;
     private int maxMember;
     private String expense;
-    private ArrayList<String> tag;
+    private Map<String, Boolean> tag;
     private ArrayList<PlaceInfo> placeInfos;
     private ArrayList<String> files;
     private String ownerUID;
@@ -65,12 +66,12 @@ public class TripInfo extends Object{
         this.placeInfos = placeInfos;
     }
 
-    public ArrayList<String> getTag() {
+    public Map<String, Boolean> getTag() {
 
         return tag;
     }
 
-    public void setTag(ArrayList<String> tag) {
+    public void setTag(Map<String, Boolean> tag) {
         this.tag = tag;
     }
 

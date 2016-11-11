@@ -33,7 +33,9 @@ import com.tinyandfriend.project.friendstrip.info.TripInfo;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import static android.app.Activity.RESULT_OK;
@@ -140,7 +142,12 @@ public class FragmentAddTag extends FragmentPager {
         tagArray.addAll(regionTagAdapter.getSelectedTag());
         tagArray.addAll(tripTagAdapter.getSelectedTag());
 
-        tripInfo.setTag(tagArray);
+
+        Map<String, Boolean> tagMap = new HashMap<>();
+        for(String tag: tagArray){
+            tagMap.put(tag, true);
+        }
+        tripInfo.setTag(tagMap);
     }
 
 

@@ -17,12 +17,16 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.UploadTask;
+import com.tinyandfriend.project.friendstrip.ConstantValue;
 import com.tinyandfriend.project.friendstrip.fragment.FragmentAddPlace;
 import com.tinyandfriend.project.friendstrip.fragment.FragmentAddTag;
 import com.tinyandfriend.project.friendstrip.FragmentPager;
@@ -35,6 +39,7 @@ import com.tinyandfriend.project.friendstrip.view.NoSwipeViewPager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 
 public class CreateTripActivity extends AppCompatActivity {
@@ -102,8 +107,10 @@ public class CreateTripActivity extends AppCompatActivity {
                                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                                 tripInfo.setOwnerUID(user.getUid());
                                 final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-
-                                upload(addTagFragment, reference, processDialog);
+                                final DatabaseReference tripRoomReference = reference.child("tripRoom").push();
+                                String tripId = tripRoomReference.getKey();
+                                pushTagIndex(reference, tripInfo.getTag().keySet(), tripId);
+                                upload(addTagFragment, tripRoomReference,tripRoomReference, processDialog);
                             }
                         }
                     });
@@ -129,12 +136,20 @@ public class CreateTripActivity extends AppCompatActivity {
         }
     }
 
-    private void upload(final FragmentAddTag fragmentAddTag, final DatabaseReference databaseReference, final ProgressDialog processDialog) {
+    private void pushTagIndex(DatabaseReference reference, Set<String> tags, String tripId){
+        for(String tagName: tags){
+            Map<String, Object> map = new HashMap<>();
+            map.put(tripId, true);
+            reference.child(ConstantValue.TAGINDEX_CHILD).child(tagName).updateChildren(map);
+        }
+    }
+
+    private void upload(final FragmentAddTag fragmentAddTag, final DatabaseReference databaseReference, final DatabaseReference tripRoomReference, final ProgressDialog processDialog) {
         StorageMetadata metadata = new StorageMetadata.Builder()
                 .setContentType("image/jpeg")
                 .build();
 
-        final DatabaseReference tripRoomReference = databaseReference.child("tripRoom").push();
+
 
         Uri thumbNailUri = fragmentAddTag.getThumbnailUri();
         UploadTask uploadTask = storage.getReference().child(tripRoomReference.getKey() + "/thumbnail/thumbnail.jpg").putFile(thumbNailUri, metadata);
@@ -211,7 +226,7 @@ public class CreateTripActivity extends AppCompatActivity {
 
 
     private void updateTripRoom(final DatabaseReference reference, final String tripId, final String userUid){
-        DatabaseReference tripReference = reference.child("tripRoom").child(tripId).child("members");
+        DatabaseReference tripReference = reference.child("members");
         Map<String, Object> map = new HashMap<>();
         map.put(userUid, true);
         tripReference.updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
