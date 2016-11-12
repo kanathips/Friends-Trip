@@ -2,32 +2,28 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Communicate">
+    <item android:title="ทริปของฉัน">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/my_trip"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:title="ทริปที่สร้าง" />
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/joined_trip"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="ทริปที่เข้าร่วม" />
         </menu>
     </item>
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_account_circle_white_24dp"
-            android:title="Profile" />
+            android:title="โปรไฟล์" />
 
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Manage" />
         <item
             android:id="@+id/nav_log_out"
             android:icon="@drawable/logout"
-            android:title="Sign Out" />
+            android:title="ออกจากระบบ." />
     </group>
 
 </menu>

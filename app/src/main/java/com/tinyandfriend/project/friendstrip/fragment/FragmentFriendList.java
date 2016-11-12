@@ -64,7 +64,7 @@ public class FragmentFriendList extends Fragment {
 
         friendList = new ArrayList<>();
 
-        friendListAdapter = new FriendListAdapter(context, friendList);
+        friendListAdapter = new FriendListAdapter(context, friendList, reference);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(friendListAdapter);
@@ -96,8 +96,7 @@ public class FragmentFriendList extends Fragment {
                     FriendInfo friendInfo = dataSnapshot.getValue(FriendInfo.class);
                     FriendStatus status = friendInfo.getStatus();
 
-                    if ((status != FriendStatus.Ban) && (status != FriendStatus.Approving)) {
-                        friendInfo.setFriendUid(dataSnapshot.getKey());
+                    if ((status != FriendStatus.Ban) && (status != FriendStatus.Approving) && !friendList.contains(friendInfo)) {
                         friendList.add(friendInfo);
                     }
                     friendListAdapter.notifyDataSetChanged();

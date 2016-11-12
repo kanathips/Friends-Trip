@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ import com.tinyandfriend.project.friendstrip.info.TripCardViewInfo;
 import com.tinyandfriend.project.friendstrip.info.PlaceInfo;
 import com.tinyandfriend.project.friendstrip.info.TripInfo;
 import com.tinyandfriend.project.friendstrip.info.UserInfo;
+import com.tinyandfriend.project.friendstrip.view.ProfileDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,21 +51,19 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
     private static final String OWNER_UID = "ownerUID";
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseUser user = firebaseAuth.getCurrentUser();
-    String userUid = user.getUid();
+    private String userUid = user.getUid();
     private int widthPixels;
     private int heightPixels;
 
     class TripRoomHolder extends RecyclerView.ViewHolder {
-        //        TextView titles, tripStart,count;
-//        ImageView thumbnail;
-//        TextView tripEnd;
-//        CardView cardView;
+
         TextView title, spoil_trip, date_trip, count_people;
         TextView title_content, count_content, name_content, email_content, fromDate, toDate;
         ImageView title_thumbnail, head_image;
         CircleImageView content_avatar;
         FoldingCell foldingCell;
         Button content_location_bt;
+        RelativeLayout profile_dialog;
 
 
         TripRoomHolder(View itemView) {
@@ -86,14 +86,8 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
             toDate = (TextView) itemView.findViewById(R.id.content_to_date);
 
             content_location_bt = (Button) itemView.findViewById(R.id.content_location_btn);
+            profile_dialog = (RelativeLayout) itemView.findViewById(R.id.profile_dialog);
 
-
-//            titles = (TextView) itemView.findViewById(R.id.name_card);
-//            tripStart = (TextView) itemView.findViewById(R.id.trip_start);
-//            tripEnd = (TextView) itemView.findViewById(R.id.trip_end);
-//            count = (TextView) itemView.findViewById(R.id.count_people);
-//            thumbnail = (ImageView) itemView.findViewById(R.id.image_card);
-//            cardView = (CardView) itemView.findViewById(R.id.card_view);
         }
     }
 
@@ -160,7 +154,6 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
 
                 }
 
-
             }
 
             @Override
@@ -196,7 +189,6 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialog_map);
                 dialog.show();
-                final GoogleMap googleMap;
                 final MapUtils[] mapUtils = new MapUtils[1];
 
                 final ArrayList<PlaceInfo> placeInfos = new ArrayList<>();
@@ -235,34 +227,30 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
             }
         });
 
-//        holder.titles.setText(album.getName_card());
-//        holder.tripStart.setText(album.getTripStart());
-//        holder.tripEnd.setText(album.getTripEnd());
-//        holder.count.setText(Integer.toString(album.getCount_people()));
-//
-//        if (album.getThumbnail() != null) {
-//            Glide.with(mContext)
-//                    .load(album.getThumbnail()).centerCrop()
-//                    .into(holder.thumbnail);
-//
-//
-//            holder.cardView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent(mContext, JoinDetailActivity.class);
-//                    intent.putExtra("key_room",album.getTripId());
-//                    intent.putExtra("start_date",holder.tripStart.getText().toString());
-//                    intent.putExtra("end_date",holder.tripEnd.getText().toString());
-//                    intent.putExtra("count_people",holder.count.getText().toString());
-//                    intent.putExtra("name_trip",holder.titles.getText().toString());
-//                    intent.putExtra("pic_thumbnail",album.getThumbnail().toString());
-//
-//                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, holder.thumbnail, "profile");
-//
-//                    mContext.startActivity(intent, options.toBundle());
-//                }
-//            });
-//        }
+
+        holder.profile_dialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                reference.child(TRIP_CHILD).child(album.getTripId()).child(OWNER_UID).addListenerForSingleValueEvent(
+                        new ValueEventListener() {
+
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    String ownerUid = dataSnapshot.getValue(String.class);
+                                    ProfileDialog profileDialog = new ProfileDialog(mContext, ownerUid, reference);
+                                    profileDialog.show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+            }
+        });
     }
 
 

@@ -36,7 +36,6 @@ import com.google.firebase.storage.UploadTask;
 import com.tinyandfriend.project.friendstrip.ConstantValue;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.info.UserInfo;
-import com.tinyandfriend.project.friendstrip.view.MapDialog;
 
 import java.util.HashMap;
 import java.util.Map;

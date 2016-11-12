@@ -78,7 +78,6 @@ public class FriendInfo {
         FriendInfo that = (FriendInfo) o;
 
         return friendName.equals(that.friendName);
-
     }
 
     @Override

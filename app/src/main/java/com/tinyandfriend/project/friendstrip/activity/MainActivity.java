@@ -16,10 +16,19 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.adapter.ContentFragmentPagerAdapter;
+import com.tinyandfriend.project.friendstrip.info.UserInfo;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -28,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String username;
     private String userEmail;
     private FirebaseAuth.AuthStateListener authStateListener;
+    private static final String USERS_CHILD = "users";
+    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     private boolean stateFlag = true;
 
     @Override
@@ -59,12 +70,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     startActivity(new Intent(MainActivity.this, SignInActivity.class));
                     finish();
                 } else {
+                    final CircleImageView circleImageView = (CircleImageView) header.findViewById(R.id.user_profile_photo);
                     TextView username_nav = (TextView) header.findViewById(R.id.username_nav_header);
                     TextView email_nav = (TextView) header.findViewById(R.id.email_nav_header);
                     username = user.getDisplayName();
                     userEmail = user.getEmail();
                     username_nav.setText(username);
                     email_nav.setText(userEmail);
+
+                    reference.child(USERS_CHILD).child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            UserInfo userInfo = dataSnapshot.getValue(UserInfo.class);
+
+                            if (userInfo.getProfilePhoto() != null && !userInfo.getProfilePhoto().isEmpty()) {
+                                Glide.with(MainActivity.this)
+                                        .load(userInfo.getProfilePhoto()).centerCrop()
+                                        .into(circleImageView);
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
                     contentFragmentPagerAdapter.setUserUid(user.getUid());
 
                     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -122,9 +155,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (id) {
             case R.id.nav_profile:
                 startActivity(new Intent(this, EditUserInfoActivity.class));
-                break;
-            case R.id.nav_manage:
-                startActivity(new Intent(this, FindTripWithTagActivity.class));
                 break;
             case R.id.nav_log_out:
                 firebaseAuth.signOut();

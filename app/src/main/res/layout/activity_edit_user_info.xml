@@ -161,6 +161,7 @@
 
                 <EditText
                     android:id="@+id/email"
+                    android:enabled="false"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -177,6 +178,7 @@
                 android:textColorHint="@color/whiteLow">
 
                 <EditText
+                    android:enabled="false"
                     android:id="@+id/displayname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
