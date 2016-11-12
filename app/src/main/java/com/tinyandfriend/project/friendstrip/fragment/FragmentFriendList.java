@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -32,8 +33,6 @@ public class FragmentFriendList extends Fragment {
     private String userUid;
     private ArrayList<FriendInfo> friendList;
     private FriendListAdapter friendListAdapter;
-
-    private static final String FRIEND_STATUS = "Friend";
 
     private static final String USER_UID = "userUid";
     private ChildEventListener listener;
@@ -97,11 +96,11 @@ public class FragmentFriendList extends Fragment {
                     FriendInfo friendInfo = dataSnapshot.getValue(FriendInfo.class);
                     FriendStatus status = friendInfo.getStatus();
 
-                    if ((status != FriendStatus.Ban) && (status != FriendStatus.Approving)  ) {
+                    if ((status != FriendStatus.Ban) && (status != FriendStatus.Approving)) {
                         friendInfo.setFriendUid(dataSnapshot.getKey());
                         friendList.add(friendInfo);
-                        friendListAdapter.notifyDataSetChanged();
                     }
+                    friendListAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -113,13 +112,12 @@ public class FragmentFriendList extends Fragment {
                     switch (status){
                         case Ban:
                             friendList.remove(friendInfo);
-                            friendListAdapter.notifyDataSetChanged();
                             break;
                         case Friend:
                             friendList.add(friendInfo);
-                            friendListAdapter.notifyDataSetChanged();
                             break;
                     }
+                    friendListAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -139,6 +137,7 @@ public class FragmentFriendList extends Fragment {
             }
         };
         reference.child(ConstantValue.FRIEND_LIST_CHILD).child(userUid).addChildEventListener(listener);
+
     }
 
     @Override
@@ -152,6 +151,6 @@ public class FragmentFriendList extends Fragment {
     public void onResume() {
         super.onResume();
         if (listener != null && reference != null)
-            reference.addChildEventListener(listener);
+            reference.child(ConstantValue.FRIEND_LIST_CHILD).child(userUid).addChildEventListener(listener);
     }
 }

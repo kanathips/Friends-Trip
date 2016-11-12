@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.tinyandfriend.project.friendstrip.R;
@@ -47,7 +48,6 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Fr
     public void onBindViewHolder(FriendListHolder holder, int position) {
 
         FriendInfo friendInfo = friendList.get(position);
-
         holder.friendName.setText(friendInfo.getFriendName());
 
         if (friendInfo.getFriendPhotoUrl() != null) {

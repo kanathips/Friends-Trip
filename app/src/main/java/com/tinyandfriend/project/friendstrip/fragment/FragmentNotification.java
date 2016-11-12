@@ -72,6 +72,7 @@ public class FragmentNotification extends Fragment {
                     switch (notificationType){
                         case AcceptFriendNotification.TYPE:
                             AcceptFriendNotification acceptFriendNotification = dataSnapshot.getValue(AcceptFriendNotification.class);
+
                             break;
                     }
                 }

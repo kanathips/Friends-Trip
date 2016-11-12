@@ -2,6 +2,7 @@ package com.tinyandfriend.project.friendstrip.activity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,6 +12,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,7 +28,6 @@ import com.tinyandfriend.project.friendstrip.AcceptFriendNotification;
 import com.tinyandfriend.project.friendstrip.ConstantValue;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.info.FriendInfo;
-import com.tinyandfriend.project.friendstrip.info.UserInfo;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -43,6 +47,7 @@ public class AddFriendActivity extends AppCompatActivity {
     private String userDisplayName;
     private ArrayList<ValueEventListener> listeners;
     private CircleImageView friendPhoto;
+    private String userProfilePhotoUrl;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,6 +60,11 @@ public class AddFriendActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         userUid = user.getUid();
         userDisplayName = user.getDisplayName();
+        if (user.getPhotoUrl() == null) {
+            userProfilePhotoUrl = null;
+        } else {
+            userProfilePhotoUrl = user.getPhotoUrl().toString();
+        }
         listeners = new ArrayList<>();
         friendPhoto = (CircleImageView) findViewById(R.id.friend_photo);
 
@@ -84,17 +94,20 @@ public class AddFriendActivity extends AppCompatActivity {
         }
 
         ValueEventListener listener = new ValueEventListener() {
+
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     final String targetUid;
+                    final String targetProfilePhotoUrl;
 
                     DataSnapshot target;
                     Iterator<DataSnapshot> o = dataSnapshot.getChildren().iterator();
 
                     if (o.hasNext()) {
                         target = o.next();
-                        if(!target.child("displayName").exists()) {
+                        if (!target.child("displayName").exists()) {
                             targetNameTextView.setText("ไม่พบผู้ใช้งาน");
                             targetNameTextView.setVisibility(View.VISIBLE);
                             addButton.setVisibility(View.INVISIBLE);
@@ -104,13 +117,15 @@ public class AddFriendActivity extends AppCompatActivity {
                         }
                         targetUid = target.getKey();
 
-                        String targetName = target.child("displayName").getValue().toString();
+                        final String targetName = target.child("displayName").getValue().toString();
                         targetNameTextView.setVisibility(View.VISIBLE);
                         targetNameTextView.setText(targetName);
                         friendPhoto.setVisibility(View.VISIBLE);
-                        if(target.child("profilePhoto").exists()) {
-                            String profilePhoto = target.child("profilePhoto").getValue().toString();
-                                Glide.with(AddFriendActivity.this).load(profilePhoto).centerCrop().into(friendPhoto);
+                        if (target.child("profilePhoto").exists()) {
+                            targetProfilePhotoUrl = target.child("profilePhoto").getValue().toString();
+                            Glide.with(AddFriendActivity.this).load(targetProfilePhotoUrl).centerCrop().into(friendPhoto);
+                        } else {
+                            targetProfilePhotoUrl = null;
                         }
                         ValueEventListener friendCheckListener = new ValueEventListener() {
                             @Override
@@ -126,7 +141,9 @@ public class AddFriendActivity extends AppCompatActivity {
                                     addButton.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            addFriend(targetUid, userUid);
+                                            FriendInfo targetFriendInfo = new FriendInfo(targetName, targetUid, targetProfilePhotoUrl, Pending);
+                                            FriendInfo senderFriendInfo = new FriendInfo(userDisplayName, userUid, userProfilePhotoUrl, Approving);
+                                            addFriend(targetFriendInfo, senderFriendInfo);
                                         }
                                     });
                                 }
@@ -171,81 +188,49 @@ public class AddFriendActivity extends AppCompatActivity {
     }
 
     /***
-     * Add UID and status of sender to receiver Child in friendTerm Node in firebase DB
-     * then Add UID and status of receiver to sender child in friendTerm Node in firebase
-     *
-     * @param targetUID the UID of target
-     * @param senderUID the UID of sender
      */
-    private void addFriend(final String targetUID, final String senderUID) {
+//    private void addFriend(final String targetUID, final String senderUID, String friendProfilePhotoUrl, String userProfilePhoto) {
+    private void addFriend(final FriendInfo targetFriendInfo, final FriendInfo senderFriendInfo) {
         final ProgressDialog tempProgressDialog = new ProgressDialog(this);
         final int[] checkStatus = {1};
 
-        tempProgressDialog.show();
         tempProgressDialog.setMessage("กำลังเพิ่มเพื่อน");
+        tempProgressDialog.show();
 
-        ValueEventListener senderListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    String username = dataSnapshot.child("displayName").getValue(String.class);
-                    String userPhotoUri = dataSnapshot.child("profilePicture").getValue(String.class);
-                    FriendInfo friendInfo = new FriendInfo(userPhotoUri, username, Approving);
-
-                    reference.child(ConstantValue.FRIEND_LIST_CHILD).child(targetUID).child(senderUID).setValue(friendInfo);
-                    AcceptFriendNotification acceptFriendNotification = new AcceptFriendNotification(friendInfo);
-                    reference.child(ConstantValue.NOTIFICATION_CHILD).child(targetUID).push().setValue(acceptFriendNotification);
-
-                    if (checkStatus[0] >= 2) {
-                        tempProgressDialog.dismiss();
-                    } else {
-                        checkStatus[0]++;
+        //sender
+        reference.child(ConstantValue.FRIEND_LIST_CHILD).child(senderFriendInfo.getFriendUid()).child(targetFriendInfo.getFriendUid()).setValue(targetFriendInfo)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        checkAddComplete(checkStatus, tempProgressDialog);
                     }
-                }
-            }
+                });
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                if (checkStatus[0] >= 2) {
-                    tempProgressDialog.dismiss();
-                } else {
-                    checkStatus[0]++;
-                }
-            }
-        };
-
-        ValueEventListener targetListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    String username = dataSnapshot.child("displayName").getValue(String.class);
-                    String userPhotoUri = dataSnapshot.child("profilePicture").getValue(String.class);
-                    FriendInfo friendInfo = new FriendInfo(userPhotoUri, username, Pending);
-                    reference.child(ConstantValue.FRIEND_LIST_CHILD).child(senderUID).child(targetUID).setValue(friendInfo);
-
-                    if (checkStatus[0] >= 2) {
-                        tempProgressDialog.dismiss();
-                    } else {
-                        checkStatus[0]++;
+        //target
+        reference.child(ConstantValue.FRIEND_LIST_CHILD).child(targetFriendInfo.getFriendUid()).child(senderFriendInfo.getFriendUid()).setValue(senderFriendInfo)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            AcceptFriendNotification acceptFriendNotification = new AcceptFriendNotification(senderFriendInfo);
+                            reference.child(ConstantValue.NOTIFICATION_CHILD).child(targetFriendInfo.getFriendUid()).push().setValue(acceptFriendNotification)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            checkAddComplete(checkStatus, tempProgressDialog);
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            checkAddComplete(checkStatus, tempProgressDialog);
+                                        }
+                                    });
+                        } else {
+                            checkAddComplete(checkStatus, tempProgressDialog);
+                        }
                     }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                if (checkStatus[0] >= 2) {
-                    tempProgressDialog.dismiss();
-                } else {
-                    checkStatus[0]++;
-                }
-            }
-        };
-
-        listeners.add(targetListener);
-        listeners.add(senderListener);
-
-        reference.child(ConstantValue.USERS_CHILD).child(senderUID).addListenerForSingleValueEvent(senderListener);
-        reference.child(ConstantValue.USERS_CHILD).child(targetUID).addListenerForSingleValueEvent(targetListener);
+                });
 
     }
 
@@ -257,6 +242,14 @@ public class AddFriendActivity extends AppCompatActivity {
                 reference.removeEventListener(listener);
             }
             listeners.clear();
+        }
+    }
+
+    private void checkAddComplete(int[] checkStatus, ProgressDialog tempProgressDialog) {
+        if (checkStatus[0] >= 2) {
+            tempProgressDialog.dismiss();
+        } else {
+            checkStatus[0]++;
         }
     }
 }

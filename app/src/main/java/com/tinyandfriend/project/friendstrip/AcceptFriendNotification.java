@@ -28,7 +28,7 @@ public class AcceptFriendNotification extends NotificationMessage {
         return senderUid;
     }
 
-    public void setSenderUid(String senderUid) {
+    private void setSenderUid(String senderUid) {
         this.senderUid = senderUid;
     }
 }

@@ -22,6 +22,23 @@ public class FriendInfo {
 
     }
 
+    @Override
+    public String toString() {
+        return "FriendInfo{" +
+                "friendPhotoUrl='" + friendPhotoUrl + '\'' +
+                ", friendName='" + friendName + '\'' +
+                ", status=" + status +
+                ", friendUid='" + friendUid + '\'' +
+                '}';
+    }
+
+    public FriendInfo(String friendName, String friendUid, String friendPhotoUrl, FriendStatus status) {
+        this.friendPhotoUrl = friendPhotoUrl;
+        this.friendName = friendName;
+        this.friendUid = friendUid;
+        this.status =status;
+    }
+
     public FriendStatus getStatus() {
         return status;
     }
