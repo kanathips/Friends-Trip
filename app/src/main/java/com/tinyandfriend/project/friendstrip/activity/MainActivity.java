@@ -66,29 +66,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     username_nav.setText(username);
                     email_nav.setText(userEmail);
                     contentFragmentPagerAdapter.setUserUid(user.getUid());
+
+                    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+                    setSupportActionBar(toolbar);
+
+                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                    ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                            MainActivity.this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                    drawer.setDrawerListener(toggle);
+                    toggle.syncState();
+
+                    ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+                    viewPager.setAdapter(contentFragmentPagerAdapter);
+
+                    PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+                    tabsStrip.setViewPager(viewPager);
                 }
                 stateFlag = false;
             }
         };
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(contentFragmentPagerAdapter);
-
-        PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-        tabsStrip.setViewPager(viewPager);
-
-
-
     }
 
     @Override
@@ -111,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.action_friend){
+        if (id == R.id.action_friend) {
             startActivity(new Intent(this, ChatActivity.class));
         }
 
@@ -122,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        switch(id){
+        switch (id) {
             case R.id.nav_profile:
                 startActivity(new Intent(this, EditUserInfoActivity.class));
                 break;

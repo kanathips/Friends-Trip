@@ -9,8 +9,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.tinyandfriend.project.friendstrip.R;
-import com.tinyandfriend.project.friendstrip.info.CardViewInfo;
-import com.tinyandfriend.project.friendstrip.info.FriendListInfo;
+import com.tinyandfriend.project.friendstrip.info.FriendInfo;
 
 import java.util.List;
 
@@ -18,7 +17,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.FriendListHolder> {
     private final Context context;
-    private final List<FriendListInfo> friendList;
+    private final List<FriendInfo> friendList;
 
     class FriendListHolder extends RecyclerView.ViewHolder{
 
@@ -32,7 +31,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Fr
         }
     }
 
-    public FriendListAdapter(Context context, List<FriendListInfo> friendList) {
+    public FriendListAdapter(Context context, List<FriendInfo> friendList) {
         this.context = context;
         this.friendList = friendList;
     }
@@ -47,7 +46,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Fr
     @Override
     public void onBindViewHolder(FriendListHolder holder, int position) {
 
-        FriendListInfo friendInfo = friendList.get(position);
+        FriendInfo friendInfo = friendList.get(position);
 
         holder.friendName.setText(friendInfo.getFriendName());
 

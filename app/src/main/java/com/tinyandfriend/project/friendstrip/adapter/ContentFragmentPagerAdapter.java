@@ -2,41 +2,35 @@
 package com.tinyandfriend.project.friendstrip.adapter;
 
 
+import android.support.v4.app.Fragment;
 
-        import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
-        import android.support.v4.app.FragmentManager;
-
-        import android.support.v4.app.FragmentPagerAdapter;
-
+import android.support.v4.app.FragmentPagerAdapter;
 
 
-        import com.astuetz.PagerSlidingTabStrip;
+import com.astuetz.PagerSlidingTabStrip;
 
 
-        import com.tinyandfriend.project.friendstrip.R;
-        import com.tinyandfriend.project.friendstrip.fragment.FragmentFriendList;
-        import com.tinyandfriend.project.friendstrip.fragment.FragmentJoin;
-        import com.tinyandfriend.project.friendstrip.fragment.FragmentNotification;
+import com.tinyandfriend.project.friendstrip.R;
+import com.tinyandfriend.project.friendstrip.fragment.FragmentFriendList;
+import com.tinyandfriend.project.friendstrip.fragment.FragmentJoin;
+import com.tinyandfriend.project.friendstrip.fragment.FragmentNotification;
 
 
 /**
-
  * Created by StandAlone on 10/10/2559.
-
  */
 
 
+public class ContentFragmentPagerAdapter extends FragmentPagerAdapter implements PagerSlidingTabStrip.IconTabProvider {
 
-public class ContentFragmentPagerAdapter extends FragmentPagerAdapter  implements PagerSlidingTabStrip.IconTabProvider {
-
-    final int PAGE_COUNT = 4;
+    private final int PAGE_COUNT = 3;
     private String userUid;
 
-    private String tabTitles[] = new String[] { "JOIN", "CREATE", "FRIENDS" };
+    private String tabTitles[] = new String[]{"JOIN", "CREATE", "FRIENDS"};
 
-    private int tabIcons[] = {R.drawable.ic_directions_walk_black_18dp, R.drawable.ic_star_rate_black_18dp, R.drawable.ic_notifications_black_18dp,R.drawable.ic_group_black_18dp};
-
+    private int tabIcons[] = {R.drawable.ic_directions_walk_black_18dp, R.drawable.ic_notifications_black_18dp, R.drawable.ic_group_black_18dp};
 
 
     public ContentFragmentPagerAdapter(FragmentManager fm) {
@@ -56,27 +50,31 @@ public class ContentFragmentPagerAdapter extends FragmentPagerAdapter  implement
     }
 
 
-
     @Override
 
     public Fragment getItem(int position) {
 
-        switch(position){
+        switch (position) {
 
-            case 0: return new FragmentJoin();
+            case 0:
+                if (userUid != null && !userUid.isEmpty())
+                    return new FragmentJoin();
 
-            case 1: return new FragmentJoin();
+//            case 1: return new FragmentJoin();
 
-            case 2: return new FragmentNotification();
+            case 1:
+                if (userUid != null && !userUid.isEmpty())
+                    return FragmentNotification.newInstance(userUid);
 
-            case 3: return FragmentFriendList.newInstance(userUid);
+            case 2:
+                if (userUid != null && !userUid.isEmpty())
+                    return FragmentFriendList.newInstance(userUid);
 
         }
 
         return null;
 
     }
-
 
 
     @Override
@@ -88,11 +86,6 @@ public class ContentFragmentPagerAdapter extends FragmentPagerAdapter  implement
         return tabTitles[position];
 
     }
-
-
-
-
-
 
 
     @Override
