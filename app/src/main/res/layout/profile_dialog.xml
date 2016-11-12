@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:id="@+id/header_cover_image"
+        android:layout_height="200dp"
+        android:layout_width="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/navigation_header_image2" />
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:elevation="5dp"
+        android:id="@+id/user_profile_photo"
+        android:layout_below="@+id/header_cover_image"
+        android:layout_centerHorizontal="true"
+        android:layout_height="120dp"
+        android:layout_marginTop="-60dp"
+        android:layout_width="120dp"
+        android:src="@drawable/ic_account_circle_white_24dp" />
+    <!--app:civ_border_color="#FF000000"-->
+    <!--app:civ_border_width="2dp" />-->
+
+    <RelativeLayout
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        android:id="@+id/profile_layout"
+        android:layout_below="@+id/header_cover_image"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:paddingBottom="24dp">
+
+
+        <ImageView
+            android:id="@+id/add_friend"
+            android:layout_alignParentRight="true"
+            android:layout_height="30dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_width="30dp"
+            android:src="@drawable/ic_person_add_white_24dp" />
+
+        <TextView
+            android:id="@+id/user_profile_name_dialog"
+            android:layout_below="@+id/user_profile_email_dialog"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="35dp"
+            android:layout_width="wrap_content"
+            android:text="StandAlone"
+            android:textColor="#fff"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/user_profile_email_dialog"
+            android:layout_below="@+id/add_friend"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:layout_width="wrap_content"
+            android:text="USER_EMAIL"
+            android:textColor="#fff"
+            android:textSize="14sp" />
+    </RelativeLayout>
+</RelativeLayout>

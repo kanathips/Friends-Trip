@@ -25,12 +25,6 @@
             android:textSize="20sp" />
 
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/menu_icon" />
 
     </RelativeLayout>
 
@@ -84,6 +78,8 @@
 
         <!-- avatar and name part -->
         <RelativeLayout
+            android:id="@+id/profile_dialog"
+            android:background="@drawable/ripple_effect"
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
 
@@ -178,15 +174,6 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/content_from_address_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/content_from_date"
-                    android:layout_below="@id/content_from_date"
-                    android:text="@string/content_from2_mock"
-                    android:textColor="@color/mainTextColor"
-                    android:textSize="14sp" />
 
             </RelativeLayout>
 
@@ -214,22 +201,8 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/content_to_address_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/content_to_date"
-                    android:layout_below="@id/content_to_date"
-                    android:text="@string/content_to2_mock"
-                    android:textColor="@color/mainTextColor"
-                    android:textSize="14sp" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/arrow" />
+
 
             </RelativeLayout>
 

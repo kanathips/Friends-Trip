@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +65,7 @@ public class TripRoomCardViewAdapter extends RecyclerView.Adapter<TripRoomCardVi
         CircleImageView content_avatar;
         FoldingCell foldingCell;
         Button content_location_bt;
+        RelativeLayout profile_dialog;
 
 
         TripRoomHolder(View itemView) {
@@ -86,6 +88,7 @@ public class TripRoomCardViewAdapter extends RecyclerView.Adapter<TripRoomCardVi
             toDate = (TextView) itemView.findViewById(R.id.content_to_date);
 
             content_location_bt = (Button) itemView.findViewById(R.id.content_location_btn);
+            profile_dialog = (RelativeLayout) itemView.findViewById(R.id.profile_dialog);
 
 
 //            titles = (TextView) itemView.findViewById(R.id.name_card);
@@ -160,7 +163,6 @@ public class TripRoomCardViewAdapter extends RecyclerView.Adapter<TripRoomCardVi
 
                 }
 
-
             }
 
             @Override
@@ -234,6 +236,75 @@ public class TripRoomCardViewAdapter extends RecyclerView.Adapter<TripRoomCardVi
 
             }
         });
+
+
+
+
+        holder.profile_dialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog dialog = new Dialog(mContext);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.profile_dialog);
+                dialog.show();
+
+                final CircleImageView circleImageView = (CircleImageView) dialog.findViewById(R.id.user_profile_photo);
+                final TextView userName_dialog = (TextView) dialog.findViewById(R.id.user_profile_name_dialog);
+                final TextView userEmail_dialog = (TextView)dialog.findViewById(R.id.user_profile_email_dialog);
+
+
+                reference.child(TRIP_CHILD).child(album.getTripId()).child(OWNER_UID).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            String owner_uid = dataSnapshot.getValue(String.class);
+
+                            if(owner_uid.equals(userUid)){
+                                ImageView imageView = (ImageView) dialog.findViewById(R.id.add_friend);
+                                imageView.setVisibility(View.INVISIBLE);
+                            }
+
+                            reference.child(USERS_CHILD).child(owner_uid).addListenerForSingleValueEvent(new ValueEventListener() {
+
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        UserInfo userInfo = dataSnapshot.getValue(UserInfo.class);
+
+                                        userName_dialog.setText(userInfo.getDisplayName());
+                                        userEmail_dialog.setText(userInfo.getEmail());
+
+                                        if (userInfo.getProfilePhoto() != null && !userInfo.getProfilePhoto().isEmpty()) {
+                                            Glide.with(mContext)
+                                                    .load(userInfo.getProfilePhoto()).centerCrop()
+                                                    .into(circleImageView);
+                                        }
+                                    }
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                }
+                            });
+
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(mContext, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+
+
+            }
+        });
+
 
 //        holder.titles.setText(album.getName_card());
 //        holder.tripStart.setText(album.getTripStart());
