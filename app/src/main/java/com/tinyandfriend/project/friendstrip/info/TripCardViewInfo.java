@@ -4,7 +4,7 @@ package com.tinyandfriend.project.friendstrip.info;
  * Created by StandAlone on 21/10/2559.
  */
 
-public class CardViewInfo {
+public class TripCardViewInfo {
 
     private String tripEnd;
     private String name_card;
@@ -24,7 +24,7 @@ public class CardViewInfo {
     }
 
 
-    public CardViewInfo(String tripId,String name_card, String tripStart, String tripEnd, int count_people,String tripSpoil, int pic_id) {
+    public TripCardViewInfo(String tripId, String name_card, String tripStart, String tripEnd, int count_people, String tripSpoil, int pic_id) {
         this.name_card = name_card;
         this.tripStart = tripStart;
         this.tripEnd = tripEnd;
@@ -34,7 +34,7 @@ public class CardViewInfo {
         this.tripSpoil = tripSpoil;
     }
 
-    public CardViewInfo(String tripId,String name_card, String tripStart, String tripEnd, int count_people,String tripSpoil, String thumbnail) {
+    public TripCardViewInfo(String tripId, String name_card, String tripStart, String tripEnd, int count_people, String tripSpoil, String thumbnail) {
         this.name_card = name_card;
         this.tripStart = tripStart;
         this.tripEnd = tripEnd;

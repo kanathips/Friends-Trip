@@ -75,7 +75,7 @@ public class JoinDetailActivity extends AppCompatActivity implements OnMapReadyC
 
         if(intent.hasExtra("key_room") ){
             tripId = intent.getStringExtra("key_room");
-            reference.child(ConstantValue.TRIPROOM_CHILD).child(tripId).addListenerForSingleValueEvent(new ValueEventListener() {
+            reference.child(ConstantValue.TRIP_ROOM_CHILD).child(tripId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     TripInfo tripInfo = dataSnapshot.getValue(TripInfo.class);
@@ -109,25 +109,9 @@ public class JoinDetailActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     public void onClickJoinTrip(View view){
-
-        reference.child(ConstantValue.TRIPROOM_CHILD).child(tripId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    String userUid = user.getUid();
-
-                    updateTripRoom(reference, tripId, userUid);
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userUid = user.getUid();
+        updateTripRoom(reference, tripId, userUid);
     }
 
 

@@ -33,6 +33,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.tinyandfriend.project.friendstrip.ConstantValue;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.info.UserInfo;
 
@@ -61,6 +62,8 @@ public class EditUserInfoActivity extends AppCompatActivity {
     private StorageReference storageReference = FirebaseStorage.getInstance().getReference();
     private Uri selectedImage;
     private StorageMetadata metadata;
+    private OnFailureListener failureListener;
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -72,14 +75,23 @@ public class EditUserInfoActivity extends AppCompatActivity {
         toolbar.setTitle(user.getDisplayName());
 
         setupVariable();
-
+        setupListener();
         String userEmail = user.getEmail();
         String userUid = user.getUid();
 
         setup(userUid);
         getEmailShow().setText(userEmail);
+    }
 
-//        setProfilePhoto(userUid);
+    private void setupListener() {
+        failureListener = new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (progressDialog.isShowing())
+                    progressDialog.dismiss();
+                Toast.makeText(EditUserInfoActivity.this, "ไม่สามารถอัพโหลดไฟล์รูปได้", Toast.LENGTH_SHORT).show();
+            }
+        };
     }
 
     private void setup(String userUid) {
@@ -129,32 +141,27 @@ public class EditUserInfoActivity extends AppCompatActivity {
                 builder.setPositiveButton("ยืนยัน", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         final Map<String, Object> userInfoMap = getUserInfoMap();
-                        final ProgressDialog progressDialog = ProgressDialog.show(EditUserInfoActivity.this, "", "กำลังอัพเดตข้อมูล");
+                        progressDialog = ProgressDialog.show(EditUserInfoActivity.this, "", "กำลังอัพเดตข้อมูล");
                         if (selectedImage != null) {
                             storageReference.child(PROFILE_PHOTO_DIR + "/" + user + ".jpg").putFile(selectedImage, metadata)
                                     .addOnSuccessListener(
                                             new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                                 @Override
                                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                                    String profileUrl = taskSnapshot.getDownloadUrl().toString();
-                                                    userInfoMap.put(PROFILE_PHOTO_CHILD,profileUrl);
+                                                    final String profileUrl = taskSnapshot.getDownloadUrl().toString();
+                                                    userInfoMap.put(PROFILE_PHOTO_CHILD, profileUrl);
                                                     reference.child(USERS_CHILD).child(userUid).updateChildren(userInfoMap);
                                                     UserProfileChangeRequest.Builder profileBuilder = new UserProfileChangeRequest.Builder();
                                                     profileBuilder.setPhotoUri(Uri.parse(profileUrl));
+                                                    Map<String, Object> map = new HashMap<>();
+                                                    map.put("profilePhoto", profileUrl);
+                                                    reference.child(ConstantValue.DISPLAY_NAME_INDEX_CHILD).child(userUid).updateChildren(map);
                                                     FirebaseAuth.getInstance().getCurrentUser().updateProfile(profileBuilder.build());
                                                     Toast.makeText(EditUserInfoActivity.this, "อัพเดตข้อมูลเสร็จสิ้น", Toast.LENGTH_SHORT).show();
                                                     progressDialog.dismiss();
                                                 }
                                             }
-                                    ).addOnFailureListener(
-                                    new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            progressDialog.dismiss();
-                                            Toast.makeText(EditUserInfoActivity.this, "ไม่สามารถอัพโหลดไฟล์รูปได้", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                            );
+                                    ).addOnFailureListener(failureListener);
                         } else {
                             reference.child(USERS_CHILD).child(userUid).updateChildren(userInfoMap);
                             progressDialog.dismiss();

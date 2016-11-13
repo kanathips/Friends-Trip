@@ -24,11 +24,11 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.UploadTask;
 import com.tinyandfriend.project.friendstrip.ConstantValue;
+import com.tinyandfriend.project.friendstrip.fragment.FragmentAddPlace;
+import com.tinyandfriend.project.friendstrip.fragment.FragmentAddTag;
 import com.tinyandfriend.project.friendstrip.FragmentPager;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.adapter.FragmentPagerAdapter;
-import com.tinyandfriend.project.friendstrip.fragment.FragmentAddPlace;
-import com.tinyandfriend.project.friendstrip.fragment.FragmentAddTag;
 import com.tinyandfriend.project.friendstrip.info.FileInfo;
 import com.tinyandfriend.project.friendstrip.info.TripInfo;
 import com.tinyandfriend.project.friendstrip.view.NoSwipeViewPager;
@@ -137,7 +137,7 @@ public class CreateTripActivity extends AppCompatActivity {
         for(String tagName: tags){
             Map<String, Object> map = new HashMap<>();
             map.put(tripId, true);
-            reference.child(ConstantValue.TAGINDEX_CHILD).child(tagName).updateChildren(map);
+            reference.child(ConstantValue.TAG_INDEX_CHILD).child(tagName).updateChildren(map);
         }
     }
 

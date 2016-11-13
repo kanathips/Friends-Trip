@@ -29,20 +29,21 @@ import com.ramotion.foldingcell.FoldingCell;
 import com.tinyandfriend.project.friendstrip.ConstantValue;
 import com.tinyandfriend.project.friendstrip.MapUtils;
 import com.tinyandfriend.project.friendstrip.R;
-import com.tinyandfriend.project.friendstrip.info.CardViewInfo;
+import com.tinyandfriend.project.friendstrip.info.TripCardViewInfo;
 import com.tinyandfriend.project.friendstrip.info.PlaceInfo;
 import com.tinyandfriend.project.friendstrip.info.TripInfo;
 import com.tinyandfriend.project.friendstrip.info.UserInfo;
+import com.tinyandfriend.project.friendstrip.view.ProfileDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class TripRoomCardViewAdapter extends RecyclerView.Adapter<TripRoomCardViewAdapter.TripRoomHolder> {
+public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapter.TripRoomHolder> {
 
     private Context mContext;
-    private List<CardViewInfo> albumList;
+    private List<TripCardViewInfo> albumList;
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     private static final String USERS_CHILD = "users";
     private static final String TRIP_CHILD = "tripRoom";
@@ -50,15 +51,12 @@ public class TripRoomCardViewAdapter extends RecyclerView.Adapter<TripRoomCardVi
     private static final String OWNER_UID = "ownerUID";
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseUser user = firebaseAuth.getCurrentUser();
-    String userUid = user.getUid();
+    private String userUid = user.getUid();
     private int widthPixels;
     private int heightPixels;
 
     class TripRoomHolder extends RecyclerView.ViewHolder {
-        //        TextView titles, tripStart,count;
-//        ImageView thumbnail;
-//        TextView tripEnd;
-//        CardView cardView;
+
         TextView title, spoil_trip, date_trip, count_people;
         TextView title_content, count_content, name_content, email_content, fromDate, toDate;
         ImageView title_thumbnail, head_image;
@@ -90,17 +88,10 @@ public class TripRoomCardViewAdapter extends RecyclerView.Adapter<TripRoomCardVi
             content_location_bt = (Button) itemView.findViewById(R.id.content_location_btn);
             profile_dialog = (RelativeLayout) itemView.findViewById(R.id.profile_dialog);
 
-
-//            titles = (TextView) itemView.findViewById(R.id.name_card);
-//            tripStart = (TextView) itemView.findViewById(R.id.trip_start);
-//            tripEnd = (TextView) itemView.findViewById(R.id.trip_end);
-//            count = (TextView) itemView.findViewById(R.id.count_people);
-//            thumbnail = (ImageView) itemView.findViewById(R.id.image_card);
-//            cardView = (CardView) itemView.findViewById(R.id.card_view);
         }
     }
 
-    public TripRoomCardViewAdapter(Context mContext, List<CardViewInfo> albumList, int pixelWidth, int pixelHeight) {
+    public TripCardViewAdapter(Context mContext, List<TripCardViewInfo> albumList, int pixelWidth, int pixelHeight) {
         this.mContext = mContext;
         this.albumList = albumList;
         this.widthPixels = pixelWidth;
@@ -118,7 +109,7 @@ public class TripRoomCardViewAdapter extends RecyclerView.Adapter<TripRoomCardVi
     @Override
     public void onBindViewHolder(final TripRoomHolder holder, int position) {
 
-        final CardViewInfo album = albumList.get(position);
+        final TripCardViewInfo album = albumList.get(position);
 
         holder.title.setText(album.getName_card());
         holder.spoil_trip.setText(album.getTripSpoil());
@@ -198,7 +189,6 @@ public class TripRoomCardViewAdapter extends RecyclerView.Adapter<TripRoomCardVi
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialog_map);
                 dialog.show();
-                final GoogleMap googleMap;
                 final MapUtils[] mapUtils = new MapUtils[1];
 
                 final ArrayList<PlaceInfo> placeInfos = new ArrayList<>();
@@ -215,7 +205,7 @@ public class TripRoomCardViewAdapter extends RecyclerView.Adapter<TripRoomCardVi
                     }
                 });
 
-                reference.child(ConstantValue.TRIPROOM_CHILD).child(album.getTripId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                reference.child(ConstantValue.TRIP_ROOM_CHILD).child(album.getTripId()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         TripInfo tripInfo = dataSnapshot.getValue(TripInfo.class);
@@ -238,102 +228,29 @@ public class TripRoomCardViewAdapter extends RecyclerView.Adapter<TripRoomCardVi
         });
 
 
-
-
         holder.profile_dialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog dialog = new Dialog(mContext);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.profile_dialog);
-                dialog.show();
 
-                final CircleImageView circleImageView = (CircleImageView) dialog.findViewById(R.id.user_profile_photo);
-                final TextView userName_dialog = (TextView) dialog.findViewById(R.id.user_profile_name_dialog);
-                final TextView userEmail_dialog = (TextView)dialog.findViewById(R.id.user_profile_email_dialog);
+                reference.child(TRIP_CHILD).child(album.getTripId()).child(OWNER_UID).addListenerForSingleValueEvent(
+                        new ValueEventListener() {
 
-
-                reference.child(TRIP_CHILD).child(album.getTripId()).child(OWNER_UID).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            String owner_uid = dataSnapshot.getValue(String.class);
-
-                            if(owner_uid.equals(userUid)){
-                                ImageView imageView = (ImageView) dialog.findViewById(R.id.add_friend);
-                                imageView.setVisibility(View.INVISIBLE);
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    String ownerUid = dataSnapshot.getValue(String.class);
+                                    ProfileDialog profileDialog = new ProfileDialog(mContext, ownerUid, reference);
+                                    profileDialog.show();
+                                }
                             }
 
-                            reference.child(USERS_CHILD).child(owner_uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
 
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if (dataSnapshot.exists()) {
-                                        UserInfo userInfo = dataSnapshot.getValue(UserInfo.class);
-
-                                        userName_dialog.setText(userInfo.getDisplayName());
-                                        userEmail_dialog.setText(userInfo.getEmail());
-
-                                        if (userInfo.getProfilePhoto() != null && !userInfo.getProfilePhoto().isEmpty()) {
-                                            Glide.with(mContext)
-                                                    .load(userInfo.getProfilePhoto()).centerCrop()
-                                                    .into(circleImageView);
-                                        }
-                                    }
-
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                }
-                            });
-
-                        }
-
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(mContext, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-
-
-
+                            }
+                        });
             }
         });
-
-
-//        holder.titles.setText(album.getName_card());
-//        holder.tripStart.setText(album.getTripStart());
-//        holder.tripEnd.setText(album.getTripEnd());
-//        holder.count.setText(Integer.toString(album.getCount_people()));
-//
-//        if (album.getThumbnail() != null) {
-//            Glide.with(mContext)
-//                    .load(album.getThumbnail()).centerCrop()
-//                    .into(holder.thumbnail);
-//
-//
-//            holder.cardView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent(mContext, JoinDetailActivity.class);
-//                    intent.putExtra("key_room",album.getTripId());
-//                    intent.putExtra("start_date",holder.tripStart.getText().toString());
-//                    intent.putExtra("end_date",holder.tripEnd.getText().toString());
-//                    intent.putExtra("count_people",holder.count.getText().toString());
-//                    intent.putExtra("name_trip",holder.titles.getText().toString());
-//                    intent.putExtra("pic_thumbnail",album.getThumbnail().toString());
-//
-//                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, holder.thumbnail, "profile");
-//
-//                    mContext.startActivity(intent, options.toBundle());
-//                }
-//            });
-//        }
     }
 
 

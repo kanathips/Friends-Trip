@@ -2,6 +2,7 @@ package com.tinyandfriend.project.friendstrip.activity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -10,6 +11,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -18,20 +24,30 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.tinyandfriend.project.friendstrip.AcceptFriendNotification;
+import com.tinyandfriend.project.friendstrip.ConstantValue;
 import com.tinyandfriend.project.friendstrip.R;
-import com.tinyandfriend.project.friendstrip.info.FriendListInfo;
+import com.tinyandfriend.project.friendstrip.info.FriendInfo;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.tinyandfriend.project.friendstrip.info.FriendStatus.Approving;
 import static com.tinyandfriend.project.friendstrip.info.FriendStatus.Pending;
 
 public class AddFriendActivity extends AppCompatActivity {
 
-    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     private Button addButton;
     private TextView targetNameTextView;
     private ProgressDialog progressDialog;
+    private String userUid;
+    private String userDisplayName;
+    private ArrayList<ValueEventListener> listeners;
+    private CircleImageView friendPhoto;
+    private String userProfilePhotoUrl;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,72 +57,112 @@ public class AddFriendActivity extends AppCompatActivity {
         targetNameTextView = (TextView) findViewById(R.id.target_name);
         progressDialog = new ProgressDialog(this);
         Button searchButton = (Button) findViewById(R.id.search_button);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        userUid = user.getUid();
+        userDisplayName = user.getDisplayName();
+        if (user.getPhotoUrl() == null) {
+            userProfilePhotoUrl = null;
+        } else {
+            userProfilePhotoUrl = user.getPhotoUrl().toString();
+        }
+        listeners = new ArrayList<>();
+        friendPhoto = (CircleImageView) findViewById(R.id.friend_photo);
+
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onclickSearch(v);
+                String searchText = ((EditText) findViewById(R.id.search_text)).getText().toString();
+                onclickSearch(searchText);
             }
         });
     }
-//
-//    @Nullable
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        rootView = inflater.inflate(R.layout.activity_add_friend, container, false);
-//        addButton = (Button) rootView.findViewById(R.id.add_friend_button);
-//        context = getContext();
-//        targetNameTextView = (TextView) rootView.findViewById(R.id.target_name);
-//        progressDialog = new ProgressDialog(context);
-//        Button searchButton = (Button) rootView.findViewById(R.id.search_button);
-//        searchButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onclickSearch(v);
-//            }
-//        });
-//
-//        return rootView;
-//    }
 
-    public void onclickSearch(View view) {
-        String searchText = ((EditText) findViewById(R.id.search_text)).getText().toString();
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    public void onclickSearch(String searchText) {
+
         progressDialog.setMessage("กำลังค้นหา");
         progressDialog.show();
 
-        assert user != null;
-        if (searchText.equals(user.getDisplayName())) {
+        if (searchText.equals(userDisplayName) || searchText.isEmpty()) {
+            targetNameTextView.setText(null);
+            friendPhoto.setVisibility(View.INVISIBLE);
+            friendPhoto.setImageBitmap(null);
+            targetNameTextView.setVisibility(View.INVISIBLE);
+            addButton.setVisibility(View.INVISIBLE);
+            addButton.setOnClickListener(null);
+            progressDialog.dismiss();
             return;
         }
 
-        Query query = databaseReference.child("displayNameIndex").orderByChild("displayName").equalTo(searchText);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        ValueEventListener listener = new ValueEventListener() {
+
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    final String targetUID;
-                    String targetName;
+                    final String targetUid;
+                    final String targetProfilePhotoUrl;
+
                     DataSnapshot target;
                     Iterator<DataSnapshot> o = dataSnapshot.getChildren().iterator();
 
                     if (o.hasNext()) {
                         target = o.next();
-                        targetUID = target.getKey();
-                        targetName = target.child("displayName").getValue().toString();
+                        if (!target.child("displayName").exists()) {
+                            targetNameTextView.setText("ไม่พบผู้ใช้งาน");
+                            targetNameTextView.setVisibility(View.VISIBLE);
+                            addButton.setVisibility(View.INVISIBLE);
+                            addButton.setOnClickListener(null);
+                            progressDialog.dismiss();
+                            return;
+                        }
+                        targetUid = target.getKey();
+
+                        final String targetName = target.child("displayName").getValue().toString();
                         targetNameTextView.setVisibility(View.VISIBLE);
                         targetNameTextView.setText(targetName);
-                        addButton.setVisibility(View.VISIBLE);
-                        addButton.setOnClickListener(new View.OnClickListener() {
+                        friendPhoto.setVisibility(View.VISIBLE);
+                        if (target.child("profilePhoto").exists()) {
+                            targetProfilePhotoUrl = target.child("profilePhoto").getValue().toString();
+                            Glide.with(AddFriendActivity.this).load(targetProfilePhotoUrl).centerCrop().into(friendPhoto);
+                        } else {
+                            targetProfilePhotoUrl = null;
+                        }
+                        ValueEventListener friendCheckListener = new ValueEventListener() {
                             @Override
-                            public void onClick(View v) {
-                                addFriend(targetUID, user.getUid());
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                addButton.setVisibility(View.VISIBLE);
+                                if (dataSnapshot.exists()) {
+
+                                    addButton.setEnabled(false);
+                                    addButton.setText("เป็นเพื่อนกันแล้ว");
+                                } else {
+                                    addButton.setEnabled(true);
+                                    addButton.setText("เพิ่มเพื่อน");
+                                    addButton.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            FriendInfo targetFriendInfo = new FriendInfo(targetName, targetUid, targetProfilePhotoUrl, Pending);
+                                            FriendInfo senderFriendInfo = new FriendInfo(userDisplayName, userUid, userProfilePhotoUrl, Approving);
+                                            addFriend(targetFriendInfo, senderFriendInfo);
+                                        }
+                                    });
+                                }
                             }
-                        });
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        };
+                        reference.child(ConstantValue.FRIEND_LIST_CHILD).child(userUid).child(targetUid).addListenerForSingleValueEvent(friendCheckListener);
+                        listeners.add(friendCheckListener);
                     } else {
                         targetNameTextView.setText(null);
                         targetNameTextView.setVisibility(View.INVISIBLE);
                         addButton.setVisibility(View.INVISIBLE);
                         addButton.setOnClickListener(null);
+                        friendPhoto.setImageBitmap(null);
+                        friendPhoto.setVisibility(View.INVISIBLE);
                     }
 
                 } else {
@@ -123,75 +179,77 @@ public class AddFriendActivity extends AppCompatActivity {
                 Toast.makeText(AddFriendActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
             }
-        });
+        };
+
+        Query query = reference.child(ConstantValue.DISPLAY_NAME_INDEX_CHILD).orderByChild("displayName").equalTo(searchText);
+        query.addListenerForSingleValueEvent(listener);
+        listeners.add(listener);
+
     }
 
     /***
-     * Add UID and status of sender to receiver Child in friendTerm Node in firebase DB
-     * then Add UID and status of receiver to sender child in friendTerm Node in firebase
-     *
-     * @param targetUID the UID of target
-     * @param senderUID the UID of sender
      */
-    private void addFriend(final String targetUID, final String senderUID) {
+//    private void addFriend(final String targetUID, final String senderUID, String friendProfilePhotoUrl, String userProfilePhoto) {
+    private void addFriend(final FriendInfo targetFriendInfo, final FriendInfo senderFriendInfo) {
         final ProgressDialog tempProgressDialog = new ProgressDialog(this);
         final int[] checkStatus = {1};
 
-        tempProgressDialog.show();
         tempProgressDialog.setMessage("กำลังเพิ่มเพื่อน");
+        tempProgressDialog.show();
 
-        databaseReference.child("users").child(senderUID).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    String username = dataSnapshot.child("displayName").getValue(String.class);
-                    String userPhotoUri = dataSnapshot.child("profilePicture").getValue(String.class);
-                    FriendListInfo friendListInfo = new FriendListInfo(userPhotoUri, username, Pending);
-                    databaseReference.child("friendTerm").child(targetUID).setValue(friendListInfo);
-                    if (checkStatus[0] >= 2) {
-                        tempProgressDialog.dismiss();
-                    } else {
-                        checkStatus[0]++;
+        //sender
+        reference.child(ConstantValue.FRIEND_LIST_CHILD).child(senderFriendInfo.getFriendUid()).child(targetFriendInfo.getFriendUid()).setValue(targetFriendInfo)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        checkAddComplete(checkStatus, tempProgressDialog);
                     }
-                }
-            }
+                });
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                if (checkStatus[0] >= 2) {
-                    tempProgressDialog.dismiss();
-                } else {
-                    checkStatus[0]++;
-                }
-            }
-        });
-
-        databaseReference.child("users").child(targetUID).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    String username = dataSnapshot.child("displayName").getValue(String.class);
-                    String userPhotoUri = dataSnapshot.child("profilePicture").getValue(String.class);
-                    FriendListInfo friendListInfo = new FriendListInfo(userPhotoUri, username, Approving);
-                    databaseReference.child("friendTerm").child(senderUID).setValue(friendListInfo);
-
-                    if (checkStatus[0] >= 2) {
-                        tempProgressDialog.dismiss();
-                    } else {
-                        checkStatus[0]++;
+        //target
+        reference.child(ConstantValue.FRIEND_LIST_CHILD).child(targetFriendInfo.getFriendUid()).child(senderFriendInfo.getFriendUid()).setValue(senderFriendInfo)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            AcceptFriendNotification acceptFriendNotification = new AcceptFriendNotification(senderFriendInfo);
+                            reference.child(ConstantValue.NOTIFICATION_CHILD).child(targetFriendInfo.getFriendUid()).push().setValue(acceptFriendNotification)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            checkAddComplete(checkStatus, tempProgressDialog);
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            checkAddComplete(checkStatus, tempProgressDialog);
+                                        }
+                                    });
+                        } else {
+                            checkAddComplete(checkStatus, tempProgressDialog);
+                        }
                     }
-                }
-            }
+                });
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                if (checkStatus[0] >= 2) {
-                    tempProgressDialog.dismiss();
-                } else {
-                    checkStatus[0]++;
-                }
-            }
-        });
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (reference != null) {
+            for (ValueEventListener listener : listeners) {
+                reference.removeEventListener(listener);
+            }
+            listeners.clear();
+        }
+    }
+
+    private void checkAddComplete(int[] checkStatus, ProgressDialog tempProgressDialog) {
+        if (checkStatus[0] >= 2) {
+            tempProgressDialog.dismiss();
+        } else {
+            checkStatus[0]++;
+        }
     }
 }

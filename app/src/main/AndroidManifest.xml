@@ -31,8 +31,6 @@
         <activity
             android:name=".activity.JoinDetailActivity"
             android:parentActivityName=".activity.MainActivity" />
-
-
         <activity android:name=".activity.SignInActivity" />
         <activity android:name=".activity.SignUpActivity" />
         <activity android:name=".activity.AddFriendActivity" />
@@ -51,6 +49,7 @@
         <activity android:name=".activity.AddPlaceActivity" />
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.ChatActivity" />
+        <activity android:name=".activity.FindTripWithTagActivity"></activity>
     </application>
 
 </manifest>
