@@ -36,6 +36,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Fr
             friendName = (TextView)itemView.findViewById(R.id.friend_name);
         }
     }
+
     public FriendListAdapter(Context context, List<FriendInfo> friendList, DatabaseReference reference) {
         this.context = context;
         this.friendList = friendList;

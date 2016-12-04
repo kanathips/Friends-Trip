@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/noti_photo"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_gravity="center_vertical"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="MESSAGE"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:id="@+id/noti_message"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="end"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/accept_button"
+            android:textColor="@color/white"
+            android:background="@color/colorGreen"
+            android:layout_gravity="center_vertical"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:text="ยอมรับ"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/denied_button"
+            android:textColor="@color/white"
+            android:background="@color/colorRed"
+            android:layout_marginLeft="8dp"
+            android:layout_gravity="center_vertical"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:text="ไม่ยอมรับ"/>
+    </LinearLayout>
+</LinearLayout>

@@ -46,6 +46,7 @@ public class CreateTripActivity extends AppCompatActivity {
     private ArrayList<FragmentPager> fragmentPagers;
     private TripInfo tripInfo;
     private StorageMetadata metadata;
+    private DatabaseReference reference;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,7 +104,7 @@ public class CreateTripActivity extends AppCompatActivity {
                                 final FragmentAddTag addTagFragment = (FragmentAddTag) currentFragment;
                                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                                 tripInfo.setOwnerUID(user.getUid());
-                                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+                                reference = FirebaseDatabase.getInstance().getReference();
                                 final DatabaseReference tripRoomReference = reference.child("tripRoom").push();
                                 String tripId = tripRoomReference.getKey();
                                 pushTagIndex(reference, tripInfo.getTag().keySet(), tripId);
@@ -179,11 +180,11 @@ public class CreateTripActivity extends AppCompatActivity {
 
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
-    private void uploadFile(final ArrayList<FileInfo> fileInfos, final int position, final DatabaseReference reference, final ProgressDialog processDialog, final ArrayList<String> successFiles) {
+    private void uploadFile(final ArrayList<FileInfo> fileInfos, final int position, final DatabaseReference tripReference, final ProgressDialog processDialog, final ArrayList<String> successFiles) {
         Uri uri = fileInfos.get(position).getUri();
         final String fileName = fileInfos.get(position).getFileName();
 
-        UploadTask uploadTask = storage.getReference().child(reference.getKey() + "/trip_document/" + fileName).putFile(uri, metadata);
+        UploadTask uploadTask = storage.getReference().child(tripReference.getKey() + "/trip_document/" + fileName).putFile(uri, metadata);
         uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
@@ -206,11 +207,11 @@ public class CreateTripActivity extends AppCompatActivity {
                 if (position + 1 == fileInfos.size()) {
                     processDialog.setMessage("อัพโหลดเสร็จสิ้น");
                     tripInfo.setFiles(successFiles);
-                    reference.setValue(tripInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    tripReference.setValue(tripInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            updateTripRoom(reference, reference.getKey(), user.getUid());
+                            updateTripRoom(tripReference, tripReference.getKey(), user.getUid());
                             processDialog.dismiss();
                             CreateTripActivity.this.finish();
                         }
@@ -222,11 +223,11 @@ public class CreateTripActivity extends AppCompatActivity {
     }
 
 
-    private void updateTripRoom(final DatabaseReference reference, final String tripId, final String userUid){
-        DatabaseReference tripReference = reference.child("members");
+    private void updateTripRoom(final DatabaseReference tripReference, final String tripId, final String userUid){
+        DatabaseReference tripMemberReference = tripReference.child("members");
         Map<String, Object> map = new HashMap<>();
         map.put(userUid, true);
-        tripReference.updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+        tripMemberReference.updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 updateUserProfile(reference, tripId, userUid);
