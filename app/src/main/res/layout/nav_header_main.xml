@@ -16,7 +16,6 @@
         android:id="@+id/user_profile_photo"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_below="@+id/header_cover_image"
         android:src="@drawable/ic_account_circle_white_24dp"
         android:elevation="5dp" />
 
@@ -24,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Android Studio"
+        android:text="USER_DISPLAY_NAME"
         android:id="@+id/username_nav_header"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
@@ -32,7 +31,7 @@
         android:id="@+id/email_nav_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="android.studio@android.com" />
+        android:text="USER_EMAIL" />
 
 
 

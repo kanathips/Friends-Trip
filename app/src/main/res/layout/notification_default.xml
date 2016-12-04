@@ -6,20 +6,20 @@
     android:background="@color/white">
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/noti_photo"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:src="@drawable/ic_account_circle_white_24dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_gravity="center_vertical"
-        android:id="@+id/friend_photo"/>
+        android:layout_gravity="center_vertical"/>
 
     <TextView
-        android:id="@+id/friend_name"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:layout_gravity="center_vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="NOTIFICATION_MESSAGE"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:id="@+id/noti_message"/>
 </LinearLayout>

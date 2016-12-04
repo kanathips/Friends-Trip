@@ -141,8 +141,8 @@ public class AddFriendActivity extends AppCompatActivity {
                                     addButton.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            FriendInfo targetFriendInfo = new FriendInfo(targetName, targetUid, targetProfilePhotoUrl, Pending);
-                                            FriendInfo senderFriendInfo = new FriendInfo(userDisplayName, userUid, userProfilePhotoUrl, Approving);
+                                            FriendInfo targetFriendInfo = new FriendInfo(targetName, targetUid, Pending);
+                                            FriendInfo senderFriendInfo = new FriendInfo(userDisplayName, userUid, Approving);
                                             addFriend(targetFriendInfo, senderFriendInfo);
                                         }
                                     });

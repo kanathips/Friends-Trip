@@ -69,7 +69,6 @@ public class FriendInfo {
         this.friendName = friendName;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -77,7 +76,8 @@ public class FriendInfo {
 
         FriendInfo that = (FriendInfo) o;
 
-        return friendName.equals(that.friendName);
+        return friendUid != null ? friendUid.equals(that.friendUid) : that.friendUid == null;
+
     }
 
     @Override

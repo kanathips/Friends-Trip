@@ -24,9 +24,8 @@ import com.tinyandfriend.project.friendstrip.adapter.NotificationAdapter;
 import com.tinyandfriend.project.friendstrip.info.NotificationType;
 
 import java.util.ArrayList;
-import java.util.TreeMap;
 
-public class FragmentNotification extends Fragment {
+public class FragmentFriendNotification extends Fragment {
 
     private View rootView;
     private ChildEventListener listener;
@@ -38,8 +37,8 @@ public class FragmentNotification extends Fragment {
     private NotificationAdapter notificationAdapter;
     private ArrayList<Notification> notificationList;
 
-    public static FragmentNotification newInstance(String userUid) {
-        FragmentNotification fragment = new FragmentNotification();
+    public static FragmentFriendNotification newInstance(String userUid) {
+        FragmentFriendNotification fragment = new FragmentFriendNotification();
         Bundle args = new Bundle();
         args.putString(USER_UID, userUid);
         fragment.setArguments(args);
@@ -65,9 +64,7 @@ public class FragmentNotification extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_notification, container, false);
-        Toast.makeText(context, "B4 LOAD", Toast.LENGTH_SHORT).show();
         loadNotification(reference, userUid);
-        Toast.makeText(context, "AFTER LOAD", Toast.LENGTH_SHORT).show();
         notificationArea = (RecyclerView)rootView.findViewById(R.id.notification_area);
         notificationList = new ArrayList<>();
         notificationAdapter = new NotificationAdapter(context, notificationList);
@@ -94,12 +91,12 @@ public class FragmentNotification extends Fragment {
                         return;
                     }
                     switch (notificationType) {
-//                        case AcceptFriend:
-//                            notification = dataSnapshot.getValue(AcceptFriendNotification.class);
-//                            notification.setId(notificationId);
-//                            notificationList.add(notification);
-//                            notificationAdapter.notifyDataSetChanged();
-//                            break;
+                        case AcceptFriend:
+                            notification = dataSnapshot.getValue(AcceptFriendNotification.class);
+                            notification.setId(notificationId);
+                            notificationList.add(notification);
+                            notificationAdapter.notifyDataSetChanged();
+                            break;
                     }
                 }
             }

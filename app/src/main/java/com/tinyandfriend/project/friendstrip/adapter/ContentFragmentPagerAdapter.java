@@ -54,22 +54,18 @@ public class ContentFragmentPagerAdapter extends FragmentPagerAdapter implements
 
     public Fragment getItem(int position) {
 
-        switch (position) {
+        if (userUid != null && !userUid.isEmpty()) {
+            switch (position) {
 
-            case 0:
-                if (userUid != null && !userUid.isEmpty())
+                case 0:
                     return new FragmentJoin();
-
-//            case 1: return new FragmentJoin();
-
-            case 1:
-                if (userUid != null && !userUid.isEmpty())
+                case 1:
                     return FragmentNotification.newInstance(userUid);
 
-            case 2:
-                if (userUid != null && !userUid.isEmpty())
+                case 2:
                     return FragmentFriendList.newInstance(userUid);
 
+            }
         }
 
         return null;

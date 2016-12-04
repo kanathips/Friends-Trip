@@ -11,13 +11,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tinyandfriend.project.friendstrip.ConstantValue;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.activity.AddFriendActivity;
@@ -37,6 +37,8 @@ public class FragmentFriendList extends Fragment {
     private static final String USER_UID = "userUid";
     private ChildEventListener listener;
     private DatabaseReference reference;
+    private ValueEventListener friendProfileListener;
+    private Context context;
 
     public static FragmentFriendList newInstance(String userUid) {
         FragmentFriendList fragment = new FragmentFriendList();
@@ -49,27 +51,34 @@ public class FragmentFriendList extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        reference = FirebaseDatabase.getInstance().getReference();
+        friendList = new ArrayList<>();
+
         if (getArguments() != null) {
             userUid = getArguments().getString(USER_UID);
         }
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootview = inflater.inflate(R.layout.fragment_friend, container, false);
-        final Context context = getContext();
-        reference = FirebaseDatabase.getInstance().getReference();
+        View rootview = inflater.inflate(R.layout.fragment_friend_list, container, false);
         RecyclerView recyclerView = (RecyclerView) rootview.findViewById(R.id.friend_list);
 
-        friendList = new ArrayList<>();
+
 
         friendListAdapter = new FriendListAdapter(context, friendList, reference);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(friendListAdapter);
         friendListAdapter.notifyDataSetChanged();
-
 
         FloatingActionButton fab = (FloatingActionButton) rootview.findViewById(R.id.fab);
         fab.setOnClickListener(
@@ -86,20 +95,39 @@ public class FragmentFriendList extends Fragment {
         return rootview;
     }
 
-    private void getFriendList(DatabaseReference reference, String userUid) {
+    private void getFriendList(final DatabaseReference reference, String userUid) {
 
         listener = new ChildEventListener() {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if (dataSnapshot.exists()) {
-                    FriendInfo friendInfo = dataSnapshot.getValue(FriendInfo.class);
+                    final FriendInfo friendInfo = dataSnapshot.getValue(FriendInfo.class);
                     FriendStatus status = friendInfo.getStatus();
 
                     if ((status != FriendStatus.Ban) && (status != FriendStatus.Approving) && !friendList.contains(friendInfo)) {
-                        friendList.add(friendInfo);
+                        friendProfileListener = new ValueEventListener(){
+
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()){
+                                    String friendPhotoUrl = dataSnapshot.getValue(String.class);
+                                    friendInfo.setFriendPhotoUrl(friendPhotoUrl);
+                                }
+                                if(!friendList.contains(friendInfo)) {
+                                    friendList.add(friendInfo);
+                                }
+                                friendListAdapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        };
+
+                        reference.child(ConstantValue.USERS_CHILD).child(friendInfo.getFriendUid()).child(ConstantValue.PROFILE_PHOTO_CHILD).addListenerForSingleValueEvent(friendProfileListener);
                     }
-                    friendListAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -122,7 +150,11 @@ public class FragmentFriendList extends Fragment {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                if(dataSnapshot.exists()) {
+                    FriendInfo friendInfo = dataSnapshot.getValue(FriendInfo.class);
+                    friendList.remove(friendInfo);
+                    friendListAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
