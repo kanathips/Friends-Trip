@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if(dataSnapshot.exists()){
                                 String tripId = dataSnapshot.getValue(String.class);
+                                contentFragmentPagerAdapter.setTripID(tripId);
                                 reference.child(ConstantValue.TRIP_ROOM_CHILD).child(tripId).child(ConstantValue.OWNER_UID).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {

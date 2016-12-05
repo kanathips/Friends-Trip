@@ -25,17 +25,16 @@ public class FragmentRoomJoiner extends Fragment {
     private DatabaseReference reference;
     private FirebaseUser user;
     private String userUid;
-    private int type;
-
+    private String tripID;
     public FragmentRoomJoiner() {
         // Required empty public constructor
     }
 
-    public static FragmentRoomJoiner newInstance(String userUid, int type) {
+    public static FragmentRoomJoiner newInstance(String userUid,String tripID) {
         FragmentRoomJoiner fragment = new FragmentRoomJoiner();
         Bundle args = new Bundle();
         args.putString(ConstantValue.USER_UID, userUid);
-        args.putInt("type", type);
+        args.putString(ConstantValue.TRIP_ID_CHILD, tripID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,7 +47,7 @@ public class FragmentRoomJoiner extends Fragment {
 
         if (getArguments() != null) {
             userUid = getArguments().getString(ConstantValue.USER_UID);
-            type = getArguments().getInt("type");
+            tripID = getArguments().getString(ConstantValue.TRIP_ID_CHILD);
         }
     }
 

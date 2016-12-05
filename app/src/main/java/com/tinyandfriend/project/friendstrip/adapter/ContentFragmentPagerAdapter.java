@@ -28,6 +28,7 @@ import com.tinyandfriend.project.friendstrip.fragment.FragmentRoomJoiner;
 public class ContentFragmentPagerAdapter extends FragmentPagerAdapter implements PagerSlidingTabStrip.IconTabProvider{
 
     private String userUid;
+    private String tripID;
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     private final int PAGE_COUNT = 4;
     public static String tabTitles[] = new String[]{"จัดการทริป","เข้าร่วมทริป", "การแจ้งเตือน", "คำร้องขอ"};
@@ -42,6 +43,10 @@ public class ContentFragmentPagerAdapter extends FragmentPagerAdapter implements
 
     public void setUserUid(String userUid) {
         this.userUid = userUid;
+    }
+
+    public void setTripID(String tripID) {
+        this.tripID = tripID;
     }
 
     @Override
@@ -60,11 +65,11 @@ public class ContentFragmentPagerAdapter extends FragmentPagerAdapter implements
                 case 0:
                     switch (joinType){
                         case 0:
-                            return new FragmentRoomHost();
+                            return FragmentRoomHost.newInstance(userUid,tripID);
                         case 1:
-                            return new FragmentRoomJoiner();
+                            return FragmentRoomJoiner.newInstance(userUid,tripID);
                         case 2:
-                            return new FragmentRoomDefault();
+                            return FragmentRoomDefault.newInstance(userUid,tripID);
                     }
                     return new FragmentRoomDefault();
                 case 1:

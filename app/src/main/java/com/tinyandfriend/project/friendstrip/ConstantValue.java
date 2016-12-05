@@ -19,4 +19,6 @@ public class ConstantValue {
 
     public static final String OWNER_UID ="ownerUID";
     public static final String USER_UID = "userUID";
+    public static final String THUMB_NAIL = "thumbnail";
+    public static final String TRIP_NAME = "tripName";
 }
