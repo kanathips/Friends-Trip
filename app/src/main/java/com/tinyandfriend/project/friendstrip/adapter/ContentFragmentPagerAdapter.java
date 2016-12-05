@@ -15,7 +15,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.fragment.FragmentFriendList;
 import com.tinyandfriend.project.friendstrip.fragment.FragmentFriendNotification;
-import com.tinyandfriend.project.friendstrip.fragment.FragmentJoin;
+import com.tinyandfriend.project.friendstrip.fragment.FragmentTripFriendJoined;
 import com.tinyandfriend.project.friendstrip.fragment.FragmentNotification;
 
 
@@ -56,7 +56,7 @@ public class ContentFragmentPagerAdapter extends FragmentPagerAdapter implements
         if (userUid != null && !userUid.isEmpty()) {
             switch (position) {
                 case 0:
-                    return FragmentJoin.newInstance(userUid);
+                    return FragmentTripFriendJoined.newInstance(userUid);
                 case 1:
                     return FragmentFriendList.newInstance(userUid);
                 case 2:

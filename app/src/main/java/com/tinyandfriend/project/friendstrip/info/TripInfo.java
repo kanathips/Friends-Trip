@@ -22,6 +22,7 @@ public class TripInfo {
     private String ownerUID;
     private String thumbnail;
     private String status = "open";
+    private PlaceInfo appointPlace;
 
 
     public String getThumbnail() {
@@ -152,6 +153,14 @@ public class TripInfo {
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
+    }
+
+    public void setAppointPlace(PlaceInfo appointPlace) {
+        this.appointPlace = appointPlace;
+    }
+
+    public PlaceInfo getAppointPlace() {
+        return appointPlace;
     }
 }
 

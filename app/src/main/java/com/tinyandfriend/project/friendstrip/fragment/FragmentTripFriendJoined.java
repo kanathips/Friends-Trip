@@ -38,7 +38,7 @@ import java.util.List;
 
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 
-public class FragmentJoin extends Fragment {
+public class FragmentTripFriendJoined extends Fragment {
 
     private List<TripCardViewInfo> tripList;
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
@@ -49,8 +49,8 @@ public class FragmentJoin extends Fragment {
     private static final String USER_UID = "userUid";
     private String userUid;
 
-    public static FragmentJoin newInstance(String userUid) {
-        FragmentJoin fragment = new FragmentJoin();
+    public static FragmentTripFriendJoined newInstance(String userUid) {
+        FragmentTripFriendJoined fragment = new FragmentTripFriendJoined();
         Bundle args = new Bundle();
         args.putString(USER_UID, userUid);
         fragment.setArguments(args);
@@ -76,7 +76,7 @@ public class FragmentJoin extends Fragment {
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment__join, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment__trip_friend_joined, container, false);
 
 
         pixelWidth = getResources().getDisplayMetrics().widthPixels;

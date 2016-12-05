@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -36,6 +37,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -63,6 +65,8 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
     private int tripDuration;
     private ViewGroup infoWindow;
     private MapUtils mapUtils;
+    private PlaceInfo appointPlace;
+    private PlaceInfo originalAppointPlace;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -80,6 +84,11 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
         }
 
         tripDuration = (int) getIntent().getLongExtra("tripDuration", 0);
+
+        originalAppointPlace = getIntent().getParcelableExtra("appointPlace");
+//        if(originalAppointPlace == null){
+//            originalAppointPlace = new PlaceInfo();
+//        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -117,8 +126,8 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
                         return;
                     }
                 }
-                for(PlaceInfo info: originalPlaceInfos){
-                    if(info.getName().equals(marker.getTitle())){
+                for (PlaceInfo info : originalPlaceInfos) {
+                    if (info.getName().equals(marker.getTitle())) {
                         originalPlaceInfos.remove(info);
                         marker.remove();
                         return;
@@ -168,6 +177,8 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
                 originalPlaceInfos.addAll(placeInfos);
                 Intent intent = new Intent(this, CreateTripActivity.class);
                 intent.putParcelableArrayListExtra("placeInfos", originalPlaceInfos);
+                originalAppointPlace = appointPlace;
+                intent.putExtra("appointPlace", originalAppointPlace);
                 setResult(RESULT_OK, intent);
                 finish();
                 return true;
@@ -177,64 +188,74 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
     }
 
     private void setupAddPlaceFab(int tripDuration) {
-        if (tripDuration == 0 || tripDuration == 1) {
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_place_button);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (placeInfo == null)
-                        return;
-                    if (originalPlaceInfos.contains(placeInfo) || placeInfos.contains(placeInfo)) {
-                        Toast.makeText(AddPlaceActivity.this, "คุณเลือกสถานที่นี้ไปแล้ว", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    addPlace(placeInfos, placeInfo, googleMap);
+//        if (tripDuration == 0 || tripDuration == 1) {
+//            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_place_button);
+//            fab.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (placeInfo == null)
+//                        return;
+//                    if (originalPlaceInfos.contains(placeInfo) || placeInfos.contains(placeInfo)) {
+//                        Toast.makeText(AddPlaceActivity.this, "คุณเลือกสถานที่นี้ไปแล้ว", Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
+//                    addPlace(placeInfos, placeInfo, googleMap);
+//                }
+//            });
+//        } else {
+
+        ArrayList<String> fabSheetTexts = new ArrayList<>();
+        for (int i = 1; i <= tripDuration && i < 6; i++) {
+            String text = "วันที่ " + i;
+                fabSheetTexts.add(0, text);
+        }
+
+        fabSheetTexts.add("สถานที่นัดพบ");
+
+        if (tripDuration > 5) {
+            fabSheetTexts.add(0, "เพิ่มเติม");
+        }
+
+
+        SingleSheetFAB fab = (SingleSheetFAB) findViewById(R.id.add_place_button);
+        ListView sheetView = (ListView) findViewById(R.id.fab_sheet);
+        View overlay = findViewById(R.id.overlay);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, fabSheetTexts);
+        int sheetColor = getResources().getColor(R.color.fabBackGround);
+        int fabColor = getResources().getColor(R.color.colorPrimary);
+
+        sheetView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (placeInfo == null)
+                    return;
+                if (originalPlaceInfos.contains(placeInfo) || placeInfos.contains(placeInfo)) {
+                    Toast.makeText(AddPlaceActivity.this, "คุณเลือกสถานที่นี้ไปแล้ว", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-            });
-        } else {
-
-            ArrayList<String> fabSheetTexts = new ArrayList<>();
-
-            for (int i = 1; i <= tripDuration && i < 6; i++) {
-                String text = "วันที่ " + i;
-                fabSheetTexts.add(text);
-            }
-
-            if (tripDuration > 5) {
-                fabSheetTexts.add("เพิ่มเติม");
-            }
 
 
-            SingleSheetFAB fab = (SingleSheetFAB) findViewById(R.id.add_place_button);
-            ListView sheetView = (ListView) findViewById(R.id.fab_sheet);
-            View overlay = findViewById(R.id.overlay);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, fabSheetTexts);
-            int sheetColor = getResources().getColor(R.color.fabBackGround);
-            int fabColor = getResources().getColor(R.color.colorPrimary);
-
-            sheetView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    if (placeInfo == null)
-                        return;
-                    if (originalPlaceInfos.contains(placeInfo) || placeInfos.contains(placeInfo)) {
-                        Toast.makeText(AddPlaceActivity.this, "คุณเลือกสถานที่นี้ไปแล้ว", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if (position < 5) {
-                        placeInfo.setDay(position + 1);
+                if (position == placeInfos.size()) {
+                    if (position <= 5) {
+                        placeInfo.setDay(position);
                         addPlace(placeInfos, placeInfo, googleMap);
                     } else {
                         setupDialog(placeInfos, placeInfo, googleMap);
                     }
-                    materialSheetFab.hideSheet();
+                } else {
+                    if (originalAppointPlace != null && originalAppointPlace.equals(placeInfo)) {                        Toast.makeText(AddPlaceActivity.this, "คุณนัดไว้ที่สถานที่นี้", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    addAppointPlace(placeInfo, googleMap);
                 }
-            });
+                materialSheetFab.hideSheet();
+            }
+        });
 
-            sheetView.setAdapter(adapter);
-            materialSheetFab = new MaterialSheetFab<>(fab, sheetView, overlay,
-                    sheetColor, fabColor);
-        }
+        sheetView.setAdapter(adapter);
+        materialSheetFab = new MaterialSheetFab<>(fab, sheetView, overlay,
+                sheetColor, fabColor);
+//        }
     }
 
     @Override
@@ -246,6 +267,16 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
         } else {
             super.onBackPressed();
         }
+    }
+
+    private void addAppointPlace(PlaceInfo placeInfo, GoogleMap googleMap) {
+        if (placeInfo == null)
+            return;
+//        googleMap.clear();
+        appointPlace = placeInfo;
+        MapUtils mapUtils = new MapUtils(googleMap);
+        mapUtils.addMarkers(placeInfos);
+        mapUtils.addAppoint(appointPlace);
     }
 
     private void addPlace(ArrayList<PlaceInfo> placeInfos, PlaceInfo placeInfo, GoogleMap googleMap) {
@@ -306,10 +337,14 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
             options.position(info.getLocation().toGmsLatLng());
             options.title(info.getName());
             builder.include(info.getLocation().toGmsLatLng());
-            googleMap.addMarker(options).setTag(info.getDay());
+            googleMap.addMarker(options).setTag(info.getDay()+1);
         }
+        if (originalAppointPlace != null) {
 
 
+            builder.include(originalAppointPlace.getLocation().toGmsLatLng());
+            addAppointPlace(originalAppointPlace, googleMap );
+        }
 
         mapUtils.updateCamera(placeInfos, pixelWidth, pixelHeight);
     }
