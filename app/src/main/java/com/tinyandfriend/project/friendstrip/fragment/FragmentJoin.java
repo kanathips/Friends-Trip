@@ -7,7 +7,6 @@ package com.tinyandfriend.project.friendstrip.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -47,7 +46,6 @@ public class FragmentJoin extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment__join, container, false);
-
 
         pixelWidth = getResources().getDisplayMetrics().widthPixels;
         pixelHeight = getResources().getDisplayMetrics().heightPixels;

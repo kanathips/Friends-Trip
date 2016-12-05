@@ -38,10 +38,10 @@
 
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-
-
         <com.astuetz.PagerSlidingTabStrip
             android:background="@color/white"
+
+            android:layout_gravity="bottom"
 
             android:id="@+id/tabs"
 
@@ -65,11 +65,7 @@
 
         </com.astuetz.PagerSlidingTabStrip>
 
-
-
     </android.support.design.widget.AppBarLayout>
-
-
 
     <include layout="@layout/content_main" />
 
@@ -88,7 +84,6 @@
         <!--android:layout_margin="@dimen/fab_margin"-->
 
         <!--app:srcCompat="@drawable/ic_add_white_24dp" />-->
-
 
 
 

@@ -2,6 +2,7 @@
 <resources>
     <color name="colorblue">#3300FF</color>
     <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimarySecond">#008cf7</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <!--<color name="colorAccent">#167991</color>-->
@@ -24,6 +25,7 @@
     <color name="bgTitleLeft">#594691</color>
     <color name="bgTitleRight">#ffffff</color>
     <color name="bgContentTop">#594691</color>
+    <color name="pinkLow">#FFA8FF</color>
     <color name="bgContent">#ffffff</color>
     <color name="contentDividerLine">#e0e0e0</color>
     <color name="contentBadgeTitle">#a9a9a9</color>

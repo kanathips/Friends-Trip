@@ -62,7 +62,7 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
         ImageView title_thumbnail, head_image;
         CircleImageView content_avatar;
         FoldingCell foldingCell;
-        Button content_location_bt;
+        Button content_location_bt,content_join_bt;
         RelativeLayout profile_dialog;
 
 
@@ -86,6 +86,7 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
             toDate = (TextView) itemView.findViewById(R.id.content_to_date);
 
             content_location_bt = (Button) itemView.findViewById(R.id.content_location_btn);
+            content_join_bt = (Button) itemView.findViewById(R.id.content_request_btn);
             profile_dialog = (RelativeLayout) itemView.findViewById(R.id.profile_dialog);
 
         }
@@ -251,6 +252,7 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
                         });
             }
         });
+
     }
 
 

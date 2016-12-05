@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -24,9 +23,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.tinyandfriend.project.friendstrip.ConstantValue;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.adapter.ContentFragmentPagerAdapter;
 import com.tinyandfriend.project.friendstrip.info.UserInfo;
+import com.tinyandfriend.project.friendstrip.view.MainViewPager;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -40,12 +41,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String USERS_CHILD = "users";
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     private boolean stateFlag = true;
+    private Toolbar toolbar;
+    private boolean checkJoined = false;
+    private ContentFragmentPagerAdapter contentFragmentPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         firebaseAuth = FirebaseAuth.getInstance();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -53,7 +56,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         final View header = navigationView.getHeaderView(0);
 
-        final ContentFragmentPagerAdapter contentFragmentPagerAdapter = new ContentFragmentPagerAdapter(getSupportFragmentManager());
+        contentFragmentPagerAdapter = new ContentFragmentPagerAdapter(getSupportFragmentManager(),MainActivity.this);
+
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -77,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     userEmail = user.getEmail();
                     username_nav.setText(username);
                     email_nav.setText(userEmail);
-
+                    final String userUid = user.getUid();
                     reference.child(USERS_CHILD).child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -98,27 +102,67 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     });
 
 
-                    contentFragmentPagerAdapter.setUserUid(user.getUid());
+                    reference.child(ConstantValue.USERS_CHILD).child(userUid).child(ConstantValue.TRIP_ID_CHILD).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                String tripId = dataSnapshot.getValue(String.class);
+                                reference.child(ConstantValue.TRIP_ROOM_CHILD).child(tripId).child(ConstantValue.OWNER_UID).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()) {
+                                            String ownerUID = dataSnapshot.getValue(String.class);
+                                            if(userUid.equals(ownerUID)){
+                                                contentFragmentPagerAdapter.setJoinType(0);
+                                            }else{
+                                                contentFragmentPagerAdapter.setJoinType(1);
+                                            }
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
 
-                    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+                                    }
+                                });
+                            }else{
+                                contentFragmentPagerAdapter.setJoinType(2);
+                            }
 
-                    setSupportActionBar(toolbar);
+                            contentFragmentPagerAdapter.setUserUid(user.getUid());
 
-                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                    ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                            MainActivity.this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-                    drawer.setDrawerListener(toggle);
-                    toggle.syncState();
 
-                    ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-                    viewPager.setAdapter(contentFragmentPagerAdapter);
 
-                    PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-                    tabsStrip.setViewPager(viewPager);
+
+                            toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+                            setSupportActionBar(toolbar);
+
+                            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                                    MainActivity.this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                            drawer.setDrawerListener(toggle);
+                            toggle.syncState();
+
+                            MainViewPager viewPager = (MainViewPager) findViewById(R.id.viewpager);
+                            viewPager.setStatusJoined(checkJoined);
+                            viewPager.setAdapter(contentFragmentPagerAdapter);
+
+                            PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+                            tabsStrip.setViewPager(viewPager);
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
                 stateFlag = false;
             }
         };
+
+
     }
 
     @Override
@@ -142,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_friend) {
-            startActivity(new Intent(this, ChatActivity.class));
+//            startActivity(new Intent(this, ChatActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
