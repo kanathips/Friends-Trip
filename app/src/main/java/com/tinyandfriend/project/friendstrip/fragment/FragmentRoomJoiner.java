@@ -1,6 +1,7 @@
 package com.tinyandfriend.project.friendstrip.fragment;
 
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,15 +9,24 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.MapView;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tinyandfriend.project.friendstrip.ConstantValue;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.activity.ChatActivity;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class FragmentRoomJoiner extends Fragment {
@@ -58,6 +68,45 @@ public class FragmentRoomJoiner extends Fragment {
         createMap(view,savedInstanceState);
 
         Button chat_bt = (Button) view.findViewById(R.id.chat_detail);
+
+        final Button detail_trip = (Button) view.findViewById(R.id.room_detail);
+        final ImageView imageView = (ImageView) view.findViewById(R.id.image_detail);
+        final TextView room_name = (TextView) view.findViewById(R.id.room_name_text);
+        final TextView room_spoil = (TextView) view.findViewById(R.id.room_spoil_text);
+
+//        FloatingActionButton floatingActionButton = (FloatingActionButton) view.findViewById(R.id.config_trip);
+
+
+        reference = FirebaseDatabase.getInstance().getReference();
+        reference.child(ConstantValue.TRIP_ROOM_CHILD).child(tripID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DataSnapshot profilePhotoChild_thumb = dataSnapshot.child(ConstantValue.THUMB_NAIL);
+                DataSnapshot profilePhotoChild_text = dataSnapshot.child(ConstantValue.TRIP_NAME);
+                DataSnapshot profilePhotoChild_spoil = dataSnapshot.child(ConstantValue.TRIP_SPOIL);
+                if (profilePhotoChild_thumb.exists()) {
+                    String profilePhotoURL = profilePhotoChild_thumb.getValue(String.class);
+                    Glide.with(getActivity().getApplicationContext())
+                            .load(profilePhotoURL).centerCrop()
+                            .into(imageView);
+                }
+                if (profilePhotoChild_text.exists()) {
+                    String profilePhotoURL_text = profilePhotoChild_text.getValue(String.class);
+                    room_name.setText(profilePhotoURL_text);
+                }
+                if(profilePhotoChild_spoil.exists()){
+                    String profilePhotoURL_spoil = profilePhotoChild_spoil.getValue(String.class);
+                    room_spoil.setText(profilePhotoURL_spoil);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
         chat_bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,6 +114,78 @@ public class FragmentRoomJoiner extends Fragment {
                 startActivity(intent);
             }
         });
+
+        detail_trip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog dialog = new Dialog(getContext());
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.detail_joiner);
+                dialog.setCancelable(true);
+
+                final CircleImageView profile_host = (CircleImageView) dialog.findViewById(R.id.content_avatar_image);
+                final TextView name_host = (TextView) dialog.findViewById(R.id.content_name_view);
+                final TextView content_from_date = (TextView) dialog.findViewById(R.id.content_from_date);
+                final TextView content_to_date = (TextView) dialog.findViewById(R.id.content_to_date);
+                final TextView text_count = (TextView) dialog.findViewById(R.id.head_text_count);
+
+                reference.child(ConstantValue.TRIP_ROOM_CHILD).child(tripID).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        DataSnapshot dataSnapshot1 = dataSnapshot.child(ConstantValue.OWNER_UID);
+                        DataSnapshot from_date_snap = dataSnapshot.child(ConstantValue.TRIP_FROM_DATE);
+                        DataSnapshot to_date_snap = dataSnapshot.child(ConstantValue.TRIP_TO_DATE);
+                        DataSnapshot count_people = dataSnapshot.child(ConstantValue.TRIP_MAX_MEMBERS);
+                        if (dataSnapshot1.exists()) {
+                            reference.child(ConstantValue.USERS_CHILD).child(userUid).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    DataSnapshot profile_avatar = dataSnapshot.child(ConstantValue.PROFILE_PHOTO_CHILD);
+                                    DataSnapshot profile_name_host = dataSnapshot.child(ConstantValue.DISPLAY_NAME);
+                                    if (profile_avatar.exists() && profile_name_host.exists()) {
+                                        String profile_URL = profile_avatar.getValue(String.class);
+                                        String profile_URL_displayName = profile_name_host.getValue(String.class);
+
+                                        Glide.with(getActivity().getApplicationContext())
+                                                .load(profile_URL).centerCrop()
+                                                .into(profile_host);
+                                        name_host.setText(profile_URL_displayName);
+
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                        if(from_date_snap.exists() && to_date_snap.exists() && count_people.exists()){
+                            String from_date_string = from_date_snap.getValue(String.class);
+                            String to_date_string = to_date_snap.getValue(String.class);
+                            int count_people_string = count_people.getValue(Integer.class);
+
+                            content_from_date.setText(from_date_string);
+                            content_to_date.setText(to_date_string);
+                            text_count.setText(count_people_string+"");
+
+                        }
+
+                    }
+
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+                dialog.show();
+            }
+        });
+
+
 
         return view;
     }

@@ -18,7 +18,17 @@
         android:layout_marginBottom="90dp"
         android:text="Room"
         android:textColor="@color/white"
-        android:textSize="20dp" />
+        android:textSize="30dp" />
+    <TextView
+        android:textColor="@color/white"
+        android:text="Room"
+        android:textSize="20dp"
+        android:layout_marginBottom="60dp"
+        android:layout_alignBottom="@+id/image_detail"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/room_spoil_text" />
 
     <LinearLayout
         android:id="@+id/linear_layout"
@@ -68,6 +78,17 @@
     </com.google.android.gms.maps.MapView>
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/convert_map"
+        android:layout_alignBottom="@+id/map"
+        android:layout_alignLeft="@id/image_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_location_city_white_36dp" />
+
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/config_trip"
         android:layout_alignBottom="@+id/map"
         android:layout_alignRight="@id/image_detail"
@@ -76,7 +97,7 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
         android:layout_marginTop="20dp"
-        android:src="@drawable/ic_settings_black_18dp" />
+        android:src="@drawable/ic_settings_white_24dp" />
 
 
 </RelativeLayout>
