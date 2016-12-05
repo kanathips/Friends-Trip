@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,11 +94,11 @@ public class FragmentFriendNotification extends Fragment {
                     switch (notificationType) {
                         case AcceptFriend:
                             notification = dataSnapshot.getValue(AcceptFriendNotification.class);
-                            notification.setId(notificationId);
                             notificationList.add(notification);
-                            notificationAdapter.notifyDataSetChanged();
                             break;
                     }
+                    notification.setId(notificationId);
+                    notificationAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -108,7 +109,15 @@ public class FragmentFriendNotification extends Fragment {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Toast.makeText(context, "Remove", Toast.LENGTH_SHORT).show();
+                if (dataSnapshot.exists()) {
+                    Notification notification = new Notification(dataSnapshot.getKey());
+                    for(Notification notification1: notificationList){
+                        if(notification1.getId().equals(notification.getId())) {
+                            notificationList.remove(notification1);
+                        }
+                    }
+                    notificationAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -121,7 +130,6 @@ public class FragmentFriendNotification extends Fragment {
                 Toast.makeText(context, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         };
-        Toast.makeText(context, userUid, Toast.LENGTH_SHORT).show();
         reference.child(ConstantValue.NOTIFICATION_CHILD).child(userUid).addChildEventListener(listener);
     }
 

@@ -2,6 +2,7 @@ package com.tinyandfriend.project.friendstrip.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ramotion.foldingcell.FoldingCell;
 import com.tinyandfriend.project.friendstrip.ConstantValue;
+import com.tinyandfriend.project.friendstrip.JoinDetailActivity;
 import com.tinyandfriend.project.friendstrip.MapUtils;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.info.TripCardViewInfo;
@@ -36,7 +40,9 @@ import com.tinyandfriend.project.friendstrip.info.UserInfo;
 import com.tinyandfriend.project.friendstrip.view.ProfileDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -62,8 +68,9 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
         ImageView title_thumbnail, head_image;
         CircleImageView content_avatar;
         FoldingCell foldingCell;
-        Button content_location_bt;
+        Button content_location_bt, join_button;
         RelativeLayout profile_dialog;
+
 
 
         TripRoomHolder(View itemView) {
@@ -84,6 +91,8 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
             head_image = (ImageView) itemView.findViewById(R.id.head_image);
             fromDate = (TextView) itemView.findViewById(R.id.content_from_date);
             toDate = (TextView) itemView.findViewById(R.id.content_to_date);
+            join_button = (Button) itemView.findViewById(R.id.content_request_btn);
+
 
             content_location_bt = (Button) itemView.findViewById(R.id.content_location_btn);
             profile_dialog = (RelativeLayout) itemView.findViewById(R.id.profile_dialog);
@@ -181,7 +190,12 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
             }
         });
 
-
+        holder.join_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickJoinTrip(reference, album.getTripId(), userUid);
+            }
+        });
         holder.content_location_bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -227,7 +241,6 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
             }
         });
 
-
         holder.profile_dialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -257,6 +270,62 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
     @Override
     public int getItemCount() {
         return albumList.size();
+    }
+
+    public void onClickJoinTrip(DatabaseReference reference, String tripId, String userUid){
+        updateTripRoom(reference, tripId, userUid);
+    }
+
+
+    private void updateTripRoom(final DatabaseReference reference, final String tripId, final String userUid){
+        final DatabaseReference tripReference = reference.child(ConstantValue.TRIP_ROOM_CHILD).child(tripId);
+        tripReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    Long maxMember = (Long) dataSnapshot.child("maxMember").getValue();
+                    if(dataSnapshot.child("members").getChildrenCount() < maxMember){
+                        Map<String, Object> map = new HashMap<>();
+                        map.put(userUid, true);
+                        tripReference.child("members").updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                updateUserProfile(reference, tripId, userUid);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(mContext, "ไม่สามารถเข้าร่วมได้ กรุณาลองใหม่อีกครั้ง (1)", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }else{
+                        Toast.makeText(mContext, "ทริปเต็มแล้ว", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void updateUserProfile(DatabaseReference reference, String tripId, String userUid){
+        Map<String, Object> updateMap = new HashMap<>();
+        updateMap.put("tripId", tripId);
+        reference.child(ConstantValue.USERS_CHILD).child(userUid).updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(mContext, "Join OK", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(mContext, "ไม่สามารถเข้าร่วมได้ กรุณาลองใหม่อีกครั้ง (2)", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 

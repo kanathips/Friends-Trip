@@ -11,14 +11,13 @@ import com.tinyandfriend.project.friendstrip.info.NotificationType;
 public class AcceptFriendNotification extends Notification {
 
     private String senderUid;
-    private String id;
     private static final NotificationType TYPE = NotificationType.AcceptFriend;
     public AcceptFriendNotification() {
         setNotificationType(TYPE);
     }
 
     public AcceptFriendNotification(FriendInfo friendInfo, String id) {
-        this.id = id;
+        setId(id);
         setNotificationType(TYPE);
         String message = friendInfo.getFriendName() +" ต้องการเป็นเพื่อนกับคุณ";
         String photoUrl = friendInfo.getFriendPhotoUrl();
@@ -42,14 +41,5 @@ public class AcceptFriendNotification extends Notification {
 
     private void setSenderUid(String senderUid) {
         this.senderUid = senderUid;
-    }
-
-    @Exclude
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 }

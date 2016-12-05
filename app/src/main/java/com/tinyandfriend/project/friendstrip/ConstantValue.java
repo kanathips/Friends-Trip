@@ -15,4 +15,5 @@ public class ConstantValue {
     public static final String USERS_CHILD = "users";
     public static final String DISPLAY_NAME_INDEX_CHILD = "displayNameIndex";
     public static final String PROFILE_PHOTO_CHILD = "profilePhoto";
+    public static final String TRIP_ID_CHILD = "tripId";
 }

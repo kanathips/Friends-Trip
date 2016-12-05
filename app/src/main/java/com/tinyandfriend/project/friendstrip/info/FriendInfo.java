@@ -9,6 +9,7 @@ public class FriendInfo {
     private String friendName;
     private FriendStatus status;
     private String friendUid;
+    private String tripId;
 
     public String getFriendUid() {
         return friendUid;
@@ -83,5 +84,13 @@ public class FriendInfo {
     @Override
     public int hashCode() {
         return friendName.hashCode();
+    }
+
+    public String getTripId() {
+        return tripId;
+    }
+
+    public void setTripId(String tripId) {
+        this.tripId = tripId;
     }
 }

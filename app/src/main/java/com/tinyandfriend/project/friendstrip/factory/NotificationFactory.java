@@ -1,6 +1,7 @@
 package com.tinyandfriend.project.friendstrip.factory;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,7 @@ public class NotificationFactory {
             case 1:
                 itemView = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.notification_accept_friend, parent, false);
-                return new NotificationHolder(itemView);
+                return new NotiAcptFriendHolder(itemView);
 
             default:
                 itemView = LayoutInflater.from(parent.getContext())
@@ -66,12 +67,12 @@ public class NotificationFactory {
             case AcceptFriend:
                 final AcceptFriendNotification acptFrndNotiInfo = (AcceptFriendNotification) notification;
                 NotiAcptFriendHolder notiAcptFriendHolder = (NotiAcptFriendHolder) holder;
-
+                Log.i("Noti", acptFrndNotiInfo.getId());
+                final String senderUid = acptFrndNotiInfo.getSenderUid();
                 notiAcptFriendHolder.getAcceptButton().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String senderUid = acptFrndNotiInfo.getSenderUid();
-                        reference.child(ConstantValue.NOTIFICATION_CHILD).child(acptFrndNotiInfo.getId()).child(senderUid).removeValue();
+                        reference.child(ConstantValue.NOTIFICATION_CHILD).child(user.getUid()).child(acptFrndNotiInfo.getId()).removeValue();
                         Map<String, Object> friendMap  = new HashMap<>();
                         friendMap.put("status", Friend);
 
@@ -80,11 +81,10 @@ public class NotificationFactory {
                     }
                 });
 
-                notiAcptFriendHolder.getAcceptButton().setOnClickListener(new View.OnClickListener() {
+                notiAcptFriendHolder.getDenidedButton().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String senderUid = acptFrndNotiInfo.getSenderUid();
-                        reference.child(ConstantValue.NOTIFICATION_CHILD).child(acptFrndNotiInfo.getId()).child(senderUid).removeValue();
+                        reference.child(ConstantValue.NOTIFICATION_CHILD).child(user.getUid()).child(acptFrndNotiInfo.getId()).removeValue();
                         reference.child(ConstantValue.FRIEND_LIST_CHILD).child(senderUid).child(user.getUid()).removeValue();
                         reference.child(ConstantValue.FRIEND_LIST_CHILD).child(user.getUid()).child(senderUid).removeValue();
                     }

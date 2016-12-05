@@ -7,12 +7,12 @@ package com.tinyandfriend.project.friendstrip.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,11 +23,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tinyandfriend.project.friendstrip.ConstantValue;
 import com.tinyandfriend.project.friendstrip.GridSpacingItemDecoration;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.activity.CreateTripActivity;
 import com.tinyandfriend.project.friendstrip.adapter.TripCardViewAdapter;
+import com.tinyandfriend.project.friendstrip.info.FriendInfo;
 import com.tinyandfriend.project.friendstrip.info.TripCardViewInfo;
 import com.tinyandfriend.project.friendstrip.info.TripInfo;
 
@@ -44,6 +46,34 @@ public class FragmentJoin extends Fragment {
     private Context context;
     int pixelWidth;
     int pixelHeight;
+    private static final String USER_UID = "userUid";
+    private String userUid;
+
+    public static FragmentJoin newInstance(String userUid) {
+        FragmentJoin fragment = new FragmentJoin();
+        Bundle args = new Bundle();
+        args.putString(USER_UID, userUid);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        reference = FirebaseDatabase.getInstance().getReference();
+
+        if (getArguments() != null) {
+            userUid = getArguments().getString(USER_UID);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment__join, container, false);
@@ -53,7 +83,7 @@ public class FragmentJoin extends Fragment {
         pixelHeight = getResources().getDisplayMetrics().heightPixels;
 
         tripList = new ArrayList<>();
-        TripCardViewAdapter adapter = new TripCardViewAdapter(getActivity(), tripList,pixelWidth,pixelHeight);
+        TripCardViewAdapter adapter = new TripCardViewAdapter(getActivity(), tripList, pixelWidth, pixelHeight);
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -78,19 +108,55 @@ public class FragmentJoin extends Fragment {
                 }
         );
 
-        reference.child(ConstantValue.TRIP_ROOM_CHILD).addChildEventListener(new ChildEventListener() {
+        reference.child(ConstantValue.FRIEND_LIST_CHILD).child(userUid).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 {
-                    String key = dataSnapshot.getKey();
-                    if (key != null && !rooms.contains(key)) {
-                        rooms.add(dataSnapshot.getKey());
-                        TripInfo tripInfo = dataSnapshot.getValue(TripInfo.class);
-                        TripCardViewInfo tripCardViewInfo = new TripCardViewInfo(key,tripInfo.getTripName(),
-                                tripInfo.getStartDate(), tripInfo.getEndDate(), tripInfo.getMaxMember(),tripInfo.getTripSpoil(), tripInfo.getThumbnail());
-                        tripList.add(0, tripCardViewInfo);
-                        alphaAdapter.notifyDataSetChanged();
-                    }
+                    String friendId = dataSnapshot.getKey();
+                    reference.child(ConstantValue.USERS_CHILD).child(friendId).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            FriendInfo friendInfo = dataSnapshot.getValue(FriendInfo.class);
+                            Log.i("JOIN FROM FRIEND", dataSnapshot.getValue().toString());
+                            String tripId = friendInfo.getTripId();
+                            if (tripId == null || rooms.contains(tripId)) {
+                                return;
+                            }
+                            reference.child(ConstantValue.TRIP_ROOM_CHILD).child(tripId).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                    TripInfo tripInfo = dataSnapshot.getValue(TripInfo.class);
+                                    String key = dataSnapshot.getKey();
+                                    tripInfo.setId(key);
+                                    if (rooms.contains(key) || tripInfo.getStatus().equals("close")) {
+                                        if(rooms.contains(key) && tripInfo.getStatus().equals("close")) {
+                                            rooms.remove(key);
+                                            tripList.remove(tripList.indexOf(new TripCardViewInfo(key)));
+                                            alphaAdapter.notifyDataSetChanged();
+                                        }
+                                        return;
+                                    }
+                                    rooms.add(dataSnapshot.getKey());
+                                    TripCardViewInfo tripCardViewInfo = new TripCardViewInfo(key, tripInfo.getTripName(),
+                                            tripInfo.getStartDate(), tripInfo.getEndDate(), tripInfo.getMaxMember(), tripInfo.getTripSpoil(), tripInfo.getThumbnail());
+                                    tripList.add(0, tripCardViewInfo);
+                                    alphaAdapter.notifyDataSetChanged();
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
             }
 
@@ -119,7 +185,6 @@ public class FragmentJoin extends Fragment {
     }
 
     /////////////////////////////////////////////////////// Start class CardView /////////////////////////////////////////////////////
-
 
 
     private int dpToPx(int dp) {

@@ -65,9 +65,7 @@ public class FragmentNotification extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_notification, container, false);
-        Toast.makeText(context, "B4 LOAD", Toast.LENGTH_SHORT).show();
         loadNotification(reference, userUid);
-        Toast.makeText(context, "AFTER LOAD", Toast.LENGTH_SHORT).show();
         notificationArea = (RecyclerView)rootView.findViewById(R.id.notification_area);
         notificationList = new ArrayList<>();
         notificationAdapter = new NotificationAdapter(context, notificationList);
@@ -124,7 +122,6 @@ public class FragmentNotification extends Fragment {
                 Toast.makeText(context, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         };
-        Toast.makeText(context, userUid, Toast.LENGTH_SHORT).show();
         reference.child(ConstantValue.NOTIFICATION_CHILD).child(userUid).addChildEventListener(listener);
     }
 

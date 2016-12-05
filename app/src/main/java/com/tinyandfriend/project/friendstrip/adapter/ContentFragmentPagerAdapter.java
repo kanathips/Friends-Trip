@@ -14,6 +14,7 @@ import com.astuetz.PagerSlidingTabStrip;
 
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.fragment.FragmentFriendList;
+import com.tinyandfriend.project.friendstrip.fragment.FragmentFriendNotification;
 import com.tinyandfriend.project.friendstrip.fragment.FragmentJoin;
 import com.tinyandfriend.project.friendstrip.fragment.FragmentNotification;
 
@@ -25,12 +26,11 @@ import com.tinyandfriend.project.friendstrip.fragment.FragmentNotification;
 
 public class ContentFragmentPagerAdapter extends FragmentPagerAdapter implements PagerSlidingTabStrip.IconTabProvider {
 
-    private final int PAGE_COUNT = 3;
     private String userUid;
 
-    private String tabTitles[] = new String[]{"JOIN", "CREATE", "FRIENDS"};
+    private String tabTitles[] = new String[]{"Current Trip","Find Trip", "Notification", "Friend Request"};
 
-    private int tabIcons[] = {R.drawable.ic_directions_walk_black_18dp, R.drawable.ic_notifications_black_18dp, R.drawable.ic_group_black_18dp};
+    private int tabIcons[] = {R.drawable.ic_directions_walk_black_18dp, R.drawable.ic_notifications_black_18dp,R.drawable.ic_notifications_black_18dp, R.drawable.ic_group_black_18dp};
 
 
     public ContentFragmentPagerAdapter(FragmentManager fm) {
@@ -42,10 +42,9 @@ public class ContentFragmentPagerAdapter extends FragmentPagerAdapter implements
     }
 
     @Override
-
     public int getCount() {
 
-        return PAGE_COUNT;
+        return 4;
 
     }
 
@@ -56,15 +55,14 @@ public class ContentFragmentPagerAdapter extends FragmentPagerAdapter implements
 
         if (userUid != null && !userUid.isEmpty()) {
             switch (position) {
-
                 case 0:
-                    return new FragmentJoin();
+                    return FragmentJoin.newInstance(userUid);
                 case 1:
-                    return FragmentNotification.newInstance(userUid);
-
-                case 2:
                     return FragmentFriendList.newInstance(userUid);
-
+                case 2:
+                    return FragmentNotification.newInstance(userUid);
+                case 3:
+                    return FragmentFriendNotification.newInstance(userUid);
             }
         }
 
