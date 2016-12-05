@@ -15,12 +15,22 @@ public class FriendInfo {
         return friendUid;
     }
 
+    public FriendInfo(String friendPhotoUrl, String friendName, String friendUid) {
+        this.friendPhotoUrl = friendPhotoUrl;
+        this.friendName = friendName;
+        this.friendUid = friendUid;
+    }
+
     public void setFriendUid(String friendUid) {
         this.friendUid = friendUid;
     }
 
     public FriendInfo(){
 
+    }
+
+    public FriendInfo(String friendUid) {
+        this.friendUid = friendUid;
     }
 
     @Override

@@ -30,7 +30,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ramotion.foldingcell.FoldingCell;
 import com.tinyandfriend.project.friendstrip.ConstantValue;
-import com.tinyandfriend.project.friendstrip.JoinDetailActivity;
 import com.tinyandfriend.project.friendstrip.MapUtils;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.info.TripCardViewInfo;
@@ -53,7 +52,6 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     private static final String USERS_CHILD = "users";
     private static final String TRIP_CHILD = "tripRoom";
-    private static final String TRIP_ID = "tripId";
     private static final String OWNER_UID = "ownerUID";
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -286,8 +284,10 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
                     Long maxMember = (Long) dataSnapshot.child("maxMember").getValue();
                     if(dataSnapshot.child("members").getChildrenCount() < maxMember){
                         Map<String, Object> map = new HashMap<>();
-                        map.put(userUid, true);
-                        tripReference.child("members").updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        map.put("name", user.getDisplayName());
+                        map.put("uid", user.getUid());
+                        map.put("photo", user.getPhotoUrl().toString());
+                        tripReference.child("members").child(userUid).setValue(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 updateUserProfile(reference, tripId, userUid);

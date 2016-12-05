@@ -98,16 +98,6 @@ public class FragmentTripFriendJoined extends Fragment {
 
         context = getContext();
 
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
-        fab.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        startActivity(new Intent(context, CreateTripActivity.class));
-                    }
-                }
-        );
-
         reference.child(ConstantValue.FRIEND_LIST_CHILD).child(userUid).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

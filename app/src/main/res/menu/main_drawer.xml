@@ -2,24 +2,19 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="ทริปของฉัน">
+    <item android:title="ข้อมูลส่วนตัว">
         <menu>
             <item
-                android:id="@+id/my_trip"
-                android:icon="@drawable/ic_menu_share"
-                android:title="ทริปที่สร้าง" />
+                android:id="@+id/nav_profile"
+                android:icon="@drawable/ic_account_circle_white_24dp"
+                android:title="โปรไฟล์" />
             <item
-                android:id="@+id/joined_trip"
-                android:icon="@drawable/ic_menu_send"
-                android:title="ทริปที่เข้าร่วม" />
+                android:id="@+id/my_trip_history"
+                android:icon="@drawable/ic_menu_share"
+                android:title="ประวัติการเข้าร่วม" />
         </menu>
     </item>
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_account_circle_white_24dp"
-            android:title="โปรไฟล์" />
-
         <item
             android:id="@+id/nav_log_out"
             android:icon="@drawable/logout"

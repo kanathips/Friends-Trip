@@ -17,13 +17,13 @@ public class Notification {
 
     }
 
-    public Notification(String id) {
-        this.id = id;
-    }
-
     public Notification(String message, String photoUrl) {
         this.message = message;
         this.photoUrl = photoUrl;
+    }
+
+    public Notification(String id) {
+        this.id = id;
     }
 
     public Notification(String message, String photoUrl, NotificationType notificationType, String id) {
