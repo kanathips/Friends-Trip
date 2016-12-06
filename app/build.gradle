@@ -30,7 +30,6 @@ dependencies {
 
     //Circle Image View
     compile 'org.jetbrains:annotations-java5:15.0'
-    compile 'org.jetbrains:annotations-java5:15.0'
     compile 'com.ramotion.foldingcell:folding-cell:1.0.1'
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.firebaseui:firebase-ui-database:0.4.0'

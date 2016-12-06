@@ -1,19 +1,34 @@
 package com.tinyandfriend.project.friendstrip.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.google.android.gms.maps.MapView;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tinyandfriend.project.friendstrip.ConstantValue;
 import com.tinyandfriend.project.friendstrip.R;
+import com.tinyandfriend.project.friendstrip.activity.CreateTripActivity;
+import com.tinyandfriend.project.friendstrip.activity.MainActivity;
+import com.tinyandfriend.project.friendstrip.view.MainViewPager;
 
 
 public class FragmentRoomDefault extends Fragment {
@@ -22,17 +37,17 @@ public class FragmentRoomDefault extends Fragment {
     private DatabaseReference reference;
     private FirebaseUser user;
     private String userUid;
-    private int type;
+    private String tripID;
 
     public FragmentRoomDefault() {
         // Required empty public constructor
     }
 
-    public static FragmentRoomDefault newInstance(String userUid, int type) {
+    public static FragmentRoomDefault newInstance(String userUid, String tripID) {
         FragmentRoomDefault fragment = new FragmentRoomDefault();
         Bundle args = new Bundle();
         args.putString(ConstantValue.USER_UID, userUid);
-        args.putInt("type", type);
+        args.putString(ConstantValue.TRIP_ID_CHILD, tripID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -45,19 +60,82 @@ public class FragmentRoomDefault extends Fragment {
 
         if (getArguments() != null) {
             userUid = getArguments().getString(ConstantValue.USER_UID);
-            type = getArguments().getInt("type");
+            tripID = getArguments().getString(ConstantValue.TRIP_ID_CHILD);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_before_joined, container, false);
+        final View view = inflater.inflate(R.layout.fragment_default_room, container, false);
+
+
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame, new FragmentRoomBeforeJoin());
+        transaction.commit();
+        reference.child(ConstantValue.USERS_CHILD).child(userUid).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if (!dataSnapshot.getKey().equals(ConstantValue.TRIP_ID_CHILD))
+                    return;
+                if (dataSnapshot.exists()) {
+                    final String tripId = dataSnapshot.getValue(String.class);
+                    reference.child(ConstantValue.TRIP_ROOM_CHILD).child(tripId).child(ConstantValue.OWNER_UID).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                String ownerUID = dataSnapshot.getValue(String.class);
+                                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                                if (userUid.equals(ownerUID)) {
+                                    transaction.replace(R.id.frame, FragmentRoomHost.newInstance(userUid, tripId));
+                                } else {
+                                    transaction.replace(R.id.frame, FragmentRoomJoiner.newInstance(userUid, tripId));
+                                }
+                                transaction.commit();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                } else {
+
+                }
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.getKey().equals(ConstantValue.TRIP_ID_CHILD))
+                    return;
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame, new FragmentRoomBeforeJoin());
+                transaction.commit();
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
         return view;
     }
 
-    public void createMap(View view,Bundle bundle){
+    public void createMap(View view, Bundle bundle) {
         mapView = (MapView) view.findViewById(R.id.map);
         mapView.onCreate(bundle);
 
