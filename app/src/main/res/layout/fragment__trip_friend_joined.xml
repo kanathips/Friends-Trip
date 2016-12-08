@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.FragmentJoin">
+    tools:context=".fragment.FragmentTripFriendJoined">
 
 
     <android.support.v7.widget.RecyclerView
@@ -14,17 +14,6 @@
         android:clipToPadding="false"
         android:clickable="true"
         android:scrollbars="vertical" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        app:useCompatPadding="true"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_add_white_24dp"
-        android:layout_alignParentRight="true" />
 
 
 </RelativeLayout>

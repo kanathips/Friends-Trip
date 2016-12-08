@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -116,7 +117,8 @@ public class AddFriendActivity extends AppCompatActivity {
                             return;
                         }
                         targetUid = target.getKey();
-
+                        Log.i("FRIEND_LIST", "TARGET : " + targetUid);
+                        Log.i("FRIEND_LIST", "ME : " + userUid);
                         final String targetName = target.child("displayName").getValue().toString();
                         targetNameTextView.setVisibility(View.VISIBLE);
                         targetNameTextView.setText(targetName);
@@ -141,8 +143,8 @@ public class AddFriendActivity extends AppCompatActivity {
                                     addButton.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            FriendInfo targetFriendInfo = new FriendInfo(targetName, targetUid, Pending);
-                                            FriendInfo senderFriendInfo = new FriendInfo(userDisplayName, userUid, Approving);
+                                            FriendInfo targetFriendInfo = new FriendInfo(targetName, targetUid, targetProfilePhotoUrl, Pending);
+                                            FriendInfo senderFriendInfo = new FriendInfo(userDisplayName, userUid, userProfilePhotoUrl, Approving);
                                             addFriend(targetFriendInfo, senderFriendInfo);
                                         }
                                     });
@@ -184,16 +186,11 @@ public class AddFriendActivity extends AppCompatActivity {
         Query query = reference.child(ConstantValue.DISPLAY_NAME_INDEX_CHILD).orderByChild("displayName").equalTo(searchText);
         query.addListenerForSingleValueEvent(listener);
         listeners.add(listener);
-
     }
 
-    /***
-     */
-//    private void addFriend(final String targetUID, final String senderUID, String friendProfilePhotoUrl, String userProfilePhoto) {
     private void addFriend(final FriendInfo targetFriendInfo, final FriendInfo senderFriendInfo) {
         final ProgressDialog tempProgressDialog = new ProgressDialog(this);
         final int[] checkStatus = {1};
-
         tempProgressDialog.setMessage("กำลังเพิ่มเพื่อน");
         tempProgressDialog.show();
 

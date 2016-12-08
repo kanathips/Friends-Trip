@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="80dp"
     android:background="@color/white"
     android:orientation="horizontal">
 
@@ -22,18 +22,19 @@
         android:text="MESSAGE"
         android:textAppearance="?android:textAppearanceMedium"
         android:id="@+id/noti_message"/>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_gravity="end"
-        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:layout_height="wrap_content">
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/accept_button"
             android:textColor="@color/white"
             android:background="@color/colorGreen"
-            android:layout_gravity="center_vertical"
             android:textAppearance="?android:textAppearanceMedium"
+            android:layout_gravity="center_vertical"
             android:text="ยอมรับ"/>
 
         <Button
@@ -46,5 +47,5 @@
             android:layout_gravity="center_vertical"
             android:textAppearance="?android:textAppearanceMedium"
             android:text="ไม่ยอมรับ"/>
-    </LinearLayout>
+        </LinearLayout>
 </LinearLayout>

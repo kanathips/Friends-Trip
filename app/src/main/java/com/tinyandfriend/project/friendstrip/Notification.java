@@ -22,6 +22,10 @@ public class Notification {
         this.photoUrl = photoUrl;
     }
 
+    public Notification(String id) {
+        this.id = id;
+    }
+
     public Notification(String message, String photoUrl, NotificationType notificationType, String id) {
         this.message = message;
         this.photoUrl = photoUrl;

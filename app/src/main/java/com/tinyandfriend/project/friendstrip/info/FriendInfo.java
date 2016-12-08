@@ -9,9 +9,16 @@ public class FriendInfo {
     private String friendName;
     private FriendStatus status;
     private String friendUid;
+    private String tripId;
 
     public String getFriendUid() {
         return friendUid;
+    }
+
+    public FriendInfo(String friendPhotoUrl, String friendName, String friendUid) {
+        this.friendPhotoUrl = friendPhotoUrl;
+        this.friendName = friendName;
+        this.friendUid = friendUid;
     }
 
     public void setFriendUid(String friendUid) {
@@ -20,6 +27,10 @@ public class FriendInfo {
 
     public FriendInfo(){
 
+    }
+
+    public FriendInfo(String friendUid) {
+        this.friendUid = friendUid;
     }
 
     @Override
@@ -83,5 +94,13 @@ public class FriendInfo {
     @Override
     public int hashCode() {
         return friendName.hashCode();
+    }
+
+    public String getTripId() {
+        return tripId;
+    }
+
+    public void setTripId(String tripId) {
+        this.tripId = tripId;
     }
 }

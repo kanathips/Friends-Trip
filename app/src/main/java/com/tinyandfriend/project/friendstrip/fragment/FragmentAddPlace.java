@@ -37,6 +37,7 @@ import com.tinyandfriend.project.friendstrip.view.DateSelect;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
 public class FragmentAddPlace extends FragmentPager implements OnMapReadyCallback {
 
     private static final String TAG = "ADD_PLACE_FRAGMENT";
@@ -47,6 +48,7 @@ public class FragmentAddPlace extends FragmentPager implements OnMapReadyCallbac
     private Context context;
     private View rootView;
     private GoogleMap googleMap;
+    private PlaceInfo appointPlace;
 
     @Nullable
     @Override
@@ -109,7 +111,7 @@ public class FragmentAddPlace extends FragmentPager implements OnMapReadyCallbac
         EditText startEditText = (EditText) rootView.findViewById(R.id.trip_start);
         EditText endEditText = (EditText) rootView.findViewById(R.id.trip_end);
 
-        if(!isValidTripDate(startEditText, endEditText)){
+        if (!isValidTripDate(startEditText, endEditText)) {
             return;
         }
         long tripDuration;
@@ -125,7 +127,7 @@ public class FragmentAddPlace extends FragmentPager implements OnMapReadyCallbac
 
         Intent intent = new Intent(context, AddPlaceActivity.class);
         intent.putExtra("placeInfos", placeInfos);
-
+        intent.putExtra("appointPlace", appointPlace);
         intent.putExtra("tripDuration", tripDuration);
         startActivityForResult(intent, ADD_PLACE_REQUEST);
     }
@@ -155,8 +157,12 @@ public class FragmentAddPlace extends FragmentPager implements OnMapReadyCallbac
         if (requestCode == ADD_PLACE_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
                 placeInfos = data.getParcelableArrayListExtra("placeInfos");
+                appointPlace = data.getParcelableExtra("appointPlace");
                 MapUtils mapUtils = new MapUtils(googleMap);
-                mapUtils.markPlace(placeInfos, pixelWidth, pixelHeight);
+                if(appointPlace != null)
+                    mapUtils.markPlace(placeInfos, appointPlace, pixelWidth, pixelHeight);
+                else
+                    mapUtils.markPlace(placeInfos, pixelWidth, pixelHeight);
             }
         }
     }
@@ -180,10 +186,10 @@ public class FragmentAddPlace extends FragmentPager implements OnMapReadyCallbac
         if (checkString.isEmpty()) {
             valid = false;
             errorText = "กรุณาตั้งชื่อห้อง";
-        }else if(checkString.length()>28) {
+        } else if (checkString.length() > 28) {
             valid = false;
             errorText = "กรุณากรอกชื่อห้องไม่เกิน 28 ตัวอักษร";
-        }else {
+        } else {
             errorText = null;
         }
         editText_name.setError(errorText);
@@ -194,10 +200,10 @@ public class FragmentAddPlace extends FragmentPager implements OnMapReadyCallbac
         if (checkString.isEmpty()) {
             valid = false;
             errorText = "กรุณาใส่จำนวนผู้เข้าร่วม";
-        }else if(Integer.parseInt(checkString) > 20){
+        } else if (Integer.parseInt(checkString) > 20) {
             valid = false;
             errorText = "กรุณาใส่จำนวนผู้เข้าร่วมไม่เกิน 20 คน";
-        }else {
+        } else {
             errorText = null;
         }
 //        editText.setError(errorText);
@@ -217,6 +223,11 @@ public class FragmentAddPlace extends FragmentPager implements OnMapReadyCallbac
 //        trip_spoil.setError(errorText);
         textInputLayout.setError(errorText);
 
+
+        if(appointPlace == null){
+            valid = false;
+            Toast.makeText(context, "กรุณาเพิ่มสถานที่นัดพบ", Toast.LENGTH_SHORT).show();
+        }
         EditText startDate = (EditText) rootView.findViewById(R.id.trip_start);
 
         EditText endDate = (EditText) rootView.findViewById(R.id.trip_end);
@@ -305,7 +316,7 @@ public class FragmentAddPlace extends FragmentPager implements OnMapReadyCallbac
         editText = (EditText) rootView.findViewById(R.id.trip_end);
         tripInfo.setEndDate(editText.getText().toString());
 
-        editText = (EditText)rootView.findViewById(R.id.trip_spoil);
+        editText = (EditText) rootView.findViewById(R.id.trip_spoil);
         tripInfo.setTripSpoil(editText.getText().toString());
 
         tripInfo.setPlaceInfos(placeInfos);
@@ -318,6 +329,8 @@ public class FragmentAddPlace extends FragmentPager implements OnMapReadyCallbac
 
         editText_name = (MaterialEditText) rootView.findViewById(R.id.trip_name);
         tripInfo.setTripName(editText_name.getText().toString());
+
+        tripInfo.setAppointPlace(appointPlace);
 
     }
 

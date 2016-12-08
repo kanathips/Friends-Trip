@@ -12,8 +12,9 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tinyandfriend.project.friendstrip.R;
+import com.tinyandfriend.project.friendstrip.fragment.FragmentFindTrip;
 import com.tinyandfriend.project.friendstrip.fragment.FragmentFriendList;
-import com.tinyandfriend.project.friendstrip.fragment.FragmentJoin;
+import com.tinyandfriend.project.friendstrip.fragment.FragmentFriendNotification;
 import com.tinyandfriend.project.friendstrip.fragment.FragmentNotification;
 import com.tinyandfriend.project.friendstrip.fragment.FragmentRoomDefault;
 import com.tinyandfriend.project.friendstrip.fragment.FragmentRoomHost;
@@ -63,19 +64,11 @@ public class ContentFragmentPagerAdapter extends FragmentPagerAdapter implements
         if (userUid != null && !userUid.isEmpty()) {
             switch (position) {
                 case 0:
-                    switch (joinType){
-                        case 0:
-                            return FragmentRoomHost.newInstance(userUid,tripID);
-                        case 1:
-                            return FragmentRoomJoiner.newInstance(userUid,tripID);
-                        case 2:
-                            return FragmentRoomDefault.newInstance(userUid,tripID);
-                    }
-                    return new FragmentRoomDefault();
+                    return FragmentRoomDefault.newInstance(userUid, tripID);
                 case 1:
-                    return new FragmentJoin();
+                    return FragmentFindTrip.newInstance(userUid);
                 case 2:
-                    return FragmentNotification.newInstance(userUid);
+                    return FragmentFriendNotification.newInstance(userUid);
                 case 3:
                     return FragmentFriendList.newInstance(userUid);
             }

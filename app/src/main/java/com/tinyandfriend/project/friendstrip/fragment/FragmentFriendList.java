@@ -8,9 +8,11 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -89,7 +91,6 @@ public class FragmentFriendList extends Fragment {
                     }
                 }
         );
-
         getFriendList(reference, userUid);
 
         return rootview;
@@ -125,7 +126,7 @@ public class FragmentFriendList extends Fragment {
 
                             }
                         };
-
+                        Log.i("FRIEND LIST", friendInfo.toString());
                         reference.child(ConstantValue.USERS_CHILD).child(friendInfo.getFriendUid()).child(ConstantValue.PROFILE_PHOTO_CHILD).addListenerForSingleValueEvent(friendProfileListener);
                     }
                 }
@@ -138,9 +139,12 @@ public class FragmentFriendList extends Fragment {
                     FriendStatus status = friendInfo.getStatus();
                     switch (status){
                         case Ban:
+                            Toast.makeText(context, "You got ban from " + friendInfo.getFriendName(), Toast.LENGTH_SHORT).show();
                             friendList.remove(friendInfo);
                             break;
                         case Friend:
+                            if(friendList.contains(friendInfo))
+                                return;
                             friendList.add(friendInfo);
                             break;
                     }

@@ -16,6 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.tinyandfriend.project.friendstrip.AcceptFriendNotification;
 import com.tinyandfriend.project.friendstrip.ConstantValue;
 import com.tinyandfriend.project.friendstrip.Notification;
 import com.tinyandfriend.project.friendstrip.R;
@@ -23,6 +24,7 @@ import com.tinyandfriend.project.friendstrip.adapter.NotificationAdapter;
 import com.tinyandfriend.project.friendstrip.info.NotificationType;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 public class FragmentNotification extends Fragment {
 
@@ -47,7 +49,9 @@ public class FragmentNotification extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         reference = FirebaseDatabase.getInstance().getReference();
+
         if (getArguments() != null) {
             userUid = getArguments().getString(USER_UID);
         }
@@ -61,9 +65,7 @@ public class FragmentNotification extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_notification, container, false);
-        Toast.makeText(context, "B4 LOAD", Toast.LENGTH_SHORT).show();
         loadNotification(reference, userUid);
-        Toast.makeText(context, "AFTER LOAD", Toast.LENGTH_SHORT).show();
         notificationArea = (RecyclerView)rootView.findViewById(R.id.notification_area);
         notificationList = new ArrayList<>();
         notificationAdapter = new NotificationAdapter(context, notificationList);
@@ -120,7 +122,6 @@ public class FragmentNotification extends Fragment {
                 Toast.makeText(context, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         };
-        Toast.makeText(context, userUid, Toast.LENGTH_SHORT).show();
         reference.child(ConstantValue.NOTIFICATION_CHILD).child(userUid).addChildEventListener(listener);
     }
 

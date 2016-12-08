@@ -1,7 +1,9 @@
 package com.tinyandfriend.project.friendstrip.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -19,9 +21,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tinyandfriend.project.friendstrip.ConstantValue;
 import com.tinyandfriend.project.friendstrip.R;
+import com.tinyandfriend.project.friendstrip.activity.CreateTripActivity;
 
 
-public class FragmentRoomDefault extends Fragment {
+public class FragmentRoomBeforeJoin extends Fragment {
 
     MapView mapView;
     private DatabaseReference reference;
@@ -29,12 +32,12 @@ public class FragmentRoomDefault extends Fragment {
     private String userUid;
     private String tripID;
 
-    public FragmentRoomDefault() {
+    public FragmentRoomBeforeJoin() {
         // Required empty public constructor
     }
 
-    public static FragmentRoomDefault newInstance(String userUid, String tripID) {
-        FragmentRoomDefault fragment = new FragmentRoomDefault();
+    public static FragmentRoomBeforeJoin newInstance(String userUid, String tripID) {
+        FragmentRoomBeforeJoin fragment = new FragmentRoomBeforeJoin();
         Bundle args = new Bundle();
         args.putString(ConstantValue.USER_UID, userUid);
         args.putString(ConstantValue.TRIP_ID_CHILD, tripID);
@@ -57,71 +60,18 @@ public class FragmentRoomDefault extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_default_room, container, false);
+        final View view = inflater.inflate(R.layout.fragment_before_joined, container, false);
 
 
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame, new FragmentRoomBeforeJoin());
-        transaction.commit();
-        reference.child(ConstantValue.USERS_CHILD).child(userUid).addChildEventListener(new ChildEventListener() {
+
+
+        FloatingActionButton floatingActionButton = (FloatingActionButton)view.findViewById(R.id.floatingActionButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (!dataSnapshot.getKey().equals(ConstantValue.TRIP_ID_CHILD))
-                    return;
-                if (dataSnapshot.exists()) {
-                    final String tripId = dataSnapshot.getValue(String.class);
-                    reference.child(ConstantValue.TRIP_ROOM_CHILD).child(tripId).child(ConstantValue.OWNER_UID).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                String ownerUID = dataSnapshot.getValue(String.class);
-                                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                                if (userUid.equals(ownerUID)) {
-                                    transaction.replace(R.id.frame, FragmentRoomHost.newInstance(userUid, tripId));
-                                } else {
-                                    transaction.replace(R.id.frame, FragmentRoomJoiner.newInstance(userUid, tripId));
-                                }
-                                transaction.commit();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-                } else {
-
-                }
-
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.getKey().equals(ConstantValue.TRIP_ID_CHILD))
-                    return;
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.frame, new FragmentRoomBeforeJoin());
-                transaction.commit();
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), CreateTripActivity.class));
             }
         });
-
-
         return view;
     }
 

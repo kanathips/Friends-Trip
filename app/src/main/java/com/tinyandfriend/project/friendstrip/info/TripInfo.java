@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class TripInfo {
 
+    private String id;
     private String tripName;
     private String startDate;
     private String endDate;
@@ -20,6 +21,8 @@ public class TripInfo {
     private ArrayList<String> files;
     private String ownerUID;
     private String thumbnail;
+    private String status = "open";
+    private PlaceInfo appointPlace;
 
 
     public String getThumbnail() {
@@ -119,4 +122,45 @@ public class TripInfo {
     public void setTripName(String tripName) {
         this.tripName = tripName;
     }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TripInfo tripInfo = (TripInfo) o;
+
+        return id != null ? id.equals(tripInfo.id) : tripInfo.id == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    public void setAppointPlace(PlaceInfo appointPlace) {
+        this.appointPlace = appointPlace;
+    }
+
+    public PlaceInfo getAppointPlace() {
+        return appointPlace;
+    }
 }
+

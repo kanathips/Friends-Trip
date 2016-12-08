@@ -23,6 +23,9 @@ public class TripCardViewInfo {
         this.tripEnd = tripEnd;
     }
 
+    public TripCardViewInfo(String tripId) {
+        this.tripId = tripId;
+    }
 
     public TripCardViewInfo(String tripId, String name_card, String tripStart, String tripEnd, int count_people, String tripSpoil, int pic_id) {
         this.name_card = name_card;
@@ -98,5 +101,21 @@ public class TripCardViewInfo {
 
     public void setCount_people(int count_people) {
         this.count_people = count_people;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TripCardViewInfo that = (TripCardViewInfo) o;
+
+        return tripId != null ? tripId.equals(that.tripId) : that.tripId == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return tripId != null ? tripId.hashCode() : 0;
     }
 }
