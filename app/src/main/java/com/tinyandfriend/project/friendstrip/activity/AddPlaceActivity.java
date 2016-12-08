@@ -86,9 +86,6 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
         tripDuration = (int) getIntent().getLongExtra("tripDuration", 0);
 
         originalAppointPlace = getIntent().getParcelableExtra("appointPlace");
-//        if(originalAppointPlace == null){
-//            originalAppointPlace = new PlaceInfo();
-//        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -207,13 +204,13 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
         ArrayList<String> fabSheetTexts = new ArrayList<>();
         for (int i = 1; i <= tripDuration && i < 6; i++) {
             String text = "วันที่ " + i;
-                fabSheetTexts.add(0, text);
+            fabSheetTexts.add(0, text);
         }
 
-        fabSheetTexts.add("สถานที่นัดพบ");
+        fabSheetTexts.add(0, "สถานที่นัดพบ");
 
         if (tripDuration > 5) {
-            fabSheetTexts.add(0, "เพิ่มเติม");
+            fabSheetTexts.add(fabSheetTexts.size(), "เพิ่มเติม");
         }
 
 
@@ -236,17 +233,20 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
 
 
                 if (position == placeInfos.size()) {
+                    if (originalAppointPlace != null && originalAppointPlace.equals(placeInfo)) {
+                        Toast.makeText(AddPlaceActivity.this, "คุณนัดไว้ที่สถานที่นี้", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    addAppointPlace(placeInfo, googleMap);
+                } else {
+
                     if (position <= 5) {
                         placeInfo.setDay(position);
                         addPlace(placeInfos, placeInfo, googleMap);
                     } else {
                         setupDialog(placeInfos, placeInfo, googleMap);
                     }
-                } else {
-                    if (originalAppointPlace != null && originalAppointPlace.equals(placeInfo)) {                        Toast.makeText(AddPlaceActivity.this, "คุณนัดไว้ที่สถานที่นี้", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    addAppointPlace(placeInfo, googleMap);
+
                 }
                 materialSheetFab.hideSheet();
             }
@@ -337,13 +337,13 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
             options.position(info.getLocation().toGmsLatLng());
             options.title(info.getName());
             builder.include(info.getLocation().toGmsLatLng());
-            googleMap.addMarker(options).setTag(info.getDay()+1);
+            googleMap.addMarker(options).setTag(info.getDay() + 1);
         }
         if (originalAppointPlace != null) {
 
 
             builder.include(originalAppointPlace.getLocation().toGmsLatLng());
-            addAppointPlace(originalAppointPlace, googleMap );
+            addAppointPlace(originalAppointPlace, googleMap);
         }
 
         mapUtils.updateCamera(placeInfos, pixelWidth, pixelHeight);

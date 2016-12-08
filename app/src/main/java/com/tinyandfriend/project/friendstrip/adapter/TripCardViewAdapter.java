@@ -70,7 +70,6 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
         RelativeLayout profile_dialog;
 
 
-
         TripRoomHolder(View itemView) {
             super(itemView);
             foldingCell = (FoldingCell) itemView.findViewById(R.id.foldingcell_row);
@@ -270,19 +269,19 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
         return albumList.size();
     }
 
-    public void onClickJoinTrip(DatabaseReference reference, String tripId, String userUid){
+    public void onClickJoinTrip(DatabaseReference reference, String tripId, String userUid) {
         updateTripRoom(reference, tripId, userUid);
     }
 
 
-    private void updateTripRoom(final DatabaseReference reference, final String tripId, final String userUid){
+    private void updateTripRoom(final DatabaseReference reference, final String tripId, final String userUid) {
         final DatabaseReference tripReference = reference.child(ConstantValue.TRIP_ROOM_CHILD).child(tripId);
         tripReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     Long maxMember = (Long) dataSnapshot.child("maxMember").getValue();
-                    if(dataSnapshot.child("members").getChildrenCount() < maxMember){
+                    if (dataSnapshot.child("members").getChildrenCount() < maxMember) {
                         Map<String, Object> map = new HashMap<>();
                         map.put("name", user.getDisplayName());
                         map.put("uid", user.getUid());
@@ -298,7 +297,7 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
                                 Toast.makeText(mContext, "ไม่สามารถเข้าร่วมได้ กรุณาลองใหม่อีกครั้ง (1)", Toast.LENGTH_SHORT).show();
                             }
                         });
-                    }else{
+                    } else {
                         Toast.makeText(mContext, "ทริปเต็มแล้ว", Toast.LENGTH_SHORT).show();
                     }
 
@@ -312,7 +311,7 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
         });
     }
 
-    private void updateUserProfile(DatabaseReference reference, String tripId, String userUid){
+    private void updateUserProfile(DatabaseReference reference, String tripId, String userUid) {
         Map<String, Object> updateMap = new HashMap<>();
         updateMap.put("tripId", tripId);
         reference.child(ConstantValue.USERS_CHILD).child(userUid).updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {

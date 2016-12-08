@@ -17,8 +17,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageMetadata;
@@ -38,6 +41,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import static com.tinyandfriend.project.friendstrip.R.drawable.user;
+
 
 public class CreateTripActivity extends AppCompatActivity {
 
@@ -47,6 +52,7 @@ public class CreateTripActivity extends AppCompatActivity {
     private TripInfo tripInfo;
     private StorageMetadata metadata;
     private DatabaseReference reference;
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -223,7 +229,44 @@ public class CreateTripActivity extends AppCompatActivity {
     }
 
 
-    private void updateTripRoom(final DatabaseReference tripReference, final String tripId, final String userUid){
+    private void updateTripRoom(DatabaseReference tripReference, final String tripId, final String userUid){
+
+        tripReference = reference.child(ConstantValue.TRIP_ROOM_CHILD).child(tripId);
+        final DatabaseReference finalTripReference = tripReference;
+        tripReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    Long maxMember = (Long) dataSnapshot.child("maxMember").getValue();
+                    if(dataSnapshot.child("members").getChildrenCount() < maxMember){
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("name", user.getDisplayName());
+                        map.put("uid", user.getUid());
+                        map.put("photo", user.getPhotoUrl().toString());
+                        finalTripReference.child("members").child(userUid).setValue(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                updateUserProfile(reference, tripId, userUid);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(CreateTripActivity.this, "ไม่สามารถเข้าร่วมได้ กรุณาลองใหม่อีกครั้ง (1)", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }else{
+                        Toast.makeText(CreateTripActivity.this, "ทริปเต็มแล้ว", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         DatabaseReference tripMemberReference = tripReference.child("members");
         Map<String, Object> map = new HashMap<>();
         map.put(userUid, true);

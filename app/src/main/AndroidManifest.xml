@@ -8,7 +8,7 @@
     <application
         android:allowBackup="true"
         android:fullBackupContent="true"
-        android:icon="@drawable/logo_icon"
+        android:icon="@drawable/logo_lastest"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:screenOrientation="portrait"

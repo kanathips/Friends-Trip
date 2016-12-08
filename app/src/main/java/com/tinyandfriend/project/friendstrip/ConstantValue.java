@@ -21,4 +21,9 @@ public class ConstantValue {
     public static final String USER_UID = "userUID";
     public static final String THUMB_NAIL = "thumbnail";
     public static final String TRIP_NAME = "tripName";
+    public static final String TRIP_SPOIL = "tripSpoil";
+    public static final String DISPLAY_NAME = "displayName";
+    public static final String TRIP_FROM_DATE = "startDate";
+    public static final String TRIP_TO_DATE = "endDate";
+    public static final String TRIP_MAX_MEMBERS = "maxMember";
 }
