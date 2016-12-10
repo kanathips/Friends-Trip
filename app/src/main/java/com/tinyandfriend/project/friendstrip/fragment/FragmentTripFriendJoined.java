@@ -5,10 +5,8 @@ package com.tinyandfriend.project.friendstrip.fragment;
  */
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,7 +25,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.tinyandfriend.project.friendstrip.ConstantValue;
 import com.tinyandfriend.project.friendstrip.GridSpacingItemDecoration;
 import com.tinyandfriend.project.friendstrip.R;
-import com.tinyandfriend.project.friendstrip.activity.CreateTripActivity;
 import com.tinyandfriend.project.friendstrip.adapter.TripCardViewAdapter;
 import com.tinyandfriend.project.friendstrip.info.FriendInfo;
 import com.tinyandfriend.project.friendstrip.info.TripCardViewInfo;
@@ -76,7 +73,7 @@ public class FragmentTripFriendJoined extends Fragment {
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment__trip_friend_joined, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_trip_friend_joined, container, false);
 
 
         pixelWidth = getResources().getDisplayMetrics().widthPixels;

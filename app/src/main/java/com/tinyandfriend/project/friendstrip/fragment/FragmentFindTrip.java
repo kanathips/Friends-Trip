@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -53,6 +54,7 @@ public class FragmentFindTrip extends Fragment {
     private boolean flag = false;
     private FragmentTripFriendJoined tripFriendJoined;
     private FragmentFindTripWithTag findTripWithTag;
+    private FragmentManager fragmentManager;
 
     public static FragmentFindTrip newInstance(String userUid) {
         FragmentFindTrip fragment = new FragmentFindTrip();
@@ -73,6 +75,7 @@ public class FragmentFindTrip extends Fragment {
         }
         tripFriendJoined = FragmentTripFriendJoined.newInstance(userUid);
         findTripWithTag = new FragmentFindTripWithTag();
+        fragmentManager = getChildFragmentManager();
     }
 
     @Override
@@ -86,11 +89,12 @@ public class FragmentFindTrip extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_find_trip, container, false);
 
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        if (flag) {
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        if (!flag) {
             transaction.replace(R.id.find_trip_fragment, findTripWithTag);
         } else {
             transaction.replace(R.id.find_trip_fragment, tripFriendJoined);
+
         }
         transaction.commit();
 
@@ -100,7 +104,7 @@ public class FragmentFindTrip extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        FragmentTransaction transaction = fragmentManager.beginTransaction();
                         if (flag) {
                             transaction.replace(R.id.find_trip_fragment, findTripWithTag);
                             flag = !flag;
@@ -120,26 +124,27 @@ public class FragmentFindTrip extends Fragment {
     public void onPause() {
         super.onPause();
 
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        if (flag) {
-            transaction.remove(findTripWithTag);
-        } else {
-            transaction.remove(tripFriendJoined);
-        }
-        transaction.commit();
+//        FragmentTransaction transaction = fragmentManager.beginTransaction();
+//        if (!flag) {
+//            transaction.remove(findTripWithTag);
+//        } else {
+//            transaction.remove(tripFriendJoined);
+//        }
+//        transaction.commit();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        if (flag) {
-            transaction.replace(R.id.find_trip_fragment, findTripWithTag);
-            transaction.remove(findTripWithTag);
-        } else {
-            transaction.replace(R.id.find_trip_fragment, tripFriendJoined);
-            transaction.remove(findTripWithTag);
-        }
-        transaction.commit();
+//        FragmentTransaction transaction = fragmentManager.beginTransaction();
+//        if (!flag) {
+//            transaction.replace(R.id.find_trip_fragment, findTripWithTag);
+//            transaction.remove(findTripWithTag);
+//        } else {
+//            transaction.replace(R.id.find_trip_fragment, tripFriendJoined);
+//            transaction.remove(findTripWithTag);
+//        }
+//        transaction.commit();
+//    }
     }
 }

@@ -183,7 +183,7 @@ public class AddFriendActivity extends AppCompatActivity {
             }
         };
 
-        Query query = reference.child(ConstantValue.DISPLAY_NAME_INDEX_CHILD).orderByChild("displayName").equalTo(searchText);
+        Query query = reference.child(ConstantValue.DISPLAY_NAME_INDEX_CHILD).orderByChild("displayName").startAt(searchText);
         query.addListenerForSingleValueEvent(listener);
         listeners.add(listener);
     }

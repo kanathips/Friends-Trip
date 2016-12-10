@@ -107,7 +107,7 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
     @Override
     public TripRoomHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.cell, parent, false);
+                .inflate(R.layout.trip_room_cell, parent, false);
 
         return new TripRoomHolder(itemView);
     }
@@ -190,7 +190,7 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
         holder.join_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickJoinTrip(reference, album.getTripId(), userUid);
+                updateTripRoom(reference, album.getTripId(), userUid, holder);
             }
         });
         holder.content_location_bt.setOnClickListener(new View.OnClickListener() {
@@ -269,12 +269,8 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
         return albumList.size();
     }
 
-    public void onClickJoinTrip(DatabaseReference reference, String tripId, String userUid) {
-        updateTripRoom(reference, tripId, userUid);
-    }
 
-
-    private void updateTripRoom(final DatabaseReference reference, final String tripId, final String userUid) {
+    private void updateTripRoom(final DatabaseReference reference, final String tripId, final String userUid, final TripRoomHolder holder) {
         final DatabaseReference tripReference = reference.child(ConstantValue.TRIP_ROOM_CHILD).child(tripId);
         tripReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -289,16 +285,17 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
                         tripReference.child("members").child(userUid).setValue(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                updateUserProfile(reference, tripId, userUid);
+                                updateUserProfile(reference, tripId, userUid, holder);
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(mContext, "ไม่สามารถเข้าร่วมได้ กรุณาลองใหม่อีกครั้ง (1)", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, "ไม่สามารถเข้าร่วมได้ กรุณาลองใหม่อีกครั้ง", Toast.LENGTH_SHORT).show();
                             }
                         });
                     } else {
                         Toast.makeText(mContext, "ทริปเต็มแล้ว", Toast.LENGTH_SHORT).show();
+                        holder.foldingCell.toggle(true);
                     }
 
                 }
@@ -311,18 +308,19 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
         });
     }
 
-    private void updateUserProfile(DatabaseReference reference, String tripId, String userUid) {
+    private void updateUserProfile(DatabaseReference reference, String tripId, String userUid, final TripRoomHolder holder) {
         Map<String, Object> updateMap = new HashMap<>();
         updateMap.put("tripId", tripId);
         reference.child(ConstantValue.USERS_CHILD).child(userUid).updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(mContext, "Join OK", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "คุณได้เข้าร่วมทริปแล้ว", Toast.LENGTH_SHORT).show();
+                holder.foldingCell.toggle(false);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(mContext, "ไม่สามารถเข้าร่วมได้ กรุณาลองใหม่อีกครั้ง (2)", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "ไม่สามารถเข้าร่วมได้ กรุณาลองใหม่อีกครั้ง", Toast.LENGTH_SHORT).show();
             }
         });
     }
