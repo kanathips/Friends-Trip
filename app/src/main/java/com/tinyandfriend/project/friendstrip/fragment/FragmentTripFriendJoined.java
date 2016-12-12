@@ -7,6 +7,7 @@ package com.tinyandfriend.project.friendstrip.fragment;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,6 +46,7 @@ public class FragmentTripFriendJoined extends Fragment {
     int pixelHeight;
     private static final String USER_UID = "userUid";
     private String userUid;
+    private ScaleInAnimationAdapter alphaAdapter;
 
     public static FragmentTripFriendJoined newInstance(String userUid) {
         FragmentTripFriendJoined fragment = new FragmentTripFriendJoined();
@@ -59,41 +61,19 @@ public class FragmentTripFriendJoined extends Fragment {
         super.onCreate(savedInstanceState);
 
         reference = FirebaseDatabase.getInstance().getReference();
+        pixelWidth = getResources().getDisplayMetrics().widthPixels;
+        pixelHeight = getResources().getDisplayMetrics().heightPixels;
+        tripList = new ArrayList<>();
+        rooms = new ArrayList<>();
 
         if (getArguments() != null) {
             userUid = getArguments().getString(USER_UID);
         }
-    }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.context = context;
-    }
-
-
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_trip_friend_joined, container, false);
-
-
-        pixelWidth = getResources().getDisplayMetrics().widthPixels;
-        pixelHeight = getResources().getDisplayMetrics().heightPixels;
-
-        tripList = new ArrayList<>();
-        TripCardViewAdapter adapter = new TripCardViewAdapter(getActivity(), tripList, pixelWidth, pixelHeight);
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(10), true));
-
-        final ScaleInAnimationAdapter alphaAdapter = new ScaleInAnimationAdapter(adapter);
+        TripCardViewAdapter adapter = new TripCardViewAdapter(context, tripList, pixelWidth, pixelHeight);
+        alphaAdapter = new ScaleInAnimationAdapter(adapter);
         alphaAdapter.setFirstOnly(false);
         alphaAdapter.setDuration(250);
-        recyclerView.setAdapter(alphaAdapter);
-
-        rooms = new ArrayList<>();
-
-        context = getContext();
 
         reference.child(ConstantValue.FRIEND_LIST_CHILD).child(userUid).addChildEventListener(new ChildEventListener() {
             @Override
@@ -105,7 +85,6 @@ public class FragmentTripFriendJoined extends Fragment {
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
                             FriendInfo friendInfo = dataSnapshot.getValue(FriendInfo.class);
-                            Log.i("JOIN FROM FRIEND", dataSnapshot.getValue().toString());
                             String tripId = friendInfo.getTripId();
                             if (tripId == null || rooms.contains(tripId)) {
                                 return;
@@ -167,6 +146,24 @@ public class FragmentTripFriendJoined extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        final View rootView = inflater.inflate(R.layout.fragment_trip_friend_joined, container, false);
+
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(context, 1);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(10), true));
+        recyclerView.setAdapter(alphaAdapter);
 
         return rootView;
     }

@@ -25,7 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.tinyandfriend.project.friendstrip.AcceptFriendNotification;
+import com.tinyandfriend.project.friendstrip.info.notification.AcceptFriendNotification;
 import com.tinyandfriend.project.friendstrip.ConstantValue;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.info.FriendInfo;
@@ -143,6 +143,7 @@ public class AddFriendActivity extends AppCompatActivity {
                                     addButton.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
+                                            addButton.setEnabled(false);
                                             FriendInfo targetFriendInfo = new FriendInfo(targetName, targetUid, targetProfilePhotoUrl, Pending);
                                             FriendInfo senderFriendInfo = new FriendInfo(userDisplayName, userUid, userProfilePhotoUrl, Approving);
                                             addFriend(targetFriendInfo, senderFriendInfo);

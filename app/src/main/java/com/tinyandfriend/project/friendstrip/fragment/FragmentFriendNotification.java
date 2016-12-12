@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +16,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.tinyandfriend.project.friendstrip.AcceptFriendNotification;
+import com.tinyandfriend.project.friendstrip.info.notification.AcceptFriendNotification;
 import com.tinyandfriend.project.friendstrip.ConstantValue;
-import com.tinyandfriend.project.friendstrip.Notification;
+import com.tinyandfriend.project.friendstrip.info.notification.InviteNotification;
+import com.tinyandfriend.project.friendstrip.info.notification.Notification;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.adapter.NotificationAdapter;
-import com.tinyandfriend.project.friendstrip.info.NotificationType;
+import com.tinyandfriend.project.friendstrip.info.notification.NotificationType;
 
 import java.util.ArrayList;
 
@@ -96,6 +96,9 @@ public class FragmentFriendNotification extends Fragment {
                             notification = dataSnapshot.getValue(AcceptFriendNotification.class);
                             notificationList.add(notification);
                             break;
+                        case TripInvite:
+                            notification = dataSnapshot.getValue(InviteNotification.class);
+                            notificationList.add(notification);
                     }
                     notification.setId(notificationId);
                     notificationAdapter.notifyDataSetChanged();

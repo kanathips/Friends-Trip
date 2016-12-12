@@ -200,7 +200,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -214,8 +213,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.tinyandfriend.project.friendstrip.ConstantValue;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.adapter.ContentFragmentPagerAdapter;
+import com.tinyandfriend.project.friendstrip.adapter.InviteFriendListAdapter;
 import com.tinyandfriend.project.friendstrip.info.UserInfo;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -227,9 +228,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String username;
     private String userEmail;
     private FirebaseAuth.AuthStateListener authStateListener;
-    private static final String USERS_CHILD = "users";
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     private boolean stateFlag = true;
+    private String userUid;
+    private ContentFragmentPagerAdapter contentFragmentPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -243,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         final View header = navigationView.getHeaderView(0);
 
-        final ContentFragmentPagerAdapter contentFragmentPagerAdapter = new ContentFragmentPagerAdapter(getSupportFragmentManager(),this);
+        contentFragmentPagerAdapter = new ContentFragmentPagerAdapter(getSupportFragmentManager());
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -265,10 +267,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     TextView email_nav = (TextView) header.findViewById(R.id.email_nav_header);
                     username = user.getDisplayName();
                     userEmail = user.getEmail();
+                    userUid = user.getUid();
                     username_nav.setText(username);
                     email_nav.setText(userEmail);
 
-                    reference.child(USERS_CHILD).child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    reference.child(ConstantValue.USERS_CHILD).child(userUid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             UserInfo userInfo = dataSnapshot.getValue(UserInfo.class);
@@ -322,34 +325,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//        if (id == R.id.action_friend) {
-//            startActivity(new Intent(this, ChatActivity.class));
-//        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-
+        Intent intent;
         switch (id) {
             case R.id.nav_profile:
                 startActivity(new Intent(this, EditUserInfoActivity.class));
+                break;
+            case R.id.nav_friend_list:
+                intent = new Intent(this, FriendListActivity.class);
+                startActivity(intent);
                 break;
             case R.id.nav_log_out:
                 firebaseAuth.signOut();
                 startActivity(new Intent(this, SignInActivity.class));
                 finish();
+                break;
+            case R.id.nav_invite:
+                intent = new Intent(this, InviteFriendActivity.class);
+                String tripId = contentFragmentPagerAdapter.getTripId();
+                intent.putExtra("tripId", tripId);
+                startActivity(intent);
                 break;
         }
 

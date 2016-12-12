@@ -1,4 +1,4 @@
-package com.tinyandfriend.project.friendstrip.info;
+package com.tinyandfriend.project.friendstrip.info.notification;
 
 /**
  * Created by NewWy on 13/11/2559.
@@ -6,7 +6,7 @@ package com.tinyandfriend.project.friendstrip.info;
 
 public enum NotificationType {
 
-    AcceptFriend(1), Default(0) ;
+    AcceptFriend(1), Default(0), TripInvite(2) ;
 
     private final int type;
 

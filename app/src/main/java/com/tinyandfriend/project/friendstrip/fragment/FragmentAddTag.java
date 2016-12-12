@@ -49,19 +49,19 @@ public class FragmentAddTag extends FragmentPager {
     private TagListViewAdapter regionTagAdapter;
     private TagListViewAdapter tripTagAdapter;
     private TagListViewAdapter placeTagAdapter;
-    private ArrayList<FileInfo> fileInfos;
-    private FileCardViewAdapter fileCardViewAdapter;
     private int[] tempHeaderImage = {
             R.drawable.pic1, R.drawable.pic2, R.drawable.pic3,
             R.drawable.pic4, R.drawable.pic5, R.drawable.pic6,
             R.drawable.pic7, R.drawable.pic8, R.drawable.pic9,
             R.drawable.pic10};
     private Uri thumbnailUri;
+    private FileInfo uploadFile;
+    private View rootView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_add_tag, container, false);
+        rootView = inflater.inflate(R.layout.fragment_add_tag, container, false);
         context = getContext();
 
         setUpTagListView(rootView);
@@ -73,14 +73,6 @@ public class FragmentAddTag extends FragmentPager {
                 showFileChooser();
             }
         });
-        uploadFiles = new ArrayList<>();
-
-        fileInfos = new ArrayList<>();
-        fileCardViewAdapter = new FileCardViewAdapter(fileInfos);
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.file_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(fileCardViewAdapter);
 
         Random random = new Random();
         int ranInt = random.nextInt(9);
@@ -129,9 +121,6 @@ public class FragmentAddTag extends FragmentPager {
         return true;
     }
 
-    public void onClickAddImgHeader(View view){
-
-    }
 
     @Override
     public void setInfo(Object info) {
@@ -189,7 +178,6 @@ public class FragmentAddTag extends FragmentPager {
         }
     }
 
-    ArrayList<String> uploadFiles;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -201,9 +189,7 @@ public class FragmentAddTag extends FragmentPager {
                     fileInfo.setUri(data.getData());
                     File file = new File(fileInfo.getUri().getPath());
                     fileInfo.setFileName(file.getName());
-                    fileInfos.add(fileInfo);
-                    Log.d(TAG, fileInfo.getFileName() + " Uri: " + fileInfo.getUri());
-                    fileCardViewAdapter.notifyDataSetChanged();
+                    uploadFile = fileInfo;
                 }
                 break;
             case ID_REQUEST:
@@ -216,13 +202,10 @@ public class FragmentAddTag extends FragmentPager {
                     assert cursor != null;
                     cursor.moveToFirst();
 
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String picturePath = cursor.getString(columnIndex);
                     cursor.close();
 
-                    TripInfo tripInfo = new TripInfo();
 
-                    ImageView imageView = (ImageView) getView().findViewById(R.id.header_image);
+                    ImageView imageView = (ImageView) rootView.findViewById(R.id.header_image);
                     imageView.setImageURI(selectedImage);
                     imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     thumbnailUri = selectedImage;
@@ -238,7 +221,7 @@ public class FragmentAddTag extends FragmentPager {
         return thumbnailUri;
     }
 
-    public ArrayList<FileInfo> getFileList() {
-        return fileInfos;
+    public FileInfo getUploadFile() {
+        return uploadFile;
     }
 }

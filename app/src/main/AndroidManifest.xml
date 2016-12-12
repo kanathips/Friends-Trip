@@ -33,7 +33,6 @@
         <activity android:name=".activity.AddFriendActivity" />
         <activity android:name=".activity.ForgetPasswordActivity" />
         <activity android:name=".activity.CreateTripActivity" />
-        <activity android:name=".activity.SelectTripActivity" />
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -46,7 +45,10 @@
         <activity android:name=".activity.AddPlaceActivity" />
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.ChatActivity" />
-        <activity android:name=".activity.FindTripWithTagActivity"></activity>
+        <activity android:name=".activity.FindTripWithTagActivity" />
+        <activity android:name=".activity.FriendListActivity" />
+        <activity android:name=".activity.InviteFriendActivity"/>
+        <activity android:name=".activity.TripReviewActivity"/>
     </application>
 
 </manifest>

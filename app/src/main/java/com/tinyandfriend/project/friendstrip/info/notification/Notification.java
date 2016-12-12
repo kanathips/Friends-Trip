@@ -1,6 +1,4 @@
-package com.tinyandfriend.project.friendstrip;
-
-import com.tinyandfriend.project.friendstrip.info.NotificationType;
+package com.tinyandfriend.project.friendstrip.info.notification;
 
 /**
  *

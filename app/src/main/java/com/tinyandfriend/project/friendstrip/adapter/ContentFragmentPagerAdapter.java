@@ -2,60 +2,36 @@
 package com.tinyandfriend.project.friendstrip.adapter;
 
 
-import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v7.app.AppCompatActivity;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.fragment.FragmentFindTrip;
-import com.tinyandfriend.project.friendstrip.fragment.FragmentFriendList;
 import com.tinyandfriend.project.friendstrip.fragment.FragmentFriendNotification;
-import com.tinyandfriend.project.friendstrip.fragment.FragmentNotification;
 import com.tinyandfriend.project.friendstrip.fragment.FragmentRoomDefault;
-import com.tinyandfriend.project.friendstrip.fragment.FragmentRoomHost;
-import com.tinyandfriend.project.friendstrip.fragment.FragmentRoomJoiner;
-
-
-/**
- * Created by StandAlone on 10/10/2559.
- */
 
 
 public class ContentFragmentPagerAdapter extends FragmentPagerAdapter implements PagerSlidingTabStrip.IconTabProvider{
 
     private String userUid;
-    private String tripID;
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-    private final int PAGE_COUNT = 4;
-    public static String tabTitles[] = new String[]{"จัดการทริป","เข้าร่วมทริป", "การแจ้งเตือน", "คำร้องขอ"};
-    private int tabIcons[] = {R.drawable.ic_directions_walk_black_18dp,R.drawable.ic_filter_hdr_black_18dp, R.drawable.ic_notifications_black_18dp, R.drawable.ic_group_black_18dp};
-    private int joinType;
-    private AppCompatActivity activity;
+    public static String tabTitles[] = new String[]{"จัดการทริป","เข้าร่วมทริป", "การแจ้งเตือน"};
+    private int tabIcons[] = {R.drawable.ic_directions_walk_black_18dp,R.drawable.ic_filter_hdr_black_18dp, R.drawable.ic_notifications_black_18dp};
+    private FragmentRoomDefault tripRoom;
 
-    public ContentFragmentPagerAdapter(FragmentManager fm, Activity activity)  {
+    public ContentFragmentPagerAdapter(FragmentManager fm)  {
         super(fm);
-        this.activity = (AppCompatActivity) activity;
     }
 
     public void setUserUid(String userUid) {
         this.userUid = userUid;
     }
 
-    public void setTripID(String tripID) {
-        this.tripID = tripID;
-    }
-
     @Override
 
     public int getCount() {
-//        if(checkJoined == false)
-//            return modelJoinedTrips.get(0).getCount()-1;
-        return PAGE_COUNT;
+        return 3;
     }
 
     @Override
@@ -64,13 +40,12 @@ public class ContentFragmentPagerAdapter extends FragmentPagerAdapter implements
         if (userUid != null && !userUid.isEmpty()) {
             switch (position) {
                 case 0:
-                    return FragmentRoomDefault.newInstance(userUid, tripID);
+                    tripRoom = FragmentRoomDefault.newInstance(userUid);
+                    return tripRoom;
                 case 1:
                     return FragmentFindTrip.newInstance(userUid);
                 case 2:
                     return FragmentFriendNotification.newInstance(userUid);
-                case 3:
-                    return FragmentFriendList.newInstance(userUid);
             }
         }
 
@@ -93,12 +68,7 @@ public class ContentFragmentPagerAdapter extends FragmentPagerAdapter implements
         return tabIcons[position];
     }
 
-
-    public int getJoinType() {
-        return joinType;
-    }
-
-    public void setJoinType(int joinType) {
-        this.joinType = joinType;
+    public String getTripId(){
+        return  tripRoom.getTripId();
     }
 }

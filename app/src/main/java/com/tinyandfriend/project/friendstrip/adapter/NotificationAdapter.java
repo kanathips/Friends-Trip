@@ -4,13 +4,11 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.tinyandfriend.project.friendstrip.Notification;
+import com.tinyandfriend.project.friendstrip.info.notification.Notification;
 import com.tinyandfriend.project.friendstrip.factory.NotificationFactory;
 import com.tinyandfriend.project.friendstrip.holder.NotificationHolder;
 
 import java.util.ArrayList;
-
-import static com.tinyandfriend.project.friendstrip.info.NotificationType.AcceptFriend;
 
 /**
  * Created by NewWy on 13/11/2559.
@@ -46,6 +44,5 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationHolder
     @Override
     public int getItemViewType(int position) {
         return notificationList.get(position).getNotificationType().getType();
-
     }
 }

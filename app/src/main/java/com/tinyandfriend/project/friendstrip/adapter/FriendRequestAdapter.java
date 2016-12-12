@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.tinyandfriend.project.friendstrip.Notification;
+import com.tinyandfriend.project.friendstrip.info.notification.Notification;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.factory.NotificationFactory;
 import com.tinyandfriend.project.friendstrip.holder.NotificationHolder;

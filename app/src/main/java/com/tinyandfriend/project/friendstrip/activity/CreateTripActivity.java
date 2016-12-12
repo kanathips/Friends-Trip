@@ -161,9 +161,9 @@ public class CreateTripActivity extends AppCompatActivity {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 tripInfo.setThumbnail(taskSnapshot.getDownloadUrl().toString());
-                ArrayList<FileInfo> fileInfos = fragmentAddTag.getFileList();
+                FileInfo uploadFile = fragmentAddTag.getUploadFile();
                 ArrayList<String> successFiles = new ArrayList<>();
-                if (fileInfos.size() == 0) {
+                if (uploadFile == null) {
                     tripRoomReference.setValue(tripInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -174,11 +174,9 @@ public class CreateTripActivity extends AppCompatActivity {
                         }
                     });
 
-                } else if (fileInfos.size() > 0) {
+                } else{
                     processDialog.setMessage("กำลังอัพโหลดไฟล์");
-                    for (int i = 0; i < fileInfos.size(); i++) {
-                        uploadFile(fileInfos, i, tripRoomReference, processDialog, successFiles);
-                    }
+                        uploadFile(uploadFile, tripRoomReference, processDialog, successFiles);
                 }
             }
         });
@@ -186,9 +184,9 @@ public class CreateTripActivity extends AppCompatActivity {
 
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
-    private void uploadFile(final ArrayList<FileInfo> fileInfos, final int position, final DatabaseReference tripReference, final ProgressDialog processDialog, final ArrayList<String> successFiles) {
-        Uri uri = fileInfos.get(position).getUri();
-        final String fileName = fileInfos.get(position).getFileName();
+    private void uploadFile(final FileInfo uploadFile, final DatabaseReference tripReference, final ProgressDialog processDialog, final ArrayList<String> successFiles) {
+        Uri uri = uploadFile.getUri();
+        final String fileName = uploadFile.getFileName();
 
         UploadTask uploadTask = storage.getReference().child(tripReference.getKey() + "/trip_document/" + fileName).putFile(uri, metadata);
         uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -209,21 +207,17 @@ public class CreateTripActivity extends AppCompatActivity {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Log.i(TAG, taskSnapshot.getMetadata().getName() + ": is upload success");
                 successFiles.add(taskSnapshot.getDownloadUrl().toString());
-
-                if (position + 1 == fileInfos.size()) {
-                    processDialog.setMessage("อัพโหลดเสร็จสิ้น");
-                    tripInfo.setFiles(successFiles);
-                    tripReference.setValue(tripInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            updateTripRoom(tripReference, tripReference.getKey(), user.getUid());
-                            processDialog.dismiss();
-                            CreateTripActivity.this.finish();
-                        }
-                    });
-
-                }
+                processDialog.setMessage("อัพโหลดเสร็จสิ้น");
+                tripInfo.setFiles(successFiles);
+                tripReference.setValue(tripInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        updateTripRoom(tripReference, tripReference.getKey(), user.getUid());
+                        processDialog.dismiss();
+                        CreateTripActivity.this.finish();
+                    }
+                });
             }
         });
     }

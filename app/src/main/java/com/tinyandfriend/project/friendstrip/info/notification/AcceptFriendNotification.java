@@ -1,8 +1,6 @@
-package com.tinyandfriend.project.friendstrip;
+package com.tinyandfriend.project.friendstrip.info.notification;
 
-import com.google.firebase.database.Exclude;
 import com.tinyandfriend.project.friendstrip.info.FriendInfo;
-import com.tinyandfriend.project.friendstrip.info.NotificationType;
 
 /**
  * Created by NewWy on 11/11/2559.
@@ -21,6 +19,7 @@ public class AcceptFriendNotification extends Notification {
         setNotificationType(TYPE);
         String message = friendInfo.getFriendName() +" ต้องการเป็นเพื่อนกับคุณ";
         String photoUrl = friendInfo.getFriendPhotoUrl();
+
         setSenderUid(friendInfo.getFriendUid());
         setMessage(message);
         setPhotoUrl(photoUrl);
@@ -30,6 +29,7 @@ public class AcceptFriendNotification extends Notification {
         setNotificationType(TYPE);
         String message = friendInfo.getFriendName() +" ต้องการเป็นเพื่อนกับคุณ";
         String photoUrl = friendInfo.getFriendPhotoUrl();
+
         setSenderUid(friendInfo.getFriendUid());
         setMessage(message);
         setPhotoUrl(photoUrl);

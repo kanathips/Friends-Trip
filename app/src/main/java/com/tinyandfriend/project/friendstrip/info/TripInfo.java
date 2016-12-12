@@ -23,7 +23,16 @@ public class TripInfo {
     private String thumbnail;
     private String status = "open";
     private PlaceInfo appointPlace;
+    private Map<String, MemberInfo> members;
 
+
+    public Map<String, MemberInfo> getMembers() {
+        return members;
+    }
+
+    public void setMembers(Map<String, MemberInfo> members) {
+        this.members = members;
+    }
 
     public String getThumbnail() {
         return thumbnail;

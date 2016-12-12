@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.tinyandfriend.project.friendstrip.R;
-import com.tinyandfriend.project.friendstrip.info.NotificationType;
+import com.tinyandfriend.project.friendstrip.info.notification.NotificationType;
 
 /**
  * Created by NewWy on 3/12/2559.

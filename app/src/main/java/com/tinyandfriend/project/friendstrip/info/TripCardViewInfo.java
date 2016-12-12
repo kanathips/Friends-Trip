@@ -1,10 +1,14 @@
 package com.tinyandfriend.project.friendstrip.info;
 
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by StandAlone on 21/10/2559.
  */
 
-public class TripCardViewInfo {
+public class TripCardViewInfo implements Parcelable {
 
     private String tripEnd;
     private String name_card;
@@ -14,6 +18,29 @@ public class TripCardViewInfo {
     private String thumbnail;
     private String tripId;
     private String tripSpoil;
+
+    protected TripCardViewInfo(Parcel in) {
+        tripEnd = in.readString();
+        name_card = in.readString();
+        tripStart = in.readString();
+        count_people = in.readInt();
+        pic_id = in.readInt();
+        thumbnail = in.readString();
+        tripId = in.readString();
+        tripSpoil = in.readString();
+    }
+
+    public static final Creator<TripCardViewInfo> CREATOR = new Creator<TripCardViewInfo>() {
+        @Override
+        public TripCardViewInfo createFromParcel(Parcel in) {
+            return new TripCardViewInfo(in);
+        }
+
+        @Override
+        public TripCardViewInfo[] newArray(int size) {
+            return new TripCardViewInfo[size];
+        }
+    };
 
     public String getTripEnd() {
         return tripEnd;
@@ -115,7 +142,19 @@ public class TripCardViewInfo {
     }
 
     @Override
-    public int hashCode() {
-        return tripId != null ? tripId.hashCode() : 0;
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(tripEnd);
+        dest.writeString(name_card);
+        dest.writeString(tripStart);
+        dest.writeInt(count_people);
+        dest.writeInt(pic_id);
+        dest.writeString(thumbnail);
+        dest.writeString(tripId);
+        dest.writeString(tripSpoil);
     }
 }
