@@ -41,11 +41,11 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     public void onClickLogin(View view) {
-
-        if (!validateForm())
-            return;
-
         final ProgressDialog progressDialog = ProgressDialog.show(SignInActivity.this, "เข้าสู่ระบบ", "กำลังทำการเข้าสู่ระบบ...");
+        if (!validateForm()) {
+            progressDialog.dismiss();
+            return;
+        }
 
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();

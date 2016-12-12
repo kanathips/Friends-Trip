@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context="com.tinyandfriend.project.friendstrip.fragment.FragmentRoomDefault">
+    tools:context="com.tinyandfriend.project.friendstrip.fragment.FragmentTripRoom">
 
     <ImageView
         android:id="@+id/image_detail"

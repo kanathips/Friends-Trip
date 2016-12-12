@@ -1,5 +1,8 @@
 package com.tinyandfriend.project.friendstrip.info;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -7,7 +10,7 @@ import java.util.Map;
  * Created by NewWy on 9/10/2559.
  */
 
-public class TripInfo {
+public class TripInfo implements Parcelable {
 
     private String id;
     private String tripName;
@@ -25,6 +28,34 @@ public class TripInfo {
     private PlaceInfo appointPlace;
     private Map<String, MemberInfo> members;
 
+
+    protected TripInfo(Parcel in) {
+        id = in.readString();
+        tripName = in.readString();
+        startDate = in.readString();
+        endDate = in.readString();
+        tripSpoil = in.readString();
+        maxMember = in.readInt();
+        expense = in.readString();
+        placeInfos = in.createTypedArrayList(PlaceInfo.CREATOR);
+        files = in.createStringArrayList();
+        ownerUID = in.readString();
+        thumbnail = in.readString();
+        status = in.readString();
+        appointPlace = in.readParcelable(PlaceInfo.class.getClassLoader());
+    }
+
+    public static final Creator<TripInfo> CREATOR = new Creator<TripInfo>() {
+        @Override
+        public TripInfo createFromParcel(Parcel in) {
+            return new TripInfo(in);
+        }
+
+        @Override
+        public TripInfo[] newArray(int size) {
+            return new TripInfo[size];
+        }
+    };
 
     public Map<String, MemberInfo> getMembers() {
         return members;
@@ -170,6 +201,28 @@ public class TripInfo {
 
     public PlaceInfo getAppointPlace() {
         return appointPlace;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(tripName);
+        dest.writeString(startDate);
+        dest.writeString(endDate);
+        dest.writeString(tripSpoil);
+        dest.writeInt(maxMember);
+        dest.writeString(expense);
+        dest.writeTypedList(placeInfos);
+        dest.writeStringList(files);
+        dest.writeString(ownerUID);
+        dest.writeString(thumbnail);
+        dest.writeString(status);
+        dest.writeParcelable(appointPlace, flags);
     }
 }
 

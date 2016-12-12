@@ -1,16 +1,11 @@
 package com.tinyandfriend.project.friendstrip.factory;
 
-import android.app.Dialog;
 import android.content.Intent;
-import android.support.v4.app.DialogFragment;
 import android.content.Context;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -21,13 +16,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.tinyandfriend.project.friendstrip.ConstantValue;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.activity.TripReviewActivity;
-import com.tinyandfriend.project.friendstrip.fragment.FragmentRoomJoiner;
 import com.tinyandfriend.project.friendstrip.holder.NotiAcptFriendHolder;
 import com.tinyandfriend.project.friendstrip.holder.NotificationHolder;
 import com.tinyandfriend.project.friendstrip.info.notification.AcceptFriendNotification;
 import com.tinyandfriend.project.friendstrip.info.notification.InviteNotification;
 import com.tinyandfriend.project.friendstrip.info.notification.Notification;
-import com.tinyandfriend.project.friendstrip.view.ProfileDialog;
 
 import java.util.HashMap;
 import java.util.Map;

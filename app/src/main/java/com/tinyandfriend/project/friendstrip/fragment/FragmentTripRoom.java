@@ -1,19 +1,20 @@
 package com.tinyandfriend.project.friendstrip.fragment;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.MapView;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,20 +25,21 @@ import com.tinyandfriend.project.friendstrip.ConstantValue;
 import com.tinyandfriend.project.friendstrip.R;
 
 
-public class FragmentRoomDefault extends Fragment {
+public class FragmentTripRoom extends Fragment {
 
     MapView mapView;
     private DatabaseReference reference;
     private String userUid;
     private FragmentManager fragmentManager;
     String tripId;
+    private ViewPager viewPager;
 
-    public FragmentRoomDefault() {
+    public FragmentTripRoom() {
         // Required empty public constructor
     }
 
-    public static FragmentRoomDefault newInstance(String userUid) {
-        FragmentRoomDefault fragment = new FragmentRoomDefault();
+    public static FragmentTripRoom newInstance(String userUid) {
+        FragmentTripRoom fragment = new FragmentTripRoom();
         Bundle args = new Bundle();
         args.putString(ConstantValue.USER_UID, userUid);
         fragment.setArguments(args);
@@ -48,6 +50,10 @@ public class FragmentRoomDefault extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            userUid = getArguments().getString(ConstantValue.USER_UID);
+        }
     }
 
     @Override
@@ -59,18 +65,28 @@ public class FragmentRoomDefault extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.frame, new FragmentRoomBeforeJoin());
-        transaction.commit();
+        final ProgressDialog progressDialog = ProgressDialog.show(getContext(), "กำลังตรวจสอบข้อมูล","ตรวจสอบข้อมูลทริปที่เข้าร่วม");
 
         reference = FirebaseDatabase.getInstance().getReference();
+        reference.child(ConstantValue.USERS_CHILD).child(userUid).child(ConstantValue.TRIP_ID_CHILD).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()){
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    FragmentTripRoomBeforeJoin fragmentTripRoomBeforeJoin = new FragmentTripRoomBeforeJoin();
+                    fragmentTripRoomBeforeJoin.setViewPager(viewPager);
+                    transaction.replace(R.id.frame, fragmentTripRoomBeforeJoin);
+                    transaction.commit();
+                    tripId = null;
+                    progressDialog.dismiss();
+                }
+            }
 
-        if (getArguments() != null) {
-            userUid = getArguments().getString(ConstantValue.USER_UID);
-        }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
         reference.child(ConstantValue.USERS_CHILD).child(userUid).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -85,11 +101,12 @@ public class FragmentRoomDefault extends Fragment {
                                 String ownerUID = dataSnapshot.getValue(String.class);
                                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                                 if (userUid.equals(ownerUID)) {
-                                    transaction.replace(R.id.frame, FragmentRoomHost.newInstance(userUid, tripId));
+                                    transaction.replace(R.id.frame, FragmentTripRoomHost.newInstance(userUid, tripId));
                                 } else {
-                                    transaction.replace(R.id.frame, FragmentRoomJoiner.newInstance(userUid, tripId));
+                                    transaction.replace(R.id.frame, FragmentTripRoomJoiner.newInstance(userUid, tripId));
                                 }
                                 transaction.commit();
+                                progressDialog.dismiss();
                             }
                         }
 
@@ -100,6 +117,7 @@ public class FragmentRoomDefault extends Fragment {
                     });
                 } else {
                     tripId = null;
+                    progressDialog.dismiss();
                 }
             }
 
@@ -113,9 +131,13 @@ public class FragmentRoomDefault extends Fragment {
                 if (!dataSnapshot.getKey().equals(ConstantValue.TRIP_ID_CHILD))
                     return;
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.frame, new FragmentRoomBeforeJoin());
+                FragmentTripRoomBeforeJoin fragmentTripRoomBeforeJoin = new FragmentTripRoomBeforeJoin();
+                fragmentTripRoomBeforeJoin.setViewPager(viewPager);
+                transaction.replace(R.id.frame, fragmentTripRoomBeforeJoin);
+
                 transaction.commit();
                 tripId = null;
+                progressDialog.dismiss();
             }
 
             @Override
@@ -178,5 +200,9 @@ public class FragmentRoomDefault extends Fragment {
 
     public String getTripId() {
         return tripId;
+    }
+
+    public void setViewPager(ViewPager viewPager) {
+        this.viewPager = viewPager;
     }
 }

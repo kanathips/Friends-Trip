@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -116,6 +117,7 @@ public class InviteFriendActivity extends AppCompatActivity {
                 for(FriendInfo friendInfo: inviteList){
                     InviteNotification inviteNotification = new InviteNotification(user.getDisplayName(), user.getPhotoUrl().toString(), tripId);
                     reference.child(ConstantValue.NOTIFICATION_CHILD).child(friendInfo.getFriendUid()).push().setValue(inviteNotification);
+                    Toast.makeText(InviteFriendActivity.this, "ชวนเพื่อนเรียบร้อยแล้ว", Toast.LENGTH_SHORT).show();
                 }
             }
         });

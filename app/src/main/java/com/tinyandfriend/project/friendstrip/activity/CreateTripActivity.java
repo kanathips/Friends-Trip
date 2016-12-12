@@ -36,6 +36,7 @@ import com.tinyandfriend.project.friendstrip.info.FileInfo;
 import com.tinyandfriend.project.friendstrip.info.TripInfo;
 import com.tinyandfriend.project.friendstrip.view.NoSwipeViewPager;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +45,7 @@ import java.util.Set;
 import static com.tinyandfriend.project.friendstrip.R.drawable.user;
 
 
-public class CreateTripActivity extends AppCompatActivity {
+public class CreateTripActivity extends AppCompatActivity implements Serializable{
 
     private static final String TAG = "CREATE_TRIP_ACTIVITY";
     private NoSwipeViewPager viewPager;

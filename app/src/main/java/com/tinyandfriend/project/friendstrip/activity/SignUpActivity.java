@@ -131,9 +131,11 @@ public class SignUpActivity extends AppCompatActivity {
 
     public void onClickSignUp(View view) {
         //TODO Implement Validate From Function here
-
-        if (!validateForm())
+        final ProgressDialog progressDialog = ProgressDialog.show(SignUpActivity.this, "สมัครสมาชิก", "กำลังทำรายการโปรดรอ...");
+        if (!validateForm()) {
+            progressDialog.dismiss();
             return;
+        }
 
         SignUpInfo userInfo = new SignUpInfo();
         try {
@@ -147,7 +149,7 @@ public class SignUpActivity extends AppCompatActivity {
             userInfo.setlName(getLNameText());
             userInfo.setPhoneNumber(getPhoneNumberText());
 
-            signUp(userInfo);
+            signUp(userInfo, progressDialog);
 
 
         } catch (IllegalArgumentException e) {
@@ -219,8 +221,7 @@ public class SignUpActivity extends AppCompatActivity {
         finish();
     }
 
-    public void signUp(final SignUpInfo userInfo) {
-        final ProgressDialog progressDialog = ProgressDialog.show(SignUpActivity.this, "สมัครสมาชิก", "กำลังทำรายการโปรดรอ...");
+    public void signUp(final SignUpInfo userInfo, final ProgressDialog progressDialog) {
         dbReference.child("citizenIdIndex").orderByChild("citizenId").equalTo(userInfo.getCitizenId())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override

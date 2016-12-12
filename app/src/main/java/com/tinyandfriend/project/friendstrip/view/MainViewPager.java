@@ -7,13 +7,14 @@ import android.util.AttributeSet;
 
 import com.tinyandfriend.project.friendstrip.adapter.ContentFragmentPagerAdapter;
 
+import java.io.Serializable;
+
 /**
  * Created by StandAlone on 4/12/2559.
  */
 
-public class MainViewPager extends ViewPager {
+public class MainViewPager extends ViewPager implements Serializable {
     private AppCompatActivity activity;
-    private boolean checkJoined;
 
     public MainViewPager(Context context) {
         super(context);
@@ -25,9 +26,6 @@ public class MainViewPager extends ViewPager {
         activity = (AppCompatActivity) context;
     }
 
-    public void setStatusJoined(boolean checkJoined){
-        this.checkJoined = checkJoined;
-    }
 
     @Override
     protected void onPageScrolled(int position, float offset, int offsetPixels) {

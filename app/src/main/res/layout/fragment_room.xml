@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:map="http://schemas.android.com/apk/res-auto"
-    tools:context="com.tinyandfriend.project.friendstrip.fragment.FragmentRoomDefault">
+    tools:context="com.tinyandfriend.project.friendstrip.fragment.FragmentTripRoom">
 
     <ImageView
         android:id="@+id/image_detail"

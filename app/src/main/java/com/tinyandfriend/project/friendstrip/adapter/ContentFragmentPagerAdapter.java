@@ -5,12 +5,14 @@ package com.tinyandfriend.project.friendstrip.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.fragment.FragmentFindTrip;
 import com.tinyandfriend.project.friendstrip.fragment.FragmentFriendNotification;
-import com.tinyandfriend.project.friendstrip.fragment.FragmentRoomDefault;
+import com.tinyandfriend.project.friendstrip.fragment.FragmentTripRoom;
+import com.tinyandfriend.project.friendstrip.view.MainViewPager;
 
 
 public class ContentFragmentPagerAdapter extends FragmentPagerAdapter implements PagerSlidingTabStrip.IconTabProvider{
@@ -18,7 +20,8 @@ public class ContentFragmentPagerAdapter extends FragmentPagerAdapter implements
     private String userUid;
     public static String tabTitles[] = new String[]{"จัดการทริป","เข้าร่วมทริป", "การแจ้งเตือน"};
     private int tabIcons[] = {R.drawable.ic_directions_walk_black_18dp,R.drawable.ic_filter_hdr_black_18dp, R.drawable.ic_notifications_black_18dp};
-    private FragmentRoomDefault tripRoom;
+    private FragmentTripRoom tripRoom;
+    private ViewPager viewPager;
 
     public ContentFragmentPagerAdapter(FragmentManager fm)  {
         super(fm);
@@ -40,7 +43,8 @@ public class ContentFragmentPagerAdapter extends FragmentPagerAdapter implements
         if (userUid != null && !userUid.isEmpty()) {
             switch (position) {
                 case 0:
-                    tripRoom = FragmentRoomDefault.newInstance(userUid);
+                    tripRoom = FragmentTripRoom.newInstance(userUid);
+                    tripRoom.setViewPager(viewPager);
                     return tripRoom;
                 case 1:
                     return FragmentFindTrip.newInstance(userUid);
@@ -70,5 +74,9 @@ public class ContentFragmentPagerAdapter extends FragmentPagerAdapter implements
 
     public String getTripId(){
         return  tripRoom.getTripId();
+    }
+
+    public void setViewPager(ViewPager viewPager){
+        this.viewPager = viewPager;
     }
 }
