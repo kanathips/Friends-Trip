@@ -22,13 +22,6 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
-    //Firebase
-
-    //Google Api
-
-    //CardView
-
-    //Circle Image View
     compile 'org.jetbrains:annotations-java5:15.0'
     compile 'com.ramotion.foldingcell:folding-cell:1.0.1'
     compile 'com.android.support:appcompat-v7:24.2.1'

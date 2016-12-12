@@ -9,18 +9,14 @@
                 android:icon="@drawable/ic_account_circle_white_24dp"
                 android:title="โปรไฟล์" />
             <item
-                android:id="@+id/nav_trip_history"
-                android:icon="@drawable/ic_find_in_page_white_24dp"
-                android:title="ประวัติการเข้าร่วม" />
-            <item
                 android:id="@+id/nav_friend_list"
                 android:icon="@drawable/ic_group_white_36dp"
                 android:title="รายชื่อเพื่อน" />
-            <item
-                android:id="@+id/nav_invite"
-                android:icon="@drawable/ic_menu_share"
-                android:title="ชวนเพื่อน"
-                />
+            <!--<item-->
+                <!--android:id="@+id/nav_invite"-->
+                <!--android:icon="@drawable/ic_menu_share"-->
+                <!--android:title="ชวนเพื่อน"-->
+                <!--/>-->
         </menu>
     </item>
     <group android:checkableBehavior="single">

@@ -26,9 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.tinyandfriend.project.friendstrip.ConstantValue;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.adapter.ContentFragmentPagerAdapter;
-import com.tinyandfriend.project.friendstrip.adapter.InviteFriendListAdapter;
 import com.tinyandfriend.project.friendstrip.info.UserInfo;
-import com.tinyandfriend.project.friendstrip.view.MainViewPager;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -124,6 +122,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 stateFlag = false;
             }
         };
+
+
+
+
     }
 
     @Override
@@ -153,12 +155,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(this, SignInActivity.class));
                 finish();
                 break;
-            case R.id.nav_invite:
-                intent = new Intent(this, InviteFriendActivity.class);
-                String tripId = contentFragmentPagerAdapter.getTripId();
-                intent.putExtra("tripId", tripId);
-                startActivity(intent);
-                break;
+//            case R.id.nav_invite:
+//                intent = new Intent(this, InviteFriendActivity.class);
+//                String tripId = contentFragmentPagerAdapter.getTripId();
+//                intent.putExtra("tripId", tripId);
+//                startActivity(intent);
+//                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
