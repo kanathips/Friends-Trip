@@ -67,7 +67,7 @@ public class InviteFriendListAdapter extends RecyclerView.Adapter<InviteFriendLi
                     holder.view.setBackgroundResource(R.drawable.selected_friend);
                     inviteList.add(friendInfo);
                 }else{
-                    holder.view.setBackgroundResource(0);
+                    holder.view.setBackgroundResource(R.drawable.unselect_friend);
                     inviteList.remove(friendInfo);
                 }
                 holder.isSelected = !holder.isSelected;

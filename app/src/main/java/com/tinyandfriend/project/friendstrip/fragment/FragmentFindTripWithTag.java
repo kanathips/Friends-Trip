@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
+
 public class FragmentFindTripWithTag extends Fragment {
 
     private TagListViewAdapter regionTagAdapter;
@@ -93,14 +94,20 @@ public class FragmentFindTripWithTag extends Fragment {
     }
 
     public void addTrip(final HashSet<String> searchedTrips, DatabaseReference reference) {
-        for(final String tripId: searchedTrips) {
+        for (final String tripId : searchedTrips) {
             ValueEventListener listener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.exists()) {
+                    if (dataSnapshot.exists()) {
                         TripInfo tripInfo = dataSnapshot.getValue(TripInfo.class);
+                        String filelUrl;
+                        if (tripInfo.getFiles() != null) {
+                            filelUrl = tripInfo.getFiles().get(0);
+                        } else {
+                            filelUrl = null;
+                        }
                         TripCardViewInfo tripCardViewInfo = new TripCardViewInfo(tripId, tripInfo.getTripName(),
-                                tripInfo.getStartDate(), tripInfo.getEndDate(), tripInfo.getMaxMember(), tripInfo.getTripSpoil(), tripInfo.getThumbnail());
+                                tripInfo.getStartDate(), tripInfo.getEndDate(), tripInfo.getMaxMember(), tripInfo.getTripSpoil(), tripInfo.getThumbnail(), filelUrl);
                         tripList.add(0, tripCardViewInfo);
                         alphaAdapter.notifyDataSetChanged();
                     }
@@ -136,7 +143,7 @@ public class FragmentFindTripWithTag extends Fragment {
                             }
                         }
                         tagCheck++;
-                        if(tagCheck == tagAmount){
+                        if (tagCheck == tagAmount) {
                             addTrip(searchedTrips, reference);
                         }
                     }

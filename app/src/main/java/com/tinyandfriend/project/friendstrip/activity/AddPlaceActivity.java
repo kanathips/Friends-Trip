@@ -185,26 +185,10 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
     }
 
     private void setupAddPlaceFab(int tripDuration) {
-//        if (tripDuration == 0 || tripDuration == 1) {
-//            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_place_button);
-//            fab.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (placeInfo == null)
-//                        return;
-//                    if (originalPlaceInfos.contains(placeInfo) || placeInfos.contains(placeInfo)) {
-//                        Toast.makeText(AddPlaceActivity.this, "คุณเลือกสถานที่นี้ไปแล้ว", Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
-//                    addPlace(placeInfos, placeInfo, googleMap);
-//                }
-//            });
-//        } else {
-
         ArrayList<String> fabSheetTexts = new ArrayList<>();
         for (int i = 1; i <= tripDuration && i < 6; i++) {
             String text = "วันที่ " + i;
-            fabSheetTexts.add(0, text);
+            fabSheetTexts.add(text);
         }
 
         fabSheetTexts.add(0, "สถานที่นัดพบ");
@@ -233,13 +217,19 @@ public class AddPlaceActivity extends AppCompatActivity implements PlaceSelectio
 
 
                 if (position == placeInfos.size()) {
-                    if (originalAppointPlace != null && originalAppointPlace.equals(placeInfo)) {
+                    if ((originalAppointPlace != null && originalAppointPlace.equals(placeInfo)) || (appointPlace != null && appointPlace.equals(placeInfo))) {
                         Toast.makeText(AddPlaceActivity.this, "คุณนัดไว้ที่สถานที่นี้", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     addAppointPlace(placeInfo, googleMap);
                 } else {
-
+                    if(position == 0){
+                        if ((originalAppointPlace != null && originalAppointPlace.equals(placeInfo)) || (appointPlace != null && appointPlace.equals(placeInfo))) {
+                            Toast.makeText(AddPlaceActivity.this, "คุณนัดไว้ที่สถานที่นี้", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        addAppointPlace(placeInfo, googleMap);
+                    }
                     if (position <= 5) {
                         placeInfo.setDay(position);
                         addPlace(placeInfos, placeInfo, googleMap);

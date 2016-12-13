@@ -2,6 +2,8 @@ package com.tinyandfriend.project.friendstrip.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -61,6 +63,7 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
 
     class TripRoomHolder extends RecyclerView.ViewHolder {
 
+        private final Button fileButton;
         TextView title, spoil_trip, date_trip, count_people;
         TextView title_content, count_content, name_content, email_content, fromDate, toDate;
         ImageView title_thumbnail, head_image;
@@ -89,7 +92,7 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
             fromDate = (TextView) itemView.findViewById(R.id.content_from_date);
             toDate = (TextView) itemView.findViewById(R.id.content_to_date);
             join_button = (Button) itemView.findViewById(R.id.content_request_btn);
-
+            fileButton = (Button) itemView.findViewById(R.id.content_file_btn);
 
             content_location_bt = (Button) itemView.findViewById(R.id.content_location_btn);
             profile_dialog = (RelativeLayout) itemView.findViewById(R.id.profile_dialog);
@@ -115,20 +118,20 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
     @Override
     public void onBindViewHolder(final TripRoomHolder holder, int position) {
 
-        final TripCardViewInfo album = albumList.get(position);
+        final TripCardViewInfo tripCardViewInfo = albumList.get(position);
 
-        holder.title.setText(album.getName_card());
-        holder.spoil_trip.setText(album.getTripSpoil());
-        holder.date_trip.setText(album.getTripStart() + " ถึง \n" + album.getTripEnd());
-        holder.count_people.setText(album.getCount_people() + " คน");
+        holder.title.setText(tripCardViewInfo.getName_card());
+        holder.spoil_trip.setText(tripCardViewInfo.getTripSpoil());
+        holder.date_trip.setText(tripCardViewInfo.getTripStart() + " ถึง \n" + tripCardViewInfo.getTripEnd());
+        holder.count_people.setText(tripCardViewInfo.getCount_people() + " คน");
 
-        holder.title_content.setText(album.getName_card());
-        holder.count_content.setText(album.getCount_people() + " คน");
-        holder.fromDate.setText(album.getTripStart());
-        holder.toDate.setText(album.getTripEnd());
+        holder.title_content.setText(tripCardViewInfo.getName_card());
+        holder.count_content.setText(tripCardViewInfo.getCount_people() + " คน");
+        holder.fromDate.setText(tripCardViewInfo.getTripStart());
+        holder.toDate.setText(tripCardViewInfo.getTripEnd());
 
 //        reference.child(TRIP_CHILD).child(USERS_CHILD).child(TRIP_ID).addListenerForSingleValueEvent(new ValueEventListener() {
-        reference.child(TRIP_CHILD).child(album.getTripId()).child(OWNER_UID).addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.child(TRIP_CHILD).child(tripCardViewInfo.getTripId()).child(OWNER_UID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -169,12 +172,12 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
         });
 
 
-        if (album.getThumbnail() != null) {
+        if (tripCardViewInfo.getThumbnail() != null) {
             Glide.with(mContext)
-                    .load(album.getThumbnail()).centerCrop()
+                    .load(tripCardViewInfo.getThumbnail()).centerCrop()
                     .into(holder.title_thumbnail);
             Glide.with(mContext)
-                    .load(album.getThumbnail()).centerCrop()
+                    .load(tripCardViewInfo.getThumbnail()).centerCrop()
                     .into(holder.head_image);
 
         }
@@ -190,7 +193,7 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
         holder.join_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateTripRoom(reference, album.getTripId(), userUid, holder);
+                updateTripRoom(reference, tripCardViewInfo.getTripId(), userUid, holder);
             }
         });
         holder.content_location_bt.setOnClickListener(new View.OnClickListener() {
@@ -216,7 +219,7 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
                     }
                 });
 
-                reference.child(ConstantValue.TRIP_ROOM_CHILD).child(album.getTripId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                reference.child(ConstantValue.TRIP_ROOM_CHILD).child(tripCardViewInfo.getTripId()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         TripInfo tripInfo = dataSnapshot.getValue(TripInfo.class);
@@ -238,11 +241,25 @@ public class TripCardViewAdapter extends RecyclerView.Adapter<TripCardViewAdapte
             }
         });
 
+        final String file = tripCardViewInfo.getFileUrl();
+        if (file != null) {
+
+            holder.fileButton.setVisibility(View.VISIBLE);
+            holder.fileButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(file));
+                    mContext.startActivity(i);
+                }
+            });
+        }
+
         holder.profile_dialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                reference.child(TRIP_CHILD).child(album.getTripId()).child(OWNER_UID).addListenerForSingleValueEvent(
+                reference.child(TRIP_CHILD).child(tripCardViewInfo.getTripId()).child(OWNER_UID).addListenerForSingleValueEvent(
                         new ValueEventListener() {
 
                             @Override

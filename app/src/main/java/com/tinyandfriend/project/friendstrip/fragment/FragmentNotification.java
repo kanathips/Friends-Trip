@@ -16,7 +16,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.tinyandfriend.project.friendstrip.info.notification.AcceptFriendNotification;
 import com.tinyandfriend.project.friendstrip.ConstantValue;
+import com.tinyandfriend.project.friendstrip.info.notification.InviteNotification;
 import com.tinyandfriend.project.friendstrip.info.notification.Notification;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.adapter.NotificationAdapter;
@@ -90,13 +92,16 @@ public class FragmentNotification extends Fragment {
                         return;
                     }
                     switch (notificationType) {
-//                        case AcceptFriend:
-//                            notification = dataSnapshot.getValue(AcceptFriendNotification.class);
-//                            notification.setId(notificationId);
-//                            notificationList.add(notification);
-//                            notificationAdapter.notifyDataSetChanged();
-//                            break;
+                        case AcceptFriend:
+                            notification = dataSnapshot.getValue(AcceptFriendNotification.class);
+                            notificationList.add(0, notification);
+                            break;
+                        case TripInvite:
+                            notification = dataSnapshot.getValue(InviteNotification.class);
+                            notificationList.add(0, notification);
                     }
+                    notification.setId(notificationId);
+                    notificationAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -107,7 +112,15 @@ public class FragmentNotification extends Fragment {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Toast.makeText(context, "Remove", Toast.LENGTH_SHORT).show();
+                if (dataSnapshot.exists()) {
+                    Notification notification = new Notification(dataSnapshot.getKey());
+                    for(Notification notification1: notificationList){
+                        if(notification1.getId().equals(notification.getId())) {
+                            notificationList.remove(notification1);
+                        }
+                    }
+                    notificationAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override

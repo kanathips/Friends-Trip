@@ -3,156 +3,133 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg5"
+    android:background="@color/nearDark"
     tools:context="com.tinyandfriend.project.friendstrip.fragment.FragmentTripRoom">
 
     <ScrollView
+        android:paddingBottom="15dp"
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
         android:layout_centerHorizontal="true"
         android:scrollbars="none">
 
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
+
 
             <ImageView
                 android:id="@+id/image_detail"
                 android:layout_width="match_parent"
-                android:layout_height="170dp" />
+                android:layout_height="170dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp" />
 
-
-            <LinearLayout
+            <GridLayout
                 android:id="@+id/trip_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/image_detail"
                 android:layout_marginBottom="8dp"
-                android:orientation="vertical">
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:columnCount="6"
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:background="@color/blueLow"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp">
 
-                    <TextView
-                        android:paddingLeft="30dp"
-                        android:textColor="@color/white"
-                        android:gravity="center"
-                        android:layout_weight="1"
-                        android:textSize="25sp"
-                        android:id="@+id/textView3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="ชื่อทริป" />
+                <TextView
+                    android:textSize="20dp"
+                    android:textColor="@color/white"
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="18dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="ชื่อทริป" />
 
-                    <TextView
-                        android:textColor="@color/colorPrimary"
-                        android:layout_weight="1"
-                        android:textSize="25sp"
-                        android:id="@+id/trip_name"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:text="TRIP_NAME" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:padding="10dp"
-                    android:background="@color/darkTransparent"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:textColor="@color/white"
-                        android:textSize="16dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:text="วันเริ่ม" />
-
-                    <TextView
-                        android:textColor="@color/colorGreenLight"
-                        android:textSize="16dp"
-                        android:layout_weight="1"
-                        android:id="@+id/trip_start_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:text="10-12-2016" />
-
-                    <TextView
-                        android:textColor="@color/white"
-                        android:textSize="16dp"
-                        android:layout_weight="1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:text="ถึง" />
-
-                    <TextView
-                        android:textColor="@color/colorGreenLight"
-                        android:textSize="16dp"
-                        android:layout_weight="1"
-                        android:id="@+id/trip_end_date"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:text="11-12-2016" />
-
-                </LinearLayout>
-
-                <!--ROW 1 -->
-            <LinearLayout
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                <TextView
+                    android:textSize="20dp"
+                    android:textColor="@color/white"
+                    android:id="@+id/trip_name"
+                    android:layout_height="wrap_content"
+                    android:layout_columnSpan="5"
+                    android:layout_columnWeight="2"
+                    android:layout_marginBottom="18dp"
+                    android:text="TRIP_NAME" />
 
                 <TextView
                     android:textColor="@color/white"
-                    android:textSize="16dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="วันเริ่ม" />
+
+                <TextView
+                    android:textColor="@color/white"
+                    android:id="@+id/trip_start_date"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_columnSpan="2"
+                    android:layout_columnWeight="5"
+                    android:layout_marginEnd="8dp"
+                    android:text="TRIP_START_DATE" />
+
+                <TextView
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="ถึง" />
+
+                <TextView
+                    android:textColor="@color/white"
+                    android:id="@+id/trip_end_date"
+                    android:layout_height="wrap_content"
+                    android:layout_columnSpan="2"
+                    android:layout_columnWeight="4"
+                    android:text="TRIP_END_DATE" />
+
+                <!--ROW 1 -->
+
+                <TextView
+                    android:textColor="@color/white"
+                    android:layout_height="wrap_content"
+                    android:layout_columnSpan="2"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="18dp"
                     android:text="จำนวนผู้เข้าร่วม" />
 
                 <TextView
-                    android:textColor="@color/colorGreenLight"
-                    android:layout_weight="1"
+                    android:textColor="@color/white"
                     android:id="@+id/trip_max_member"
                     android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="5" />
+                    android:layout_columnWeight="4"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="18dp"
+                    android:text="MAX_MEMBER" />
 
                 <TextView
                     android:textColor="@color/white"
-                    android:textSize="16dp"
-                    android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_columnSpan="2"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="18dp"
                     android:text="ค่าใช้จ่ายต่อคน" />
 
                 <TextView
-                    android:textColor="@color/colorGreenLight"
-                    android:layout_weight="1"
+                    android:textColor="@color/white"
                     android:id="@+id/trip_expense"
                     android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="2000"
-                    />
-                </LinearLayout>
+                    android:layout_columnWeight="4"
+                    android:layout_marginTop="18dp" />
 
                 <TextView
                     android:textColor="@color/white"
-                    android:textSize="16dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_columnSpan="6"
@@ -160,33 +137,43 @@
                     android:text="สปอยทริป" />
 
                 <TextView
-                    android:textColor="@color/colorGreenLight"
-                    android:textSize="16dp"
+                    android:textColor="@color/white"
                     android:id="@+id/trip_spoil"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_columnSpan="6"
                     android:layout_marginBottom="18dp"
                     android:layout_marginTop="8dp"
+                    android:lines="2"
                     android:text="TRIPSPOIL" />
-                </LinearLayout>
-            </LinearLayout>
-
+            </GridLayout>
 
             <View
-                android:id="@+id/view_line"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/trip_s"
+                android:layout_below="@+id/trip_detail"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:background="@color/bgTitleLeft" />
 
+            <TextView
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/member_list"
+                android:id="@+id/member_list_text"
+                android:layout_marginLeft="16dp"
+                android:text="ผู้เข้าร่วมทริป" />
+
             <android.support.v7.widget.RecyclerView
-                android:background="@color/darkTransparent"
                 android:id="@+id/member_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/view_line"
+                android:layout_below="@id/trip_detail"
                 android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp" />
 
             <View
@@ -194,6 +181,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/member_list"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:background="@color/bgTitleLeft" />
 
             <Button
@@ -241,31 +230,17 @@
                 android:text="ออกจากทริป" />
 
             <TextView
-                android:paddingLeft="10dp"
                 android:textColor="@color/white"
-                android:background="@color/blueLow"
-                android:textSize="18sp"
-                android:id="@+id/trip_s"
-                android:layout_width="match_parent"
-                android:gravity="center_vertical"
-                android:layout_height="40dp"
-                android:text="ผู้เข้าร่วมทริป"
-                android:layout_below="@+id/trip_detail"
-                android:layout_alignParentStart="true" />
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_alignBottom="@id/trip_s"
-                android:id="@+id/trip_invites"
-                android:layout_centerInParent="true"
-                android:elevation="5dp"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignEnd="@id/trip_s"
-                android:src="@drawable/ic_add_white_24dp"
-                />
-
-
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ชวนเพื่อน"
+                android:id="@+id/invite_button"
+                android:layout_marginRight="8dp"
+                android:layout_alignBaseline="@+id/member_list_text"
+                android:layout_alignBottom="@+id/member_list_text"
+                android:layout_alignParentEnd="true" />
         </RelativeLayout>
     </ScrollView>
+
 
 </RelativeLayout>

@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     xmlns:folding-cell="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="10dp"
-    tools:context=".fragment.FragmentNotification">
+    android:padding="10dp">
 
 
     <android.support.v7.widget.RecyclerView

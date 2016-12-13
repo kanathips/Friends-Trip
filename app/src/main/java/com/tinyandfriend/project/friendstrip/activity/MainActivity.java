@@ -155,12 +155,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(this, SignInActivity.class));
                 finish();
                 break;
-//            case R.id.nav_invite:
-//                intent = new Intent(this, InviteFriendActivity.class);
-//                String tripId = contentFragmentPagerAdapter.getTripId();
-//                intent.putExtra("tripId", tripId);
-//                startActivity(intent);
-//                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

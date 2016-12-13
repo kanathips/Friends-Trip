@@ -37,7 +37,7 @@
         android:layout_height="120dp"
         android:layout_gravity="center_horizontal"
         android:elevation="5dp"
-        android:src="@drawable/ic_account_circle_white_24dp"
+        android:src="@drawable/ic_account_circle_black_24dp"
         android:visibility="invisible" />
 
     <TextView

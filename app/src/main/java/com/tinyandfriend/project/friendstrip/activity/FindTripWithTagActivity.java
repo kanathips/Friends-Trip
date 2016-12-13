@@ -76,8 +76,14 @@ public class FindTripWithTagActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if(dataSnapshot.exists()) {
                         TripInfo tripInfo = dataSnapshot.getValue(TripInfo.class);
+                        String filelUrl;
+                        if(tripInfo.getFiles() != null){
+                            filelUrl = tripInfo.getFiles().get(0);
+                        }else{
+                            filelUrl = null;
+                        }
                         TripCardViewInfo tripCardViewInfo = new TripCardViewInfo(tripId, tripInfo.getTripName(),
-                                tripInfo.getStartDate(), tripInfo.getEndDate(), tripInfo.getMaxMember(), tripInfo.getTripSpoil(), tripInfo.getThumbnail());
+                                tripInfo.getStartDate(), tripInfo.getEndDate(), tripInfo.getMaxMember(), tripInfo.getTripSpoil(), tripInfo.getThumbnail(), filelUrl);
                         tripList.add(0, tripCardViewInfo);
                         alphaAdapter.notifyDataSetChanged();
                     }

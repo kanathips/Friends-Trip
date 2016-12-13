@@ -97,7 +97,7 @@ public class FragmentTripFriendJoined extends Fragment {
                                     String key = dataSnapshot.getKey();
                                     tripInfo.setId(key);
                                     if (rooms.contains(key) || tripInfo.getStatus().equals("close")) {
-                                        if(rooms.contains(key) && tripInfo.getStatus().equals("close")) {
+                                        if (rooms.contains(key) && tripInfo.getStatus().equals("close")) {
                                             rooms.remove(key);
                                             tripList.remove(tripList.indexOf(new TripCardViewInfo(key)));
                                             alphaAdapter.notifyDataSetChanged();
@@ -105,8 +105,14 @@ public class FragmentTripFriendJoined extends Fragment {
                                         return;
                                     }
                                     rooms.add(dataSnapshot.getKey());
+                                    String filelUrl;
+                                    if (tripInfo.getFiles() != null) {
+                                        filelUrl = tripInfo.getFiles().get(0);
+                                    } else {
+                                        filelUrl = null;
+                                    }
                                     TripCardViewInfo tripCardViewInfo = new TripCardViewInfo(key, tripInfo.getTripName(),
-                                            tripInfo.getStartDate(), tripInfo.getEndDate(), tripInfo.getMaxMember(), tripInfo.getTripSpoil(), tripInfo.getThumbnail());
+                                            tripInfo.getStartDate(), tripInfo.getEndDate(), tripInfo.getMaxMember(), tripInfo.getTripSpoil(), tripInfo.getThumbnail(), filelUrl);
                                     tripList.add(0, tripCardViewInfo);
                                     alphaAdapter.notifyDataSetChanged();
                                 }

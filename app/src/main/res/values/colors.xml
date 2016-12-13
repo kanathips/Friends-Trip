@@ -14,11 +14,11 @@
     <color name="white">#ffffff</color>
     <color name="whiteLow">#C1C1C1</color>
     <color name="darkLow">#5A5A5A</color>
-    <color name="darkTransparent">#73000000</color>
+    <color name="darkTransparent">#70000000</color>
     <color name="colorRed">#FF0000</color>
     <color name="colorGreen">#00FF3C</color>
     <color name="colorGreenLight">#66ffcc</color>
-
+    <color name="buttonColor">#09BF97</color>
     <color name="viewBg">#f1f5f8</color>
     <color name="album_title">#4c4c4c</color>
     <color name="nearDark">#00284d</color>

@@ -10,6 +10,7 @@ import android.os.Parcelable;
 
 public class TripCardViewInfo implements Parcelable {
 
+    private String fileUrl;
     private String tripEnd;
     private String name_card;
     private String tripStart;
@@ -64,7 +65,7 @@ public class TripCardViewInfo implements Parcelable {
         this.tripSpoil = tripSpoil;
     }
 
-    public TripCardViewInfo(String tripId, String name_card, String tripStart, String tripEnd, int count_people, String tripSpoil, String thumbnail) {
+    public TripCardViewInfo(String tripId, String name_card, String tripStart, String tripEnd, int count_people, String tripSpoil, String thumbnail, String fileUrl) {
         this.name_card = name_card;
         this.tripStart = tripStart;
         this.tripEnd = tripEnd;
@@ -72,6 +73,7 @@ public class TripCardViewInfo implements Parcelable {
         this.thumbnail = thumbnail;
         this.tripId = tripId;
         this.tripSpoil = tripSpoil;
+        this.fileUrl = fileUrl;
     }
 
     public String getTripSpoil() {
@@ -156,5 +158,13 @@ public class TripCardViewInfo implements Parcelable {
         dest.writeString(thumbnail);
         dest.writeString(tripId);
         dest.writeString(tripSpoil);
+    }
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
     }
 }

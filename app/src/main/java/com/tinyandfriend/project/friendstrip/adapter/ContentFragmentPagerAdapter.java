@@ -10,9 +10,8 @@ import android.support.v4.view.ViewPager;
 import com.astuetz.PagerSlidingTabStrip;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.fragment.FragmentFindTrip;
-import com.tinyandfriend.project.friendstrip.fragment.FragmentFriendNotification;
+import com.tinyandfriend.project.friendstrip.fragment.FragmentNotification;
 import com.tinyandfriend.project.friendstrip.fragment.FragmentTripRoom;
-import com.tinyandfriend.project.friendstrip.view.MainViewPager;
 
 
 public class ContentFragmentPagerAdapter extends FragmentPagerAdapter implements PagerSlidingTabStrip.IconTabProvider{
@@ -49,7 +48,7 @@ public class ContentFragmentPagerAdapter extends FragmentPagerAdapter implements
                 case 1:
                     return FragmentFindTrip.newInstance(userUid);
                 case 2:
-                    return FragmentFriendNotification.newInstance(userUid);
+                    return FragmentNotification.newInstance(userUid);
             }
         }
 

@@ -26,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.tinyandfriend.project.friendstrip.ConstantValue;
 import com.tinyandfriend.project.friendstrip.R;
 import com.tinyandfriend.project.friendstrip.activity.ChatActivity;
+import com.tinyandfriend.project.friendstrip.activity.InviteFriendActivity;
 import com.tinyandfriend.project.friendstrip.adapter.MemberListAdapter;
 import com.tinyandfriend.project.friendstrip.info.MemberInfo;
 import com.tinyandfriend.project.friendstrip.info.TripInfo;
@@ -179,6 +180,17 @@ public class FragmentTripRoomJoiner extends Fragment {
                         }
                     });
 
+                    TextView inviteButton = (TextView) rootView.findViewById(R.id.invite_button);
+                    inviteButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(context, InviteFriendActivity.class);
+                            String tripId = tripInfo.getId();
+                            intent.putExtra("tripId", tripId);
+                            startActivity(intent);
+                        }
+                    });
+
                 }
             }
 
@@ -192,20 +204,4 @@ public class FragmentTripRoomJoiner extends Fragment {
         });
         return rootView;
     }
-
-
-//        final FloatingActionButton convertMap = (FloatingActionButton) rootView.findViewById(R.id.convert_map);
-//
-//        convertMap.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                if (mapFlag)
-//                    googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-//                else
-//                    googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-//                mapFlag = !mapFlag;
-//            }
-//        });
-
 }

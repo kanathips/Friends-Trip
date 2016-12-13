@@ -18,26 +18,31 @@
         android:id="@+id/textView4" />
 
     <Button
-        android:textColor="@color/white"
-        android:background="@color/colorGreenLight"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
+        android:textAppearance="?android:textAppearanceMedium"
         android:id="@+id/join_button"
         android:layout_below="@+id/textView4"
         android:text="ค้นหาทริป"
+        android:padding="3dp"
+        android:textColor="@color/white"
+        android:background="@color/buttonColor"
         android:layout_alignParentStart="true"
         android:layout_marginStart="50dp" />
 
     <Button
-        android:textColor="@color/white"
-        android:background="@color/colorGreenLight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:id="@+id/create_trip_button"
         android:layout_below="@+id/textView4"
         android:text="สร้างทริป"
+        android:padding="3dp"
+        android:textColor="@color/white"
+        android:background="@color/buttonColor"
+        android:textAppearance="?android:textAppearanceMedium"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="50dp" />
 

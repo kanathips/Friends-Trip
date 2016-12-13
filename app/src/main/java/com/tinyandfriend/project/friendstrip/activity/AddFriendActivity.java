@@ -78,7 +78,7 @@ public class AddFriendActivity extends AppCompatActivity {
         });
     }
 
-    public void onclickSearch(String searchText) {
+    public void onclickSearch(final String searchText) {
 
         progressDialog.setMessage("กำลังค้นหา");
         progressDialog.show();
@@ -100,81 +100,77 @@ public class AddFriendActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    final String targetUid;
-                    final String targetProfilePhotoUrl;
+                    boolean flag = false;
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        if (snapshot.child("displayName").exists()) {
+                            final String targetName = snapshot.child("displayName").getValue().toString();
+                            if(targetName.equals(userDisplayName)){
+                                continue;
+                            }
+                            if (targetName.toLowerCase().contains(searchText.toLowerCase())) {
+                                final String targetUid = snapshot.getKey();
+                                final String targetProfilePhotoUrl;
+                                Log.i("FRIEND_LIST", "TARGET : " + targetUid);
+                                Log.i("FRIEND_LIST", "ME : " + userUid);
 
-                    DataSnapshot target;
-                    Iterator<DataSnapshot> o = dataSnapshot.getChildren().iterator();
 
-                    if (o.hasNext()) {
-                        target = o.next();
-                        if (!target.child("displayName").exists()) {
-                            targetNameTextView.setText("ไม่พบผู้ใช้งาน");
-                            targetNameTextView.setVisibility(View.VISIBLE);
-                            addButton.setVisibility(View.INVISIBLE);
-                            addButton.setOnClickListener(null);
-                            progressDialog.dismiss();
-                            return;
-                        }
-                        targetUid = target.getKey();
-                        Log.i("FRIEND_LIST", "TARGET : " + targetUid);
-                        Log.i("FRIEND_LIST", "ME : " + userUid);
-                        final String targetName = target.child("displayName").getValue().toString();
-                        targetNameTextView.setVisibility(View.VISIBLE);
-                        targetNameTextView.setText(targetName);
-                        friendPhoto.setVisibility(View.VISIBLE);
-                        if (target.child("profilePhoto").exists()) {
-                            targetProfilePhotoUrl = target.child("profilePhoto").getValue().toString();
-                            Glide.with(AddFriendActivity.this).load(targetProfilePhotoUrl).centerCrop().into(friendPhoto);
-                        } else {
-                            targetProfilePhotoUrl = null;
-                        }
-                        ValueEventListener friendCheckListener = new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                addButton.setVisibility(View.VISIBLE);
-                                if (dataSnapshot.exists()) {
-
-                                    addButton.setEnabled(false);
-                                    addButton.setText("เป็นเพื่อนกันแล้ว");
+                                targetNameTextView.setVisibility(View.VISIBLE);
+                                targetNameTextView.setText(targetName);
+                                friendPhoto.setVisibility(View.VISIBLE);
+                                if (snapshot.child("profilePhoto").exists()) {
+                                    targetProfilePhotoUrl = snapshot.child("profilePhoto").getValue().toString();
+                                    Glide.with(AddFriendActivity.this).load(targetProfilePhotoUrl).centerCrop().into(friendPhoto);
                                 } else {
-                                    addButton.setEnabled(true);
-                                    addButton.setText("เพิ่มเพื่อน");
-                                    addButton.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            addButton.setEnabled(false);
-                                            FriendInfo targetFriendInfo = new FriendInfo(targetName, targetUid, targetProfilePhotoUrl, Pending);
-                                            FriendInfo senderFriendInfo = new FriendInfo(userDisplayName, userUid, userProfilePhotoUrl, Approving);
-                                            addFriend(targetFriendInfo, senderFriendInfo);
-                                        }
-                                    });
+                                    targetProfilePhotoUrl = null;
+                                    Glide.with(AddFriendActivity.this).load(R.drawable.ic_account_circle_black_24dp).centerCrop().into(friendPhoto);
                                 }
-                            }
+                                ValueEventListener friendCheckListener = new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        addButton.setVisibility(View.VISIBLE);
+                                        if (dataSnapshot.exists()) {
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                                            addButton.setEnabled(false);
+                                            addButton.setText("เป็นเพื่อนกันแล้ว");
+                                        } else {
+                                            addButton.setEnabled(true);
+                                            addButton.setText("เพิ่มเพื่อน");
+                                            addButton.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    addButton.setEnabled(false);
+                                                    FriendInfo targetFriendInfo = new FriendInfo(targetName, targetUid, targetProfilePhotoUrl, Pending);
+                                                    FriendInfo senderFriendInfo = new FriendInfo(userDisplayName, userUid, userProfilePhotoUrl, Approving);
+                                                    addFriend(targetFriendInfo, senderFriendInfo);
+                                                }
+                                            });
+                                        }
+                                    }
 
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                };
+                                reference.child(ConstantValue.FRIEND_LIST_CHILD).child(userUid).child(targetUid).addListenerForSingleValueEvent(friendCheckListener);
+                                listeners.add(friendCheckListener);
+
+                                progressDialog.dismiss();
+                                flag = true;
+                                break;
                             }
-                        };
-                        reference.child(ConstantValue.FRIEND_LIST_CHILD).child(userUid).child(targetUid).addListenerForSingleValueEvent(friendCheckListener);
-                        listeners.add(friendCheckListener);
-                    } else {
-                        targetNameTextView.setText(null);
-                        targetNameTextView.setVisibility(View.INVISIBLE);
+                        }
+
+                    }
+                    if (!flag) {
+                        targetNameTextView.setText("ไม่พบผู้ใช้งาน");
+                        targetNameTextView.setVisibility(View.VISIBLE);
                         addButton.setVisibility(View.INVISIBLE);
                         addButton.setOnClickListener(null);
-                        friendPhoto.setImageBitmap(null);
-                        friendPhoto.setVisibility(View.INVISIBLE);
+                        progressDialog.dismiss();
                     }
 
-                } else {
-                    targetNameTextView.setText("ไม่พบผู้ใช้งาน");
-                    targetNameTextView.setVisibility(View.VISIBLE);
-                    addButton.setVisibility(View.INVISIBLE);
-                    addButton.setOnClickListener(null);
                 }
-                progressDialog.dismiss();
             }
 
             @Override
@@ -183,8 +179,7 @@ public class AddFriendActivity extends AppCompatActivity {
                 progressDialog.dismiss();
             }
         };
-
-        Query query = reference.child(ConstantValue.DISPLAY_NAME_INDEX_CHILD).orderByChild("displayName").startAt(searchText);
+        Query query = reference.child(ConstantValue.USERS_CHILD).orderByChild("displayName");
         query.addListenerForSingleValueEvent(listener);
         listeners.add(listener);
     }
