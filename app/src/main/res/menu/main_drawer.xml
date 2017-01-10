@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="ข้อมูลส่วนตัว">
+        <menu>
+            <item
+                android:id="@+id/nav_profile"
+                android:icon="@drawable/ic_account_circle_white_24dp"
+                android:title="โปรไฟล์" />
+            <item
+                android:id="@+id/my_trip_history"
+                android:icon="@drawable/ic_menu_share"
+                android:title="ประวัติการเข้าร่วม" />
+        </menu>
+    </item>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_log_out"
+            android:icon="@drawable/logout"
+            android:title="ออกจากระบบ." />
+    </group>
+
+</menu>

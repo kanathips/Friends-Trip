@@ -1,6 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorblue">#3300FF</color>
     <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimarySecond">#008cf7</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <!--<color name="colorAccent">#167991</color>-->
+    <color name="blueLow">#5BBEFF</color>
+    <color name="fabBackGround">#B4E6F3</color>
+    <!--<color name="ColorPrimary">#e62117</color>-->
+    <!--<color name="ColorPrimaryDark">#c31c13</color>-->
+    <color name="tabsScrollColor">#8a140e</color>
+    <color name="white">#ffffff</color>
+    <color name="whiteLow">#C1C1C1</color>
+    <color name="darkLow">#5A5A5A</color>
+    <color name="darkTransparent">#73000000</color>
+    <color name="colorRed">#FF0000</color>
+    <color name="colorGreen">#00FF3C</color>
+
+    <color name="viewBg">#f1f5f8</color>
+    <color name="album_title">#4c4c4c</color>
+
+    <color name="bgBackSideColor">#f4f0ff</color>
+    <color name="bgTitleLeft">#594691</color>
+    <color name="bgTitleRight">#ffffff</color>
+    <color name="bgContentTop">#594691</color>
+    <color name="pinkLow">#FFA8FF</color>
+    <color name="bgContent">#ffffff</color>
+    <color name="contentDividerLine">#e0e0e0</color>
+    <color name="contentBadgeTitle">#a9a9a9</color>
+    <color name="titleBadgeTitle">#adafb1</color>
+    <color name="titleBadgeText">#adafb1</color>
+    <color name="mainTextColor">#343d43</color>
+    <color name="btnRequest">#ffbf12</color>
+
+    <color name="black_overlay">#66000000</color>
+
+
+    <!--100% — FF-->
+    <!--95% — F2-->
+    <!--90% — E6-->
+    <!--85% — D9-->
+    <!--80% — CC-->
+    <!--75% — BF-->
+    <!--70% — B3-->
+    <!--65% — A6-->
+    <!--60% — 99-->
+    <!--55% — 8C-->
+    <!--50% — 80-->
+    <!--45% — 73-->
+    <!--40% — 66-->
+    <!--35% — 59-->
+    <!--30% — 4D-->
+    <!--25% — 40-->
+    <!--20% — 33-->
+    <!--15% — 26-->
+    <!--10% — 1A-->
+    <!--5% — 0D-->
+    <!--0% — 00-->
+
 </resources>

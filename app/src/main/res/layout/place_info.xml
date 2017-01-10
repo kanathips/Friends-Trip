@@ -1,0 +1,75 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ชื่อสถานที" />
+
+        <TextView
+            android:id="@+id/snippet_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ที่ตั้ง" />
+
+
+        <TextView
+            android:id="@+id/trip_day_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="เที่ยววันที่" />
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/button"
+        android:text="ลบสถานที่"
+        android:textSize="16dp"
+        android:textColor="@color/white"
+        android:background="@color/colorRed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        />
+
+    <LinearLayout
+        android:id="@+id/place_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="88dp"
+        android:layout_marginStart="88dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="PLACE NAME" />
+
+        <TextView
+            android:id="@+id/snippet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ADDRESS" />
+
+        <TextView
+            android:id="@+id/trip_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TRIP DAY" />
+    </LinearLayout>
+</RelativeLayout>

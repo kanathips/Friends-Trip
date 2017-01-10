@@ -1,3 +1,104 @@
 <resources>
     <string name="app_name">Friends Trip</string>
+    <string name="username">อีเมล หรือ ชื่อผู้ใช้</string>
+    <string name="password">รหัสผ่าน</string>
+    <string name="forget">ลืมรหัสผ่าน?</string>
+    <string name="sing_in">เข้าสู่ระบบ</string>
+    <string name="sign_up">สมัครสมาชิก</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_main">Main</string>
+
+    <string-array name="tag_trip">
+        <item>ท่องเที่ยวเชิงนิเวศ</item>
+        <item>ท่องเที่ยวเชิงนันทนาการ</item>
+        <item>ท่องเที่ยวเชิงธรณีวิทยา</item>
+        <item>ท่องเที่ยวเชิงเกษตร</item>
+        <item>ท่องเที่ยวเชิงดาราศาสตร์</item>
+        <item>ท่องเที่ยวเชิงประวัติศาสตร์</item>
+        <item>ท่องเที่ยวงานชมวัฒนธรรมและประเพณี</item>
+        <item>ท่องเที่ยวชมวิถีชีวิตในชนบท</item>
+        <item>ท่องเที่ยวเชิงสุขภาพ</item>
+        <item>ท่องเที่ยวเชิงทัศนศึกษาและศาสนา</item>
+        <item>ท่องเที่ยวเชิงกีฬา</item>
+        <item>ท่องเที่ยวแบบผจญภัย</item>
+        <item>ท่องเที่ยวพำนักระยะยาว</item>
+        <item>ท่องเที่ยวเพื่อการประชุม</item>
+    </string-array>
+    <string-array name="tag_place">
+        <item>ภูเขา</item>
+        <item>น้ำตก</item>
+        <item>ศาสนสถาน</item>
+        <item>ถ้ำ</item>
+        <item>เกาะ</item>
+        <item>ทะเล</item>
+        <item>สวนสัตว์</item>
+        <item>สวนสนุก</item>
+        <item>สวนดอกไม้</item>
+        <item>น้ำพุร้อนธรรมชาติ</item>
+        <item>ผา</item>
+        <item>อุทยาน</item>
+        <item>พิพิธภัณฑ์</item>
+        <item>สถานศึกษา</item>
+        <item>ต่างประเทศ</item>
+        <item>ห้างสรรพสินค้า</item>
+        <item>ร้านอาหาร</item>
+        <item>ป่า</item>
+        <item>เขื่อน</item>
+        <item>สวนสาธรณะ</item>
+        <item>สนามกีฬา</item>
+        <item>ยิม</item>
+        <item>คอนเสิร์ต</item>
+        <item>ผับบาร์</item>
+        <item>สนามแข่งรถ</item>
+    </string-array>
+    <string-array name="tag_region">
+        <item>ภาคกลาง</item>
+        <item>ภาคตะวันออก</item>
+        <item>ภาคตะวันตก</item>
+        <item>ภาคใต้</item>
+        <item>ภาคเหนือ</item>
+        <item>ภาคตะวันออกเฉียงเหนือ</item>
+        <item>ต่างประเทศ</item>
+    </string-array>
+
+    <string name="app_name_card">Card View</string>
+    <string name="action_add_favourite">Add to Favourites</string>
+    <string name="action_play_next">Play Next</string>
+    <string name="backdrop_title">LOVE MUSIC</string>
+    <string name="backdrop_subtitle">This season top 20 albums</string>
+    <string name="friend">Friend</string>
+
+
+    <string name="order_id_mock" translatable="false"># 1234–5678</string>
+    <string name="price_mock" translatable="false">$25</string>
+    <string name="requests_count_mock" translatable="false">5</string>
+    <string name="requests_count_badge" translatable="false">ระยะเวลาทริป</string>
+    <string name="count_people" translatable="false">จำนวนคน</string>
+    <string name="pledge_mock" translatable="false">$150</string>
+    <string name="pledge_badge" translatable="false">PLEDGE</string>
+    <string name="sender_badge" translatable="false">ผู้สร้างทริป</string>
+    <string name="client_name_mock" translatable="false">Edward Norton</string>
+    <string name="rating_mock" translatable="false">(26)</string>
+    <string name="from_badge" translatable="false">ตั้งแต่วันที่</string>
+    <string name="to_badge" translatable="false">ถึงวันที่</string>
+    <string name="location" translatable="false">สถานที่</string>
+    <string name="delivery_time_mock" translatable="false">6:30 pm</string>
+    <string name="delivery_date_mock" translatable="false">May 16, 2016</string>
+    <string name="deadline_badge" translatable="false">กำหนดการ</string>
+    <string name="deadline_time_mock" translatable="false">24 minutes.pdf</string>
+    <string name="location_btn_text" translatable="false">แผนที่</string>
+    <string name="request_btn_text" translatable="false">JOIN</string>
+    <string name="btn_annotation_mock" translatable="false">5 people have sent a request</string>
+    <string name="content_from1_mock">W 90th St</string>
+    <string name="content_from2_mock">New York, NY 10025</string>
+    <string name="content_to1_mock">46th Ave</string>
+    <string name="content_to2_mock">Woodside, NY 11101</string>
 </resources>

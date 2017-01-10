@@ -1,0 +1,198 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.tinyandfriend.project.friendstrip.fragment.FragmentAddTag">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="180dp">
+
+
+        <ImageView
+            android:id="@+id/header_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/choose_pic_room"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_photo_white_24dp"
+            />
+    </RelativeLayout>
+
+
+    <!--<GridLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:columnCount="3"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:rowCount="1">-->
+
+        <!--<TextView-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_columnWeight="0.5"-->
+            <!--android:text="ภูมิภาค"-->
+            <!--android:textAppearance="?android:textAppearanceMedium" />-->
+
+        <!--<TextView-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_columnWeight="1"-->
+            <!--android:text="ประเภทการท่องเที่ยว"-->
+            <!--android:textAppearance="?android:textAppearanceMedium" />-->
+
+        <!--<TextView-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_columnWeight="1"-->
+            <!--android:text="ประเภทสถานที่ท่องเที่ยว"-->
+            <!--android:textAppearance="?android:textAppearanceMedium" />-->
+    <!--</GridLayout>-->
+
+    <!--<GridLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="180dp"-->
+        <!--android:columnCount="3"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:rowCount="1">-->
+
+        <!--<ListView-->
+            <!--android:id="@+id/tag_region"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_columnWeight="0.5" />-->
+
+        <!--<ListView-->
+            <!--android:id="@+id/tag_trip"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_columnWeight="1" />-->
+
+        <!--<ListView-->
+            <!--android:id="@+id/tag_place"-->
+
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_columnWeight="0.7" />-->
+    <!--</GridLayout>-->
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--android:orientation="horizontal">-->
+
+        <!--<Button-->
+            <!--android:id="@+id/upload_button"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginEnd="20dp"-->
+            <!--android:layout_marginRight="20dp"-->
+            <!--android:text="เพิ่มเอกสาร" />-->
+
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:id="@+id/file_recycler_view"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="100dp"-->
+            <!--android:orientation="horizontal" />-->
+    <!--</LinearLayout>-->
+<!--=======-->
+        <LinearLayout
+            android:background="@color/colorPrimaryDark"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1">
+            <TextView
+                android:textColor="@color/white"
+                android:text="ภูมิภาค"
+                android:gravity="center"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.35"/>
+
+            <TextView
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:text="ประเภทการท่องเที่ยว"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3" />
+
+            <TextView
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:text="ประเภทสถานที่ท่องเที่ยว"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.36"/>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:background="@color/whiteLow"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+            <ListView
+                android:id="@+id/tag_region"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1.1"/>
+
+            <ListView
+                android:id="@+id/tag_trip"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <ListView
+                android:id="@+id/tag_place"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1.15"/>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:padding="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:background="@color/colorAccent"
+            android:textColor="@color/white"
+            android:id="@+id/upload_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="เพิ่มเอกสาร" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/file_recycler_view"
+            android:background="#ECECEC"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+        </android.support.v7.widget.RecyclerView>
+
+
+    </LinearLayout>
+</LinearLayout>
